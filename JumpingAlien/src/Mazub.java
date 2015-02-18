@@ -1,3 +1,4 @@
+import be.kuleuven.cs.som.annotate.*;
 
 /**
  * A class of Mazub.
@@ -10,20 +11,25 @@
  */
 public class Mazub {
 	
-	public Mazub(int position,int size,float velocity,
+	public Mazub(int[] position,int size,float velocity,
 			int vmax, int acceleration, int vinitial) {
 		this.vmax = vmax;
 		this.acceleration = acceleration;
 		this.vinitial = vinitial;
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
+	@Basic
 	public int getPosition() {
 		return this.position;
 	}
 	
 	private int position;
 	
-	public void setPosition() throws IllegalPosition {
+	public void setPosition() throws IllegalPositionException {
 		//TODO
 	}
 	
@@ -33,7 +39,7 @@ public class Mazub {
 	
 	private int size;
 		
-	public void setSize() throws IllegalSize {
+	public void setSize() throws IllegalSizeException {
 		//TODO
 	}
 	
@@ -58,7 +64,7 @@ public class Mazub {
 	 * 			|	(velocity >= vinitial) && (velocity <= vmax)
 	 */
 	public static boolean isValidVelocity(int velocity,int vmax, int vinitial) {
-		return (velocity >= vinitial) && (velocity <= vmax);
+		return (velocity >= vinitial) && (velocity <= vmax);	
 	}
 	
 	/**
