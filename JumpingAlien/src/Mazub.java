@@ -11,8 +11,8 @@ import be.kuleuven.cs.som.annotate.*;
  */
 public class Mazub {
 	
-	public Mazub(int[] position,int size,float velocity,
-			int vmax, int acceleration, int vinitial) {
+	public Mazub(int[] position,int size,double velocity,
+			double vmax,double acceleration,double vinitial) {
 		this.vmax = vmax;
 		this.acceleration = acceleration;
 		this.vinitial = vinitial;
@@ -29,26 +29,60 @@ public class Mazub {
 	
 	private int position;
 	
+	/**
+	 * 
+	 * @throws IllegalPositionException
+	 */
+	@Basic
 	public void setPosition() throws IllegalPositionException {
 		//TODO
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
+	@Basic
 	public int getSize() {
 		return this.size;
 	}
 	
 	private int size;
-		
+	
+	/**
+	 * 
+	 * @throws IllegalSizeException
+	 */
+	@Basic
 	public void setSize() throws IllegalSizeException {
 		//TODO
 	}
 	
-	public int getInitialVelocity() {
+	/**
+	 * 
+	 * @return
+	 */
+	@Basic
+	public double getInitialVelocity() {
 		return this.vinitial;
 	}
 	
-	public int getVelocity() {
+	/**
+	 * 
+	 * @return
+	 */
+	@Basic
+	public double getVelocity() {
 		return this.velocity;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	@Basic @Immutable
+	public double getMaximumVelocity() {
+		return this.vmax;
 	}
 	
 	/**
@@ -63,7 +97,7 @@ public class Mazub {
 	 * 			| result ==
 	 * 			|	(velocity >= vinitial) && (velocity <= vmax)
 	 */
-	public static boolean isValidVelocity(int velocity,int vmax, int vinitial) {
+	public static boolean isValidVelocity(double velocity,double vmax,double vinitial) {
 		return (velocity >= vinitial) && (velocity <= vmax);	
 	}
 	
@@ -84,13 +118,13 @@ public class Mazub {
 		this.velocity = 0;
 	}
 	
-	private int velocity;
+	private double velocity;
 		
-	private final int vmax;
+	private final double vmax;
 	
-	private final int acceleration;
+	private final double acceleration;
 	
-	private final int vinitial;
+	private final double vinitial;
 	
 	private int direction;
 	
