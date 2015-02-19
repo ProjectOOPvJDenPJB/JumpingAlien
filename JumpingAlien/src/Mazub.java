@@ -19,8 +19,9 @@ public class Mazub {
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Return the position of this mazub.
+	 * 	The position is the actual position of the bottom left pixel of
+	 * 	the Mazub character in the //TODO gameworld.
 	 */
 	@Basic
 	public int getPosition() {
@@ -30,7 +31,7 @@ public class Mazub {
 	private int position;
 	
 	/**
-	 * 
+	 *  //TODO
 	 * @throws IllegalPositionException
 	 */
 	@Basic
@@ -39,8 +40,8 @@ public class Mazub {
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Return the size of this mazub.
+	 * 	The size is //TODO
 	 */
 	@Basic
 	public int getSize() {
@@ -50,7 +51,7 @@ public class Mazub {
 	private int size;
 	
 	/**
-	 * 
+	 * //TODO
 	 * @throws IllegalSizeException
 	 */
 	@Basic
@@ -77,12 +78,21 @@ public class Mazub {
 	}
 	
 	/**
-	 * 
+	 * //TODO
 	 * @return
 	 */
 	@Basic @Immutable
 	public double getMaximumVelocity() {
 		return this.vmax;
+	}
+	
+	/**
+	 * //TODO
+	 * @return
+	 */
+	@Basic @Immutable
+	public double getAcceleration() {
+		return this.acceleration;	
 	}
 	
 	/**
@@ -93,7 +103,7 @@ public class Mazub {
 	 * 			The maximum velocity to check the velocity against.
 	 * @param	vinitial
 	 * 			The initial velocity to check the velocity against.
-	 * @return	...
+	 * @return	... //TODO
 	 * 			| result ==
 	 * 			|	(velocity >= vinitial) && (velocity <= vmax)
 	 */
@@ -107,9 +117,9 @@ public class Mazub {
 	 */
 	public void startMove(String direction) {			
 		if (direction.equals("Left")) {
-			this.direction = -1;
+			this.setDirection(-1);
 		} else {
-			this.direction = 1;
+			this.setDirection(1);
 		}
 		//TODO
 	}
@@ -118,6 +128,24 @@ public class Mazub {
 		this.velocity = 0;
 	}
 	
+	/**
+	 *  //TODO
+	 * @return
+	 */
+	@Basic
+	public int getDirection() {
+		return direction;
+	}
+
+	/**
+	 *  //TODO
+	 * @param direction
+	 */
+	@Basic
+	public void setDirection(int direction) {
+		this.direction = direction;
+	}
+
 	private double velocity;
 		
 	private final double vmax;
