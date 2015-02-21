@@ -11,7 +11,7 @@ import be.kuleuven.cs.som.annotate.*;
  */
 public class Mazub {
 	
-	public Mazub(int[] position,int size,double velocity,
+	public Mazub(int[] position,int width,int height,double velocity,
 			double vmax,double acceleration,double vinitial, int direction) {
 		assert isValidInitialVelocity(vinitial, vmax);
 		assert isValidMaximumVelocity(vmax, vinitial);
@@ -34,7 +34,7 @@ public class Mazub {
 	/**
 	 * 
 	 * @param position
-	 * @return	...
+	 * @return	True if the given position is a valid position:
 	 * 			| result ==
 	 * 			|	(position[0] <= 1024) && (position[0] >= 0)
 	 * 			|	&& (position[1] <= 768) && (position[1] >= 0)
@@ -51,36 +51,29 @@ public class Mazub {
 	 * @throws IllegalPositionException
 	 */
 	@Basic
-	public void setPosition(int[] position) throws IllegalPositionException {
+	private void setPosition(int[] position) throws IllegalPositionException {
 		if (! isValidPosition(position))
 			throw new IllegalPositionException(position);
 		this.position = position;
 	}
 	
 	/**
-	 * Return the size of this mazub.
-	 * 	The size is //TODO
+	 * Return the size of this mazub. And his current image
+	 * 	The size is given by height and width
+	 */
+	/**
+	 * Comment to Joren, getHeight en getWidth zijn voor geprogrammeerd in de gegeven class Sprite
 	 */
 	@Basic
-	public int getSize() {
-		return this.size;
+	public int getCurrentSprite() {	
+		height = this.getHeight;
+		width = this.getWidth;
+		image = ??
+		return height,width,image;
 	}
 	
-	private int size;
 	
-	/**
-	 * //TODO
-	 * @throws IllegalSizeException
-	 */
-	@Basic
-	public void setSize() throws IllegalSizeException {
-		//TODO
-	}
 	
-	/**
-	 * 
-	 * @return
-	 */
 	@Basic
 	public double getInitialVelocity() {
 		return this.vinitial;
@@ -95,6 +88,7 @@ public class Mazub {
 	 * @return 	...//TODO
 	 * 			| result ==
 	 * 			|	(vinitial >= 1) && (vinitial < vmax)
+	 * 
 	 */
 	public static boolean isValidInitialVelocity(double vinitial, double vmax) {
 		return (vinitial >= 1) && (vinitial < vmax);
@@ -103,10 +97,6 @@ public class Mazub {
 	private final double vinitial;
 
 	
-	/**
-	 * 
-	 * @return
-	 */
 	@Basic
 	public double getVelocity() {
 		return this.velocity;
@@ -139,7 +129,6 @@ public class Mazub {
 	 * 			| new.getVelocity() == velocity
 	 */
 	public void setVelocity(double velocity) {
-		assert isValidVelocity(velocity, this.getMaximumVelocity(), this.getInitialVelocity());
 		this.velocity = velocity;
 	}
 		
@@ -194,17 +183,25 @@ public class Mazub {
 	 * Initializes movement to the given direction.
 	 * @param direction
 	 */
+	public long movingTime
 	public void startMove(String direction) {			
-		if (direction.equals("left")) {
+		if (this.direction.equals("left")) {
 			this.setDirection(-1);
 		} else {
 			this.setDirection(1);
+		if movingTime == 0
+				this.setVelocity(vinitial);
+		else
+			if isValidVelocity(this.getVelocity() + this.getAcceleration()*movingTime, this.getMaximumVelocity(), this.getInitialVelocity())
+			movingTime += 1;
+			this.setVelocity(this.getVelocity() + this.getAcceleration()*movingTime);
 		}
 		//TODO
 	}
 	
 	public void endMove() {
 		this.velocity = 0;
+		movingTime = 0;
 	}
 	
 	/**
