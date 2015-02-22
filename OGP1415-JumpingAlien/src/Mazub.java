@@ -12,11 +12,13 @@ import be.kuleuven.cs.som.annotate.*;
 /**
  * comment naar joren: 
  * moeten we acceleration, vmax, en vinitial wel aan ons object zelf toevoegen? En nie gewoon een waarde binnen de code?
- * Want die waardes veranderen niet, zijn statisch.
+ * Want die waardes veranderen niet, zijn statisch. 
+ * Comment naar PJ:
+ * 	Ja da dacht ik al ma kzei al da die constructor op nixen trekt! :)
  */
 public class Mazub {
 	
-	public Mazub(int[] position,int width,int height,double velocity,
+	public Mazub(int positionLeftX,int positionBottomY,int width,int height,double velocity,
 			double vmax,double acceleration,double vinitial, int direction) {
 		assert isValidInitialVelocity(vinitial, vmax);
 		assert isValidMaximumVelocity(vmax, vinitial);
@@ -27,49 +29,75 @@ public class Mazub {
 	}
 	
 	/**
-	 * Return the position of this mazub.
-	 * 	The position is the actual position of the bottom left pixel of
-	 * 	the Mazub character in the //TODO gameworld.
+	 * Return the X position of this mazub.
+	 * 	The position is the actual position of the left X pixel of
+	 * 	the Mazub character in the 1024*768 gameworld.
 	 */
 	@Basic
-	public int[] getPosition() {
-		return this.position;
+	public int getXPosition() {
+		return this.positionLeftX;
 	}
+	
+	/**
+	 * Return the Y position of this mazub.
+	 * 	The position is the actual position of the bottom Y pixl of
+	 * 	the Mazub character in the 1024*768 gameworld.
+	 */
+	@Basic
+	public int getYPosition () {
+		return this.positionBottomY;
+	}
+	
+	
 	
 	/**
 	 * 
 	 * @param position
 	 * @return	True if the given position is a valid position:
 	 * 			| result ==
-	 * 			|	(position[0] <= 1024) && (position[0] >= 0)
-	 * 			|	&& (position[1] <= 768) && (position[1] >= 0)
+	 * 			|	(position <= 1024) && (position >= 0)
 	 */
-	public static boolean isValidPosition(int[] position) {
-		return (position[0] <= 1024) && (position[0] >= 0)
-				&& (position[1] <= 768) && (position[1] >= 0);
+	public static boolean isValidXPosition(int position) {
+		return (position <= 1024) && (position >= 0);
+	}
+	
+	/**
+	 *	//TODO
+	 * @param position
+	 * 			//TODO
+	 * @return	True if the given Y position is a valid Y position:
+	 * 			| result ==
+	 * 			|	(position <= 768) && (position >= 0)
+	 */
+	public static boolean isValidYPosition(int position) {
+		return (position <= 768) && (position >= 0);
 	}
 		
-	private int[] position;
+	private int positionLeftX;
+	private int positionBottomY;
 	
 	/**
 	 *  //TODO
 	 * @throws IllegalPositionException
 	 */
 	@Basic
-	public void setPosition(int[] position) throws IllegalPositionException {
-		if (! isValidPosition(position))
-			throw new IllegalPositionException(position);
-		this.position = position;
+	public void setPosition(int positionLeftX, int positionBottomY) throws IllegalXPositionException, IllegalYPositionException {
+		if (! isValidXPosition(positionLeftX))
+			throw new IllegalXPositionException(positionLeftX);
+		if (! isValidYPosition(positionBottomY))
+			throw new IllegalYPositionException(positionBottomY);
+		this.positionLeftX = positionLeftX;
+		this.positionBottomY = positionBottomY;
 	}
 	
-	public static int timeStep = 0.75;
+	public static double timeStep = 0.75;
 	
 	public void changeHorizontalPosition(){
-		if (this.getDirection == "left") && isValidPosition(this.getPosition() - this.getVelocity()*timeStep - this.getAcceleration()*timeStep*timeStep ){
-			this.setPosition(this.getPosition() - this.getVelocity()*timeStep - this.getAcceleration()*timeStep*timeStep );
+		if (this.getDirection() == "left") && isValidXPosition(this.getXPosition() - this.getVelocity()*timeStep - this.getAcceleration()*timeStep*timeStep ){
+			this.setPosition(this.getPosition()[0] - this.getVelocity()*timeStep - this.getAcceleration()*timeStep*timeStep );
 		}
-		if (this.getDirection == "rigth") && isValidPosition(this.getPosition() + this.getVelocity()*timeStep + this.getAcceleration()*timeStep*timeStep ){
-			this.setPosition(this.getPosition() + this.getVelocity()*timeStep + this.getAcceleration()*timeStep*timeStep );
+		if (this.getDirection() == "rigth") && isValidPosition(this.getXPosition()[0] + this.getVelocity()*timeStep + this.getAcceleration()*timeStep*timeStep ){
+			this.setPosition(this.getPosition()[0] + this.getVelocity()*timeStep + this.getAcceleration()*timeStep*timeStep );
 		}
 	}
 	
@@ -80,13 +108,18 @@ public class Mazub {
 	 */
 	/**
 	 * Comment to Joren, getHeight en getWidth zijn voor geprogrammeerd in de gegeven class Sprite
+	 * Comment to PJ: die gaan wel over een sprite-klasse en zijn niet bruikbaar egen de mazub klasse. Dus da moet anders
+	 * 	geïmplementeerd worden ;). Ik kijk da ergens deze week wel na alsk tijd heb
+	 * 
+	 * U stukje code om het maar niet volledig weg te laten:
+	 * height = this.getHeight();
+		width = this.getWidth();
+		image = ??
+		return height,width,image;
 	 */
 	@Basic
 	public int getCurrentSprite() {	
-		height = this.getHeight;
-		width = this.getWidth;
-		image = ??
-		return height,width,image;
+		return -1;
 	}
 	
 	
