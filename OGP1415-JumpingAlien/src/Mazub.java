@@ -9,6 +9,11 @@ import be.kuleuven.cs.som.annotate.*;
  * @author Joren Dhont & Pieterjan Beerden
  * @version 0.1
  */
+/**
+ * comment naar joren: 
+ * moeten we acceleration, vmax, en vinitial wel aan ons object zelf toevoegen? En nie gewoon een waarde binnen de code?
+ * Want die waardes veranderen niet, zijn statisch.
+ */
 public class Mazub {
 	
 	public Mazub(int[] position,int width,int height,double velocity,
@@ -51,11 +56,23 @@ public class Mazub {
 	 * @throws IllegalPositionException
 	 */
 	@Basic
-	private void setPosition(int[] position) throws IllegalPositionException {
+	public void setPosition(int[] position) throws IllegalPositionException {
 		if (! isValidPosition(position))
 			throw new IllegalPositionException(position);
 		this.position = position;
 	}
+	
+	public static int timeStep = 0.75;
+	
+	public void changeHorizontalPosition(){
+		if (this.getDirection == "left") && isValidPosition(this.getPosition() - this.getVelocity()*timeStep - this.getAcceleration()*timeStep*timeStep ){
+			this.setPosition(this.getPosition() - this.getVelocity()*timeStep - this.getAcceleration()*timeStep*timeStep );
+		}
+		if (this.getDirection == "rigth") && isValidPosition(this.getPosition() + this.getVelocity()*timeStep + this.getAcceleration()*timeStep*timeStep ){
+			this.setPosition(this.getPosition() + this.getVelocity()*timeStep + this.getAcceleration()*timeStep*timeStep );
+		}
+	}
+	
 	
 	/**
 	 * Return the size of this mazub. And his current image
@@ -183,7 +200,8 @@ public class Mazub {
 	 * Initializes movement to the given direction.
 	 * @param direction
 	 */
-	public long movingTime
+	public final double movingTime
+	
 	public void startMove(String direction) {			
 		if (this.direction.equals("left")) {
 			this.setDirection(-1);
@@ -191,18 +209,32 @@ public class Mazub {
 			this.setDirection(1);
 		if movingTime == 0
 				this.setVelocity(vinitial);
+				this.changeHorizontalPosition();
 		else
 			if isValidVelocity(this.getVelocity() + this.getAcceleration()*movingTime, this.getMaximumVelocity(), this.getInitialVelocity())
-			movingTime += 1;
+			movingTime += timeStep;
 			this.setVelocity(this.getVelocity() + this.getAcceleration()*movingTime);
+			this.changeHorizontalPosition();
 		}
-		//TODO
 	}
 	
 	public void endMove() {
 		this.velocity = 0;
 		movingTime = 0;
 	}
+	
+	public final int jumpingSpeed = 8;
+	
+	public void startJump(){
+		if isValidPosition(this.getPosition() + jumpingSpeed){
+			this.setPosition(this.getPosition() + jumpingSpeed);
+		}
+	}
+	
+	public void endJump(){
+		if isValidPosition(this.getPosition() + ...){
+	}
+	
 	
 	/**
 	 *  //TODO
