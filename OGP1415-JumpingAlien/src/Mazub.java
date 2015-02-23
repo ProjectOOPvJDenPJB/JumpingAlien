@@ -1,3 +1,4 @@
+import jumpingalien.util.Util;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
@@ -10,6 +11,9 @@ import be.kuleuven.cs.som.annotate.*;
  * @version 0.1
  */
 /**
+ * 
+ * NAKIJKEN: Op welke manier elke methode moet geïmplementeerd worden.
+ * 
  * comment naar joren: 
  * moeten we acceleration, vmax, en vinitial wel aan ons object zelf toevoegen? En nie gewoon een waarde binnen de code?
  * Want die waardes veranderen niet, zijn statisch. 
@@ -19,13 +23,14 @@ import be.kuleuven.cs.som.annotate.*;
 public class Mazub {
 	
 	public Mazub(int positionLeftX,int positionBottomY,int width,int height,double velocity,
-			double vmax,double acceleration,double vinitial, int direction) {
+			double vmax,double acceleration,double vinitial, int direction,double movingTime) {
 		assert isValidInitialVelocity(vinitial, vmax);
 		assert isValidMaximumVelocity(vmax, vinitial);
 		assert isValidAcceleration(acceleration);
 		this.vinitial = vinitial;
 		this.vmax = vmax;
-		this.acceleration = acceleration;		
+		this.acceleration = acceleration;
+		this.movingTime = movingTime;
 	}
 	
 	/**
@@ -34,8 +39,8 @@ public class Mazub {
 	 * 	the Mazub character in the 1024*768 gameworld.
 	 */
 	@Basic
-	public int getXPosition() {
-		return this.positionLeftX;
+	public double getXPosition() {
+		return Math.floor(this.positionLeftX);
 	}
 	
 	/**
@@ -44,8 +49,8 @@ public class Mazub {
 	 * 	the Mazub character in the 1024*768 gameworld.
 	 */
 	@Basic
-	public int getYPosition () {
-		return this.positionBottomY;
+	public double getYPosition () {
+		return Math.floor(this.positionBottomY);
 	}
 	
 	
@@ -57,8 +62,8 @@ public class Mazub {
 	 * 			| result ==
 	 * 			|	(position <= 1024) && (position >= 0)
 	 */
-	public static boolean isValidXPosition(int position) {
-		return (position <= 1024) && (position >= 0);
+	public static boolean isValidXPosition(double position) {
+		return Util.fuzzyLessThanOrEqualTo(position,1024) && Util.fuzzyGreaterThanOrEqualTo(position, 0);
 	}
 	
 	/**
@@ -69,35 +74,46 @@ public class Mazub {
 	 * 			| result ==
 	 * 			|	(position <= 768) && (position >= 0)
 	 */
-	public static boolean isValidYPosition(int position) {
-		return (position <= 768) && (position >= 0);
+	public static boolean isValidYPosition(double position) {
+		return Util.fuzzyLessThanOrEqualTo(position,768) && Util.fuzzyGreaterThanOrEqualTo(position,0);
 	}
 		
-	private int positionLeftX;
-	private int positionBottomY;
+	private double positionLeftX;
+	private double positionBottomY;
 	
 	/**
 	 *  //TODO
-	 * @throws IllegalPositionException
+	 * @throws IllegalXPositionException
 	 */
 	@Basic
-	public void setPosition(int positionLeftX, int positionBottomY) throws IllegalXPositionException, IllegalYPositionException {
+	public void setXPosition(double positionLeftX) throws IllegalXPositionException {
 		if (! isValidXPosition(positionLeftX))
 			throw new IllegalXPositionException(positionLeftX);
+		this.positionLeftX = positionLeftX;
+	}
+	
+	/**
+	 *  //TODO
+	 * @throws IllegaYlPositionException
+	 */
+	@Basic
+	public void setYPosition(double positionBottomY) throws IllegalYPositionException {
 		if (! isValidYPosition(positionBottomY))
 			throw new IllegalYPositionException(positionBottomY);
-		this.positionLeftX = positionLeftX;
 		this.positionBottomY = positionBottomY;
 	}
 	
 	public static double timeStep = 0.75;
 	
+	/**
+	 * 
+	 */
 	public void changeHorizontalPosition(){
-		if (this.getDirection() == "left") && isValidXPosition(this.getXPosition() - this.getVelocity()*timeStep - this.getAcceleration()*timeStep*timeStep ){
-			this.setPosition(this.getPosition()[0] - this.getVelocity()*timeStep - this.getAcceleration()*timeStep*timeStep );
+		if ((this.getDirection() == "left") && isValidXPosition(this.getXPosition() - this.getVelocity()*timeStep - this.getAcceleration()*timeStep*timeStep)) {
+			this.setXPosition(this.getXPosition() - this.getVelocity()*timeStep - this.getAcceleration()*timeStep*timeStep );
 		}
-		if (this.getDirection() == "rigth") && isValidPosition(this.getXPosition()[0] + this.getVelocity()*timeStep + this.getAcceleration()*timeStep*timeStep ){
-			this.setPosition(this.getPosition()[0] + this.getVelocity()*timeStep + this.getAcceleration()*timeStep*timeStep );
+		if ((this.getDirection() == "right") && isValidXPosition(this.getXPosition() + this.getVelocity()*timeStep + this.getAcceleration()*timeStep*timeStep)) {
+			this.setXPosition(this.getXPosition() + this.getVelocity()*timeStep + this.getAcceleration()*timeStep*timeStep );
 		}
 	}
 	
@@ -105,8 +121,7 @@ public class Mazub {
 	/**
 	 * Return the size of this mazub. And his current image
 	 * 	The size is given by height and width
-	 */
-	/**
+	 *
 	 * Comment to Joren, getHeight en getWidth zijn voor geprogrammeerd in de gegeven class Sprite
 	 * Comment to PJ: die gaan wel over een sprite-klasse en zijn niet bruikbaar egen de mazub klasse. Dus da moet anders
 	 * 	geïmplementeerd worden ;). Ik kijk da ergens deze week wel na alsk tijd heb
@@ -229,43 +244,45 @@ public class Mazub {
 	private final double acceleration;
 
 	
+	
+	private double movingTime;
+	
 	/**
 	 * Initializes movement to the given direction.
+	 * 
 	 * @param direction
 	 */
-	public final double movingTime
-	
-	public void startMove(String direction) {			
-		if (this.direction.equals("left")) {
-			this.setDirection(-1);
+	public void startMove(String direction) {	
+		this.setDirection(direction);
+		if  (movingTime == 0) {
+			this.setVelocity(vinitial);
+			this.changeHorizontalPosition();
 		} else {
-			this.setDirection(1);
-		if movingTime == 0
-				this.setVelocity(vinitial);
-				this.changeHorizontalPosition();
-		else
-			if isValidVelocity(this.getVelocity() + this.getAcceleration()*movingTime, this.getMaximumVelocity(), this.getInitialVelocity())
+			if (isValidVelocity(this.getVelocity() + this.getAcceleration()*movingTime, this.getMaximumVelocity(), this.getInitialVelocity())) {
 			movingTime += timeStep;
 			this.setVelocity(this.getVelocity() + this.getAcceleration()*movingTime);
 			this.changeHorizontalPosition();
+			}
 		}
 	}
 	
 	public void endMove() {
 		this.velocity = 0;
-		movingTime = 0;
+		this.movingTime = 0;
 	}
 	
 	public final int jumpingSpeed = 8;
 	
 	public void startJump(){
-		if isValidPosition(this.getPosition() + jumpingSpeed){
-			this.setPosition(this.getPosition() + jumpingSpeed);
+		if (isValidYPosition(this.getYPosition() + jumpingSpeed)) {
+			this.setYPosition(this.getYPosition() + jumpingSpeed);
 		}
 	}
 	
 	public void endJump(){
-		if isValidPosition(this.getPosition() + ...){
+		if (isValidYPosition(this.getYPosition())) {
+			//TODO, Argument of above included.
+		}
 	}
 	
 	
@@ -275,12 +292,7 @@ public class Mazub {
 	 */
 	@Basic
 	public String getDirection() {
-		if (this.direction == -1) {
-			return "left";
-		}
-		else {
-			return "right";
-		}
+		return this.direction;
 	}
 
 	/**
@@ -288,11 +300,11 @@ public class Mazub {
 	 * @param direction
 	 */
 	@Basic
-	public void setDirection(int direction) {
+	public void setDirection(String direction) {
 		this.direction = direction;
 	}
 			
-	private int direction;
+	private String direction;
 	
 	
 }

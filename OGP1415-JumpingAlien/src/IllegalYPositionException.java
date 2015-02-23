@@ -18,7 +18,7 @@ public class IllegalYPositionException extends RuntimeException {
 	 * 			is equal to the given position.
 	 * 			| new.getPosition == position
 	 */
-	public IllegalYPositionException(int position) {
+	public IllegalYPositionException(double position) {
 		this.positionBottomY = position;
 	}
 	
@@ -26,15 +26,15 @@ public class IllegalYPositionException extends RuntimeException {
 	 * Return the position registered for the illegal position.
 	 */
 	@Basic @Immutable
-	public int getXPosition() {
-		return this.positionBottomY;
+	public double getXPosition() {
+		return Math.floor(this.positionBottomY);
 	}
 	
 	/**
 	 * Variable registering the position in this illegal position
 	 * exception.
 	 */
-	private final int positionBottomY;
+	private final double positionBottomY;
 	
 	/**
 	 * Serial Version ID, strongly advised by the Java API.
