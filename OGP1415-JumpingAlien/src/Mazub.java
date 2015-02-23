@@ -13,6 +13,7 @@ import be.kuleuven.cs.som.annotate.*;
 /**
  * 
  * NAKIJKEN: Op welke manier elke methode moet geïmplementeerd worden.
+ * Dit is belangrijk
  * 
  * comment naar joren: 
  * moeten we acceleration, vmax, en vinitial wel aan ons object zelf toevoegen? En nie gewoon een waarde binnen de code?
