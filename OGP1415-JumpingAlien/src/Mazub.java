@@ -23,15 +23,16 @@ import be.kuleuven.cs.som.annotate.*;
 public class Mazub {
 	public Mazub(int positionLeftX,int positionBottomY,int width,int height,double horizontalVelocity, double verticalVelocity,
 			double horizontalMaximumVelocity,double horizontalAcceleration,double horizontalInitialVelocity,
-			boolean moving,boolean movingVertically) {
+			boolean moving,boolean movingUpwards, boolean falling) {
 		assert isValidInitialVelocity(horizontalInitialVelocity, horizontalMaximumVelocity);
 		assert isValidMaximumVelocity(horizontalMaximumVelocity, horizontalInitialVelocity);
-		assert isValidhorizontalAcceleration(horizontalAcceleration);
+		assert isValidHorizontalAcceleration(horizontalAcceleration);
 		this.horizontalInitialVelocity = horizontalInitialVelocity;
 		this.horizontalMaximumVelocity = horizontalMaximumVelocity;
 		this.horizontalAcceleration = horizontalAcceleration;
 		this.moving = false;
-		this.movingVertically = false;
+		this.movingUpwards = false;
+		this.falling = false;
 		this.horizontalVelocity = 0;
 		this.verticalVelocity = 0;
 	}
@@ -105,7 +106,8 @@ public class Mazub {
 	}
 	
 	public boolean moving;
-	private boolean movingVertically;
+	private boolean movingUpwards;
+	private boolean falling;
 	
 	/**
 	 *  //TODO
@@ -127,16 +129,28 @@ public class Mazub {
 	 *  //TODO
 	 * @return
 	 */
-	public boolean getMovingVertically(){
-		return this.movingVertically;
+	public boolean getMovingUpwards(){
+		return this.movingUpwards;
+	}
+	
+	/**
+	 *  //TODO
+	 * @return
+	 */
+	public boolean getFalling(){
+		return this.falling;
 	}
 	
 	/**
 	 *  //TODO
 	 * @param verticalMovement
 	 */
-	public void setMovingVertically(boolean verticalMovement){
-		this.movingVertically = verticalMovement;
+	public void setMovingUpwards(boolean upwardsMovement){
+		this.movingUpwards = upwardsMovement;
+	}
+	
+	public void setFalling(boolean falling) {
+		this.falling = falling;
 	}
 	
 	private double horizontalVelocity;
@@ -193,6 +207,16 @@ public class Mazub {
 	}
 	
 	/**
+	 *  //TODO
+	 * @return
+	 */
+	public double getVerticalAcceleration(){
+		return this.verticalAcceleration;
+	}
+	
+	private double verticalAcceleration = -10;
+	
+	/**
 	 * 
 	 * @param 	velocity
 	 * 			The velocity to check.
@@ -213,31 +237,40 @@ public class Mazub {
 	 *	//TODO
 	 * @throws IllegalXPositionException
 	 * comment PJ: of wel is de snelheid positief of negatief, dus kunt ge da in 1 regel gieten om uw nieuwe pos te berekenen.
+	 * commet Joren: Ge zijt wel vergeten rekening te houden me de acceleratie, dus moet da toch.
 	 */
 	public void changeHorizontalPosition(double timeInterval) throws IllegalXPositionException {
 		double newPosition = this.getXPosition() + 100 * this.getHorizontalVelocity()*timeInterval 
-				+ 50 * this.gethorizontalAcceleration()*timeInterval*timeInterval;
+				+ 50 * this.getHorizontalAcceleration()*timeInterval*timeInterval;
 			if (!isValidXPosition(newPosition))
 					throw new IllegalXPositionException(newPosition);
 			this.setXPosition(newPosition );
 	}
 	 /**
 	  *  //TODO
-	  *  in het veranderen van de verticale pos moet nog rekening gehouden worden met de valversnelling
-	  *  ook moet de verticale snelheid nog tegoei afgewerkt worden. 
+	  *  
 	  * @param timeInterval
 	  */
-	
-	public void changeVerticalPosition(double timeInterval){
-		if (this.getMovingVertically() == true){
-			double newPosition = this.getYPosition() + getVerticalVelocity();
+	public void changeVerticalPosition(double timeInterval) throws IllegalYPositionException{
+		if (this.getMovingUpwards() == true){
+			double newPosition = this.getYPosition() 
+					+ 100 * this.getVerticalVelocity() * timeInterval;
 			if (newPosition > 768){
-				this.setYPosition(768);
+				newPosition = 768;
 			}
-			if (newPosition < 0){
-				this.setYPosition(0);
-				this.setMovingVertically(false);
+			if (!isValidYPosition(newPosition))
+				throw new IllegalYPositionException(newPosition);
+			this.setYPosition(newPosition);
+		}
+		if (this.getFalling() == true) {
+			double newPosition = this.getYPosition() 
+					+ 50 * this.getVerticalAcceleration() * timeInterval * timeInterval;
+			if (newPosition < 0) {
+				newPosition = 0;
+				this.setFalling(false);
 			}
+			if (!isValidYPosition(newPosition))
+				throw new IllegalYPositionException(newPosition);
 			this.setYPosition(newPosition);
 		}
 	}
@@ -318,38 +351,63 @@ public class Mazub {
 	 * @return
 	 */
 	@Basic @Immutable
-	public double gethorizontalAcceleration() {
+	public double getHorizontalAcceleration() {
 		return this.horizontalAcceleration;	
 	}
 			
 	/**
+	 * Comment aan PJ : Dit moet weg, alles met acceleratie: totaal!	
 	 * 
 	 * @param 	horizontalAcceleration
-	 * 			The accelration to check.
+	 * 			The acceleration to check.
 	 * @return	... //TODO
 	 * 			| result == (horizontalAcceleration >= 0)
 	 */
-	public static boolean isValidhorizontalAcceleration(double horizontalAcceleration) {
+	public static boolean isValidHorizontalAcceleration(double horizontalAcceleration) {
 		return horizontalAcceleration >= 0;
 	}
 	
-	private final double horizontalAcceleration;
-
-
+	private double horizontalAcceleration;
+	
+	/**
+	 *  //TODO Dit moet eigenlijk weg en vervangen worden door trug direction te gebruiken
+	 * @param horizontalAcceleration
+	 * 
+	 * @post	...
+	 * 			| if (horizontalAcceleration >= 0)
+	 * 			|	then new.horizontalAcceleration = horizontalAcceleration
+	 * @post	...
+	 * 			| if (horizontalAcceleration < 0)
+	 * 			|	then new.horizontalAcceleration = 0
+	 */
+	public void setHorizontalAcceleration(double horizontalAcceleration) {
+		if (horizontalAcceleration < 0)
+			this.horizontalAcceleration = horizontalAcceleration;
+		else
+			this.horizontalAcceleration = 0;
+	}
 	
 	/**
 	 * Initializes movement to the given direction.
+	 * 
+	 * Comment to PJ: Mazub klasse moet ni toegevoegd worden. 
+	 * In de tests worden deze methoden opgeroepen
+	 * uit de facade klasse, niet de mazub klasse. :)
+	 * Dus deze twee right & left moeten ook nog in één startMove worden gegoten
+	 * eigenlijk volgens de opdracht.
 	 * 
 	 //TODO
 	  * ik heb de ganse move structuur aangepast, ik moet nu nog enkele de verticale beweging nog tegoei afwerken.
 	  * ook moet nog overal documentatie bij.
 	 */
-	public void startMoveRigth(Mazub mazub){
+	public void startMoveRight(){
+		this.setHorizontalAcceleration(Math.abs(this.getHorizontalAcceleration()));
 		this.setHorizontalVelocity(this.getInitialVelocity(), this.getMaximumHorizontalVelocity());
 		this.setMoving(true);	
 	}
 	
-	public void startMoveLeft(Mazub mazub){
+	public void startMoveLeft(){
+		this.setHorizontalAcceleration(-Math.abs(this.getHorizontalAcceleration()));
 		this.setHorizontalVelocity(-this.getInitialVelocity(), this.getMaximumHorizontalVelocity());
 		this.setMoving(true);	
 	}
@@ -362,29 +420,35 @@ public class Mazub {
 	
 	public final int jumpingSpeed = 8;
 	
+	/**
+	 * Defensief?
+	 */
 	public void startJump(){
 		this.setVerticalVelocity(jumpingSpeed);
-		this.setMovingVertically(true);
+		this.setMovingUpwards(true);
 	}
 	
+	/**
+	 * Defensief?
+	 */
 	public void endJump(){
 		this.setVerticalVelocity(0);
+		this.setMovingUpwards(false);
+		this.setFalling(true);
 	}
-	
-	private double verticalAcceleration = 10;
 	
 	public void advanceTime(Mazub mazub,double timeInterval){
 		if (this.getMoving() == true){
 			changeHorizontalPosition(timeInterval);
 			if ((this.getHorizontalVelocity() < 0) && moving){
-				this.setHorizontalVelocity(this.getHorizontalVelocity() - this.gethorizontalAcceleration()*timeInterval, this.getMaximumHorizontalVelocity());
+				this.setHorizontalVelocity(this.getHorizontalVelocity() - this.getHorizontalAcceleration()*timeInterval, this.getMaximumHorizontalVelocity());
 			}
 			if ((this.getHorizontalVelocity() > 0) && moving){
-				this.setHorizontalVelocity(this.getHorizontalVelocity() + this.gethorizontalAcceleration()*timeInterval, this.getMaximumHorizontalVelocity());
+				this.setHorizontalVelocity(this.getHorizontalVelocity() + this.getHorizontalAcceleration()*timeInterval, this.getMaximumHorizontalVelocity());
 			}
 		}
 		
-		if (this.getMovingVertically() == true){
+		if ((this.getMovingUpwards() == true) | (this.getFalling() == true)){
 			double Yposition = this.getYPosition();
 			changeVerticalPosition(timeInterval);
 			double newYposition = this.getYPosition();
