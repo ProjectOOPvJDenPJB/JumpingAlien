@@ -23,7 +23,7 @@ import be.kuleuven.cs.som.annotate.*;
 public class Mazub {
 	public Mazub(int positionLeftX,int positionBottomY,int width,int height,double horizontalVelocity, double verticalVelocity,
 			double horizontalMaximumVelocity,double horizontalAcceleration,double horizontalInitialVelocity,
-			boolean moving,boolean movingUpwards, boolean falling) {
+			boolean moving,boolean movingVertical) {
 		assert isValidInitialVelocity(horizontalInitialVelocity, horizontalMaximumVelocity);
 		assert isValidMaximumVelocity(horizontalMaximumVelocity, horizontalInitialVelocity);
 		assert isValidHorizontalAcceleration(horizontalAcceleration);
@@ -31,8 +31,7 @@ public class Mazub {
 		this.horizontalMaximumVelocity = horizontalMaximumVelocity;
 		this.horizontalAcceleration = horizontalAcceleration;
 		this.moving = false;
-		this.movingUpwards = false;
-		this.falling = false;
+		this.movingVertical = false;
 		this.horizontalVelocity = 0;
 		this.verticalVelocity = 0;
 	}
@@ -106,8 +105,7 @@ public class Mazub {
 	}
 	
 	public boolean moving;
-	private boolean movingUpwards;
-	private boolean falling;
+	private boolean movingVertical;
 	
 	/**
 	 *  //TODO
@@ -129,28 +127,16 @@ public class Mazub {
 	 *  //TODO
 	 * @return
 	 */
-	public boolean getMovingUpwards(){
-		return this.movingUpwards;
-	}
-	
-	/**
-	 *  //TODO
-	 * @return
-	 */
-	public boolean getFalling(){
-		return this.falling;
+	public boolean getMovingVertical(){
+		return this.movingVertical;
 	}
 	
 	/**
 	 *  //TODO
 	 * @param verticalMovement
 	 */
-	public void setMovingUpwards(boolean upwardsMovement){
-		this.movingUpwards = upwardsMovement;
-	}
-	
-	public void setFalling(boolean falling) {
-		this.falling = falling;
+	public void setMovingVertical(boolean verticalMovement){
+		this.movingVertical = verticalMovement;
 	}
 	
 	private double horizontalVelocity;
@@ -248,26 +234,18 @@ public class Mazub {
 	}
 	 /**
 	  *  //TODO
-	  *  
+	  *  comment Joren: Geldt eigenlijk voor beide horizontaal & verticaal.
+	  *  Zit het defensieve niet al in setX/YPosition? Of moet da hier dan ook nog expliciet.
 	  * @param timeInterval
 	  */
 	public void changeVerticalPosition(double timeInterval) throws IllegalYPositionException{
-		if (this.getMovingUpwards() == true){
+		if (this.getMovingVertical() == true){
 			double newPosition = this.getYPosition() 
-					+ 100 * this.getVerticalVelocity() * timeInterval;
-			if (newPosition > 768){
-				newPosition = 768;
-			}
-			if (!isValidYPosition(newPosition))
-				throw new IllegalYPositionException(newPosition);
-			this.setYPosition(newPosition);
-		}
-		if (this.getFalling() == true) {
-			double newPosition = this.getYPosition() 
+					+ 100 * this.getVerticalVelocity() * timeInterval
 					+ 50 * this.getVerticalAcceleration() * timeInterval * timeInterval;
-			if (newPosition < 0) {
-				newPosition = 0;
-				this.setFalling(false);
+			if (Util.fuzzyEquals(newPosition, 0, timeInterval * 1e-4)) {
+				this.endJump();
+				this.setMovingVertical(false);
 			}
 			if (!isValidYPosition(newPosition))
 				throw new IllegalYPositionException(newPosition);
@@ -425,7 +403,7 @@ public class Mazub {
 	 */
 	public void startJump(){
 		this.setVerticalVelocity(jumpingSpeed);
-		this.setMovingUpwards(true);
+		this.setMovingVertical(true);
 	}
 	
 	/**
@@ -433,10 +411,14 @@ public class Mazub {
 	 */
 	public void endJump(){
 		this.setVerticalVelocity(0);
-		this.setMovingUpwards(false);
-		this.setFalling(true);
 	}
 	
+	/**
+	 * Dit moe wel nog defensief
+	 *  &&. Moeten de changepositions voor of na de setvelocity's?
+	 * @param mazub
+	 * @param timeInterval
+	 */
 	public void advanceTime(Mazub mazub,double timeInterval){
 		if (this.getMoving() == true){
 			changeHorizontalPosition(timeInterval);
@@ -448,12 +430,12 @@ public class Mazub {
 			}
 		}
 		
-		if ((this.getMovingUpwards() == true) | (this.getFalling() == true)){
+		if (this.getMovingVertical() == true) {
 			double Yposition = this.getYPosition();
 			changeVerticalPosition(timeInterval);
 			double newYposition = this.getYPosition();
 			if ((newYposition < Yposition) && (newYposition != 0 )){
-				this.setVerticalVelocity(this.getVerticalVelocity() - verticalAcceleration*timeInterval);
+				this.setVerticalVelocity(this.getVerticalVelocity() + this.getVerticalAcceleration()*timeInterval);
 			}
 		}
 	}
