@@ -10,7 +10,7 @@ public class Facade implements IFacade {
 	}
 
 	public int[] getLocation(Mazub alien) {
-		int[] location = new int[1];
+		int[] location = new int[2];
 		location[0] = (int) alien.getXPosition();
 		location[1] = (int) alien.getYPosition();
 		return location;
@@ -18,14 +18,14 @@ public class Facade implements IFacade {
 	}
 
 	public double[] getVelocity(Mazub alien) {
-		double[] velocity = new double[1];
+		double[] velocity = new double[2];
 		velocity[0] = alien.getHorizontalVelocity();
 		velocity[1] = alien.getVerticalVelocity();
 		return velocity;
 	}
 
 	public double[] getAcceleration(Mazub alien) {
-		double[] acceleration = new double[1];
+		double[] acceleration = new double[2];
 		acceleration[0] = alien.getHorizontalAcceleration();
 		acceleration[1] = alien.getVerticalAcceleration();
 		return acceleration;

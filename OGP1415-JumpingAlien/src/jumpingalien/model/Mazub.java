@@ -43,6 +43,7 @@ public class Mazub {
 		this.horizontalInitialVelocity = 1;
 		this.horizontalVelocity = 0;
 		this.verticalVelocity = 0;
+		this.setHorizontalAcceleration(0.9);
 		this.setMaximumHorizontalVelocity(3);
 		this.moving = false;
 		this.movingVertical = false;
@@ -264,8 +265,9 @@ public class Mazub {
 			if (Util.fuzzyLessThanOrEqualTo(newPosition, 0, timeInterval * 1e-4)) {
 				this.endJump();
 				this.setMovingVertical(false);
+				newPosition = 0;
 			}
-			if (!isValidYPosition(newPosition))
+			else if (!isValidYPosition(newPosition))
 				throw new IllegalYPositionException(newPosition);
 			this.setYPosition(newPosition);
 		}
@@ -359,7 +361,7 @@ public class Mazub {
 	 * 			|	then new.horizontalAcceleration = 0
 	 */
 	public void setHorizontalAcceleration(double horizontalAcceleration) {
-		if (horizontalAcceleration < 0)
+		if (horizontalAcceleration > 0)
 			this.horizontalAcceleration = horizontalAcceleration;
 		else
 			this.horizontalAcceleration = 0;
@@ -549,7 +551,7 @@ public class Mazub {
 	}
 	
 	public int[] getSize(Sprite sprite) {
-		int[] size = new int[1];
+		int[] size = new int[2];
 		size[0] = sprite.getHeight();
 		size[1] = sprite.getWidth();
 		return size;
