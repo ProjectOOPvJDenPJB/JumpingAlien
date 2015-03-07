@@ -30,12 +30,27 @@ public class Mazub {
 		assert isValidHorizontalAcceleration(horizontalAcceleration);
 		assert isValidSpriteArray(spriteArray);
 		this.horizontalInitialVelocity = horizontalInitialVelocity;
-		this.horizontalMaximumVelocity = horizontalMaximumVelocity;
+		this.setMaximumHorizontalVelocity(horizontalMaximumVelocity);
 		this.horizontalAcceleration = horizontalAcceleration;
 		this.moving = false;
 		this.movingVertical = false;
 		this.horizontalVelocity = 0;
 		this.verticalVelocity = 0;
+		this.spriteArray = spriteArray;
+	}
+	
+	public Mazub(int positionLeftX, int positionBottomY, Sprite[] spriteArray) {
+		this.horizontalInitialVelocity = 1;
+		this.horizontalVelocity = 0;
+		this.verticalVelocity = 0;
+		this.setMaximumHorizontalVelocity(3);
+		this.moving = false;
+		this.movingVertical = false;
+		this.setDirection("right");
+		this.ducking = false;
+		this.setXPosition(positionLeftX);
+		this.setYPosition(positionBottomY);
+		this.spriteArray = spriteArray;
 	}
 	
 	/**
@@ -45,7 +60,7 @@ public class Mazub {
 	 */
 	@Basic
 	public double getXPosition() {
-		return Math.floor(this.positionLeftX);
+		return this.positionLeftX;
 	}
 	
 	/**
@@ -55,7 +70,7 @@ public class Mazub {
 	 */
 	@Basic
 	public double getYPosition () {
-		return Math.floor(this.positionBottomY);
+		return this.positionBottomY;
 	}
 	
 	/**
@@ -443,13 +458,13 @@ public class Mazub {
 		return (length >= 10) && (length % 2 == 0);
 	}
 	
-	private String[] spriteArray;
+	private Sprite[] spriteArray;
 	
 	/**
 	 *	//TODO die return moet deftig, kan zijn da we methode moete aanpassen.
 	 * @return
 	 */
-	public String getCurrentSprite() {
+	public Sprite getCurrentSprite() {
 		int Sprite;
 		if (this.getMoving() == false) {
 			Sprite = this.getNotMovingSprite();
@@ -531,6 +546,13 @@ public class Mazub {
 		}
 		this.setRunTimer(0); 
 		return Sprite;			
+	}
+	
+	public int[] getSize(Sprite sprite) {
+		int[] size = new int[1];
+		size[0] = sprite.getHeight();
+		size[1] = sprite.getWidth();
+		return size;
 	}
 	
 	private int previousSprite = 0;
