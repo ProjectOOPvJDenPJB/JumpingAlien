@@ -241,8 +241,6 @@ public class Mazub {
 	/**
 	 *	//TODO
 	 * @throws IllegalXPositionException
-	 * comment PJ: of wel is de snelheid positief of negatief, dus kunt ge da in 1 regel gieten om uw nieuwe pos te berekenen.
-	 * commet Joren: Ge zijt wel vergeten rekening te houden me de acceleratie, dus moet da toch.
 	 */
 	public void changeHorizontalPosition(double timeInterval) throws IllegalXPositionException {
 		double newPosition = this.getXPosition() + this.getDirection() * (100 * this.getHorizontalVelocity()*timeInterval 
@@ -274,6 +272,10 @@ public class Mazub {
 	}
 	
 	@Basic
+	/**
+	 * 
+	 * @return
+	 */
 	public double getInitialVelocity() {
 		return this.horizontalInitialVelocity;
 	}
@@ -294,9 +296,6 @@ public class Mazub {
 	}
 	
 	private final double horizontalInitialVelocity;
-
-
-	
 		
 	/**
 	 * //TODO
@@ -307,6 +306,10 @@ public class Mazub {
 		return this.horizontalMaximumVelocity;
 	}
 	
+	/**
+	 * 
+	 * @param maximumHorizontalVelocity
+	 */
 	public void setMaximumHorizontalVelocity(double maximumHorizontalVelocity) {
 		this.horizontalMaximumVelocity = maximumHorizontalVelocity;
 	}
@@ -327,8 +330,8 @@ public class Mazub {
 	private double horizontalMaximumVelocity;
 	
 	/**
-	 * //TODO
-	 * @return
+	 * 
+	 * @return the horizontal acceleration in the form of a double.
 	 */
 	@Basic @Immutable
 	public double getHorizontalAcceleration() {
@@ -381,8 +384,9 @@ public class Mazub {
 	  * ook moet nog overal documentatie bij.
 	 */
 	public void startMove(){
-		this.setHorizontalAcceleration(this.getHorizontalAcceleration());
-		this.setHorizontalVelocity(this.getInitialVelocity(), this.getMaximumHorizontalVelocity());
+		this.setHorizontalAcceleration(this.getHorizontalAcceleration()); //is dit nie een nutteloze bewerking? 
+		this.setHorizontalVelocity(this.getDirection() * this.getInitialVelocity(), this.getMaximumHorizontalVelocity());
+		// als ge in startMoveRigth en startMoveLeft in facade, gewoon uw direction aanpast en dan gewoon startMove oproept zijt ge er al.
 		this.setMoving(true);	
 		this.setRunTimer(0);
 	}
@@ -424,6 +428,7 @@ public class Mazub {
 	/**
 	 * Dit moe wel nog defensief
 	 *  &&. Moeten de changepositions voor of na de setvelocity's?
+	 *  Na, als ge gaat kijken in de tests klopt het zo, omdat we in onze changePosition ook al inbreng van de acceleratie hebben.
 	 * @param timeInterval
 	 */
 	public void advanceTime(double timeInterval){
@@ -477,6 +482,10 @@ public class Mazub {
 		return this.spriteArray[Sprite];
 	}
 	
+	/**
+	 * 
+	 * @return The current Not moving sprite
+	 */
 	public int getNotMovingSprite() {
 		int Sprite;
 		if (Util.fuzzyGreaterThanOrEqualTo(this.getRunTimer(),1)) {
@@ -498,6 +507,10 @@ public class Mazub {
 		return Sprite;
 	}
 	
+	/**
+	 * 
+	 * @return The current moving sprite
+	 */
 	public int getMovingSprite() {
 		int Sprite = 0;
 		if (this.getMovingVertical() == true) {
@@ -525,11 +538,14 @@ public class Mazub {
 			if (Util.fuzzyGreaterThanOrEqualTo(runTimer,0.075))
 				Sprite = this.runningSprite(m);
 		}	
+		this.previousSprite = Sprite;
 		return Sprite;
 	}
 	
+	private int previousSprite = 0;
+	
 	/**
-	 * 		
+	 * TODO
 	 * @return
 	 */
 	public int runningSprite(int m) {
@@ -550,6 +566,11 @@ public class Mazub {
 		return Sprite;			
 	}
 	
+	/**
+	 *TODO
+	 * @param sprite
+	 * @return
+	 */
 	public int[] getSize(Sprite sprite) {
 		int[] size = new int[2];
 		size[0] = sprite.getHeight();
@@ -557,36 +578,60 @@ public class Mazub {
 		return size;
 	}
 	
-	private int previousSprite = 0;
-
-	public double getRunTimer() {
+	
+	/**
+	 * 
+	 * @return the value of runTimer
+	 */
+		public double getRunTimer() {
 		return this.runTimer;
 	}
-
+	/**
+	 * TODO
+	 * @param runTimer
+	 */
 	public void setRunTimer(double runTimer) {
 		this.runTimer = runTimer;
 	}
 	
+	private int direction;
+	
+	/**
+	 * 
+	 * @return the direction of mazub, either -1 for left or 1 for rigth 
+	 */
 	public int getDirection() {
 		return this.direction;
 	}
 
+	/**
+	 * 
+	 * @param direction
+	 * 		The direction of mazub
+	 */
 	public void setDirection(String direction) {
 		if (direction == "left")
 			this.direction = -1;
 		else
 			this.direction = 1;
 	}
-
+	/**
+	 * 
+	 * @return true if mazub is ducking else return false
+	 */
 	public boolean getDucking() {
 		return this.ducking;
 	}
-
+	/**
+	 * 
+	 * @param ducking
+	 * 		The boolean wether or not mazub is ducking
+	 */
 	public void setDucking(boolean ducking) {
 		this.ducking = ducking;
 	}
 
-	private int direction;
+
 	
 	
 }
