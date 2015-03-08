@@ -263,6 +263,7 @@ public class Mazub {
 			if (Util.fuzzyLessThanOrEqualTo(newPosition, 0, timeInterval * 1e-4)) {
 				this.endJump();
 				this.setMovingVertical(false);
+				this.setFalling(false);
 				newPosition = 0;
 			}
 			else if (!isValidYPosition(newPosition))
@@ -384,9 +385,11 @@ public class Mazub {
 	  * ook moet nog overal documentatie bij.
 	 */
 	public void startMove(){
-		this.setHorizontalAcceleration(this.getHorizontalAcceleration()); //is dit nie een nutteloze bewerking? 
-		this.setHorizontalVelocity(this.getDirection() * this.getInitialVelocity(), this.getMaximumHorizontalVelocity());
+		this.setHorizontalVelocity(this.getInitialVelocity(), this.getMaximumHorizontalVelocity());
 		// als ge in startMoveRigth en startMoveLeft in facade, gewoon uw direction aanpast en dan gewoon startMove oproept zijt ge er al.
+		// Ge moest hier totaal ni maal direction doen. Onze velocity blijft altijd positief, dus ge moet da hier ni ineens negatief maken. Direction wordt al aangepast
+		// in starmoveleft en startmoveright en er wordt verder in changehorizontalposition rekening met u direction gehouden.
+		// Links en rechts bewegen klopt al volledig volgens de formule als ge het test in de gui, tis springen en sprites da nog ni klopt (ducken en moven wel)
 		this.setMoving(true);	
 		this.setRunTimer(0);
 	}
@@ -404,15 +407,20 @@ public class Mazub {
 	 * Defensief?
 	 */
 	public void startJump(){
+		if (Util.fuzzyEquals(positionBottomY, 0)) {
 		this.setVerticalVelocity(jumpingSpeed);
 		this.setMovingVertical(true);
+		}
 	}
 	
 	/**
 	 * Defensief?
 	 */
 	public void endJump(){
+		if (this.getFalling() == false) {
 		this.setVerticalVelocity(0);
+		this.setFalling(true);
+		}
 	}
 	
 	private boolean ducking;
@@ -442,18 +450,19 @@ public class Mazub {
 		}
 		
 		if (this.getMovingVertical() == true) {
-			double Yposition = this.getYPosition();
+		//	double Yposition = this.getYPosition();
 			changeVerticalPosition(timeInterval);
 			double newYposition = this.getYPosition();
-			if ((newYposition < Yposition) && (!Util.fuzzyLessThanOrEqualTo(newYposition,0,timeInterval*1e-4))){
+			if (!Util.fuzzyLessThanOrEqualTo(newYposition,0,timeInterval*1e-4)){
 				this.setVerticalVelocity(this.getVerticalVelocity() + this.getVerticalAcceleration()*timeInterval);
 			}
 		}
 		this.setMaximumHorizontalVelocity(vHmax);
 		this.setRunTimer(this.getRunTimer() + timeInterval);
+		// System.out.println(this.runTimer);
 	}
 	
-	private double runTimer = 0;
+	private double runTimer = 1;
 	
 	/**
 	 * 
@@ -479,6 +488,7 @@ public class Mazub {
 		else {
 			Sprite = this.getMovingSprite();
 		}
+//		System.out.println(Sprite + "Runtimer: " + this.runTimer);
 		return this.spriteArray[Sprite];
 	}
 	
@@ -487,24 +497,22 @@ public class Mazub {
 	 * @return The current Not moving sprite
 	 */
 	public int getNotMovingSprite() {
-		int Sprite;
 		if (Util.fuzzyGreaterThanOrEqualTo(this.getRunTimer(),1)) {
 			if (this.getDucking() == true)
-				Sprite = 1;
+				return 1;
 			else
-				Sprite = 0;
+				return 0;
 		}
 		if (this.getDirection() == 1)
 			if (this.getDucking() == true)
-				Sprite = 6;
+				return 6;
 			else
-				Sprite = 2;
+				return 2;
 		else
 			if (this.getDucking() == true)
-				Sprite = 7;
+				return 7;
 			else
-				Sprite = 3;
-		return Sprite;
+				return 3;
 	}
 	
 	/**
@@ -519,7 +527,7 @@ public class Mazub {
 			else
 				Sprite = 5;
 		}
-		if (this.getDucking() == true) {
+		else if (this.getDucking() == true) {
 			if (this.getDirection() == 1)
 				Sprite = 6;
 			else
@@ -629,6 +637,16 @@ public class Mazub {
 	 */
 	public void setDucking(boolean ducking) {
 		this.ducking = ducking;
+	}
+	
+	private boolean falling;
+
+	public boolean getFalling() {
+		return this.falling;
+	}
+
+	public void setFalling(boolean falling) {
+		this.falling = falling;
 	}
 
 

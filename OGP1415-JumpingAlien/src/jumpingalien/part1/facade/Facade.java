@@ -53,7 +53,9 @@ public class Facade implements IFacade {
 	}
 
 	public void endMoveLeft(Mazub alien) {
-		alien.endMove();
+		if (alien.getDirection() == -1) {
+			alien.endMove();
+		}
 	}
 
 	public void startMoveRight(Mazub alien) {
@@ -62,7 +64,9 @@ public class Facade implements IFacade {
 	}
 
 	public void endMoveRight(Mazub alien) {
-		alien.endMove();
+		if (alien.getDirection() == 1) {
+			alien.endMove();
+		}
 	}
 
 	public void startDuck(Mazub alien) {
