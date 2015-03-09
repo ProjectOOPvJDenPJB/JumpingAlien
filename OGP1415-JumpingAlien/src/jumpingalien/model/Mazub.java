@@ -263,8 +263,8 @@ public class Mazub {
 			if (Util.fuzzyLessThanOrEqualTo(newPosition, 0, timeInterval * 1e-4)) {
 				this.endJump();
 				this.setMovingVertical(false);
-				this.setFalling(false);
 				newPosition = 0;
+				setVerticalVelocity(0);
 			}
 			else if (!isValidYPosition(newPosition))
 				throw new IllegalYPositionException(newPosition);
@@ -417,9 +417,8 @@ public class Mazub {
 	 * Defensief?
 	 */
 	public void endJump(){
-		if (this.getFalling() == false) {
-		this.setVerticalVelocity(0);
-		this.setFalling(true);
+		if (this.getVerticalVelocity() > 0){
+			this.setVerticalVelocity(0);
 		}
 	}
 	
@@ -536,21 +535,29 @@ public class Mazub {
 		else {
 			int m = ((this.spriteArray.length - 8) / 2) - 1;
 			if (this.getDirection() == 1) {
-				if ((this.previousSprite < 8) || (this.previousSprite > 8 + m))
+				if ((this.getPreviousSprite() < 8) || (this.getPreviousSprite() > 8 + m))
 					Sprite = 8;
 			}
 			if (this.getDirection() == -1){
-				if ((this.previousSprite < 9+m)|| (this.previousSprite > 9+ 2*m))
+				if ((this.getPreviousSprite() < 9+m)|| (this.getPreviousSprite() > 9+ 2*m))
 					Sprite = 9 + m;
 			}
 			if (Util.fuzzyGreaterThanOrEqualTo(runTimer,0.075))
 				Sprite = this.runningSprite(m);
 		}	
-		this.previousSprite = Sprite;
+		this.setPreviousSprite(Sprite);;
 		return Sprite;
 	}
 	
 	private int previousSprite = 0;
+	
+	public void setPreviousSprite(int sprite){
+		this.previousSprite = sprite;
+	}
+	
+	public int getPreviousSprite(){
+		return this.previousSprite;
+	}
 	
 	/**
 	 * TODO
@@ -559,16 +566,16 @@ public class Mazub {
 	public int runningSprite(int m) {
 		int Sprite;
 		if (this.getDirection() == 1) {
-			if (this.previousSprite == 8 + m)
+			if (this.getPreviousSprite() == 8 + m)
 				Sprite = 8;
 			else
-				Sprite = this.previousSprite + 1;
+				Sprite = this.getPreviousSprite() + 1;
 		}
 		else {
-			if (this.previousSprite == 9 + 2*m)
+			if (this.getPreviousSprite() == 9 + 2*m)
 				Sprite = 9 + m;
 			else
-				Sprite = this.previousSprite + 1;
+				Sprite = this.getPreviousSprite() + 1;
 		}
 		this.setRunTimer(0); 
 		return Sprite;			
@@ -639,17 +646,6 @@ public class Mazub {
 		this.ducking = ducking;
 	}
 	
-	private boolean falling;
 
-	public boolean getFalling() {
-		return this.falling;
-	}
-
-	public void setFalling(boolean falling) {
-		this.falling = falling;
-	}
-
-
-	
 	
 }
