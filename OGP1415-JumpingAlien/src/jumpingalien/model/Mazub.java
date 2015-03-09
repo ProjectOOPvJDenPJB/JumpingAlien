@@ -458,7 +458,6 @@ public class Mazub {
 		}
 		this.setMaximumHorizontalVelocity(vHmax);
 		this.setRunTimer(this.getRunTimer() + timeInterval);
-		// System.out.println(this.runTimer);
 	}
 	
 	private double runTimer = 1;
@@ -487,7 +486,6 @@ public class Mazub {
 		else {
 			Sprite = this.getMovingSprite();
 		}
-//		System.out.println(Sprite + "Runtimer: " + this.runTimer);
 		return this.spriteArray[Sprite];
 	}
 	
@@ -519,37 +517,45 @@ public class Mazub {
 	 * @return The current moving sprite
 	 */
 	public int getMovingSprite() {
-		int Sprite = 0;
 		if (this.getMovingVertical() == true) {
 			if (this.getDirection() == 1)
-				Sprite = 4;
+				return 4;
 			else
-				Sprite = 5;
+				return 5;
 		}
 		else if (this.getDucking() == true) {
 			if (this.getDirection() == 1)
-				Sprite = 6;
+				return 6;
 			else
-				Sprite = 7;
+				return 7;
 		}
 		else {
 			int m = ((this.spriteArray.length - 8) / 2) - 1;
 			if (this.getDirection() == 1) {
 				if ((this.getPreviousSprite() < 8) || (this.getPreviousSprite() > 8 + m))
-					Sprite = 8;
+				{
+					this.setPreviousSprite(8);
+					return 8;
+				}
 			}
-			if (this.getDirection() == -1){
+			else if (this.getDirection() == -1){
 				if ((this.getPreviousSprite() < 9+m)|| (this.getPreviousSprite() > 9+ 2*m))
-					Sprite = 9 + m;
+				{
+					this.setPreviousSprite(9+m);
+					return 9 + m;
+				}
 			}
-			if (Util.fuzzyGreaterThanOrEqualTo(runTimer,0.075))
+			if (Util.fuzzyGreaterThanOrEqualTo(runTimer,0.075)) {
+				int Sprite;
 				Sprite = this.runningSprite(m);
-		}	
-		this.setPreviousSprite(Sprite);;
-		return Sprite;
+				this.setPreviousSprite(Sprite);
+				return Sprite;
+			}
+		}
+		return this.getPreviousSprite();
 	}
 	
-	private int previousSprite = 0;
+	private int previousSprite;
 	
 	public void setPreviousSprite(int sprite){
 		this.previousSprite = sprite;
