@@ -518,7 +518,7 @@ public class Mazub {
 	/**
 	 * Variable registering the previous sprite of this Mazub.
 	 */
-	private int previousSprite;
+	private int previousSprite = -1;
 	
 	/**
 	 * Sets the previous sprite of this Mazub to the given sprite.
@@ -687,9 +687,9 @@ public class Mazub {
 	 */
 	public void startJump(){
 		if (Util.fuzzyEquals(this.getYPosition(), 0)) {
-		this.setVerticalVelocity(this.getInitialVerticalVelocity());
-		this.setVerticalAcceleration(-10);
-		this.setMovingVertical(true);
+			this.setVerticalVelocity(this.getInitialVerticalVelocity());
+			this.setVerticalAcceleration(-10);
+			this.setMovingVertical(true);
 		}
 	}
 	
@@ -714,7 +714,7 @@ public class Mazub {
 	 * 			| new.getDucking() == true
 	 */
 	public void startDuck() {
-		this.setDucking(true);
+			this.setDucking(true);
 	}
 	
 	/**
@@ -856,8 +856,9 @@ public class Mazub {
 		if (this.getDirection() == 1) {
 			if (this.getPreviousSprite() == 8 + m)
 				Sprite = 8;
-			else
+			else{
 				Sprite = this.getPreviousSprite() + 1;
+			}
 		}
 		else {
 			if (this.getPreviousSprite() == 9 + 2*m)
