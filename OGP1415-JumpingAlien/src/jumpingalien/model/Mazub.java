@@ -334,7 +334,15 @@ public class Mazub {
 	 * A variable registering the vertical Acceleration of this Mazub.
 	 * 	This is a final variable which does not change during the game.
 	 */
-	private final double verticalAcceleration = -10;
+	private double verticalAcceleration;
+	
+	/**
+	 * 
+	 * @param verticalAcceleration
+	 */
+	public void setVerticalAcceleration(double verticalAcceleration){
+		this.verticalAcceleration = verticalAcceleration;
+	}
 	
 	/**
 	 * Return the initial horizontal velocity of this Mazub.
@@ -418,7 +426,19 @@ public class Mazub {
 	/**
 	 * Variable registering the horizontal acceleration of this Mazub.
 	 */
-	private final double horizontalAcceleration = 0.9;
+	private double horizontalAcceleration;
+	
+	/**
+	 * Sets the horizontal acceleration to the given horizontal acceleration.
+	 * 
+	 * @param	horizontalAcceleration
+	 * 			The new horizontal acceleration for this Mazub
+	 * @post	The new horizontal acceleration for this Mazub is equal to
+	 * 			the given horizontal acceleration.	
+	 */
+	public void setHorizontalAcceleration(double horizontalAcceleration){
+		this.horizontalAcceleration = horizontalAcceleration;
+	}
 	
 	/**
 	 * Return the initial vertical velocity of this Mazub.
@@ -609,7 +629,8 @@ public class Mazub {
 					this.endJump();
 					this.setMovingVertical(false);
 					this.setYPosition(0);
-					setVerticalVelocity(0);
+					this.setVerticalVelocity(0);
+					this.setVerticalAcceleration(0);
 				// If the new Y position calculated is smaller than zero then the 
 				// Y position is set to 0, which is the bottom border of the gameworld.
 				}
@@ -633,6 +654,7 @@ public class Mazub {
 	 */
 	public void startMove(){
 		this.setHorizontalVelocity(this.getInitialHorizontalVelocity());
+		this.setHorizontalAcceleration(0.9);
 		this.setMoving(true);	
 		this.setRunTime(0);
 	}
@@ -647,6 +669,7 @@ public class Mazub {
 	 */
 	public void endMove() {
 		this.setHorizontalVelocity(0);
+		this.setHorizontalAcceleration(0);
 		this.setMoving(false);
 		this.setRunTime(0);
 	}
@@ -665,6 +688,7 @@ public class Mazub {
 	public void startJump(){
 		if (Util.fuzzyEquals(this.getYPosition(), 0)) {
 		this.setVerticalVelocity(this.getInitialVerticalVelocity());
+		this.setVerticalAcceleration(-10);
 		this.setMovingVertical(true);
 		}
 	}
