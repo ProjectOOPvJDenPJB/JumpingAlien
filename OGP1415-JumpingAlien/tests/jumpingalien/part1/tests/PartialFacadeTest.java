@@ -66,7 +66,7 @@ public class PartialFacadeTest {
 		for (int i = 0; i < m; i++) {
 			facade.advanceTime(alien, 0.075);
 		}
-
+		System.out.println(sprites);
 		assertEquals(sprites[8+m], facade.getCurrentSprite(alien));
 	}
 
