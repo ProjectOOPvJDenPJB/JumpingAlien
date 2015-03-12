@@ -60,10 +60,10 @@ public class PartialFacadeTest {
 		Sprite[] sprites = spriteArrayForSize(2, 2, 10 + 2 * m);
 		Mazub alien = facade.createMazub(0, 0, sprites);
 
-		System.out.println( facade.getCurrentSprite(alien));
 		facade.startMoveRight(alien);
 
 		facade.advanceTime(alien, 0.005);
+		System.out.println( facade.getCurrentSprite(alien));
 		for (int i = 0; i < m; i++) {
 			facade.advanceTime(alien, 0.075);
 			System.out.println( facade.getCurrentSprite(alien));
@@ -136,7 +136,7 @@ public class PartialFacadeTest {
 		facade.advanceTime(alien, 0.2);
 		// x_new [m] = 0 + 1 [m/s] * 0.2 [s] =
 		// 0.20 [m] = 20 [cm], which falls into pixel (20, 0)
-		System.out.println( facade.getVelocity(alien)[0]);
+		System.out.println( alien.getXPosition());
 		assertArrayEquals(intArray(20, 0), facade.getLocation(alien));
 	}
 	//deze functie geeft aan dat we nog een fout hebben, bij change horizontal velocity wordt er bij uw positie altijd rekening

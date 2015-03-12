@@ -49,23 +49,23 @@ public class Facade implements IFacade {
 
 	public void startMoveLeft(Mazub alien) {
 		alien.setDirection("left");
-		alien.startMove();
+		alien.startMove(0.9);
 	}
 
 	public void endMoveLeft(Mazub alien) {
 		if (alien.getDirection() == -1) {
-			alien.endMove();
+			alien.endMove(0);
 		}
 	}
 
 	public void startMoveRight(Mazub alien) {
 		alien.setDirection("right");
-		alien.startMove();
+		alien.startMove(0.9);
 	}
 
 	public void endMoveRight(Mazub alien) {
 		if (alien.getDirection() == 1) {
-			alien.endMove();
+			alien.endMove(0);
 		}
 	}
 

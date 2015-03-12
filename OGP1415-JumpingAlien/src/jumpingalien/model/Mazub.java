@@ -51,12 +51,26 @@ public class Mazub {
 		assert isValidInitialVelocity(initialHorizontalVelocity, maximumHorizontalVelocity);
 		assert isValidMaximumHorizontalVelocity(maximumHorizontalVelocity, initialHorizontalVelocity);
 		assert isValidSpriteArray(spriteArray);
-		if (!isValidXPosition(positionLeftX))
-			throw new IllegalXPositionException(positionLeftX);
-		if (!isValidYPosition(positionBottomY))
-			throw new IllegalYPositionException(positionBottomY);
-		this.setXPosition(positionLeftX);
-		this.setYPosition(positionBottomY);
+		try {
+			this.setXPosition(positionLeftX);
+		} catch (IllegalXPositionException exc) {
+			if (positionLeftX < 0)
+				this.setXPosition(0);
+			else if (positionLeftX > 1024)
+				this.setXPosition(1024);
+			else
+				throw exc;
+		}
+		try {
+			this.setYPosition(positionBottomY);
+		} catch (IllegalYPositionException exc) {
+			if (positionBottomY < 0)
+				this.setYPosition(0);
+			else if (positionBottomY > 768)
+				this.setYPosition(768);
+			else
+				throw exc;
+		}
 		this.initialHorizontalVelocity = initialHorizontalVelocity;
 		this.setMaximumHorizontalVelocity(maximumHorizontalVelocity);
 		this.spriteArray = spriteArray;
@@ -277,10 +291,11 @@ public class Mazub {
 		if (horizontalVelocity  < 0) {
 			this.horizontalVelocity = 0;
 		}
-		if (horizontalVelocity > this.getMaximumHorizontalVelocity()) {
+		if (Util.fuzzyGreaterThanOrEqualTo(horizontalVelocity,this.getMaximumHorizontalVelocity())) {
 			this.horizontalVelocity = this.getMaximumHorizontalVelocity();
 		}
 		else {
+			this.setHorizontalAcceleration(0.9);
 			this.horizontalVelocity = horizontalVelocity;
 		}
 	}
@@ -421,6 +436,17 @@ public class Mazub {
 	@Basic @Immutable
 	public double getHorizontalAcceleration() {
 		return this.horizontalAcceleration;	
+	}
+	
+	/**
+	 * 
+	 * @param 	horizontalAcceleration
+	 * 			The horizontal acceleration to check.
+	 * @return	True if and only if the given acceleration is positive or zero.
+	 * 			| result == (horizontalAcceleration >= 0)
+	 */
+	public static boolean isValidHorizontalAcceleration(double horizontalAcceleration) {
+		return horizontalAcceleration >= 0;
 	}
 	
 	/**
@@ -593,6 +619,8 @@ public class Mazub {
 	 * 			new.getXPosition = this.getXPosition() + distanceCalculated
 	 */
 	public void changeHorizontalPosition(double timeInterval){
+		if (Util.fuzzyGreaterThanOrEqualTo(horizontalVelocity,this.getMaximumHorizontalVelocity())) 
+			this.setHorizontalAcceleration(0);
 		double newPosition = this.getXPosition() + this.getDirection() * (100 * this.getHorizontalVelocity()*timeInterval 
 				+ 50 * this.getHorizontalAcceleration()*timeInterval*timeInterval);
 			try { 
@@ -646,15 +674,22 @@ public class Mazub {
 	/**
 	 * Initializes horizontal movement to the direction Mazub is facing.
 	 * 
+	 * @param	horizontalAcceleration
+	 * 			The new horizontal acceleration for this Mazub.
+	 * @pre		The given horizontal acceleration must be a valid horizontal acceleration.
+	 * 			| isValidHorizontalAcceleration(horizontalAcceleration)
 	 * @post	The new horizontal velocity of this Mazub is equal to the initial horizontal
-	 * 			velocity of this Mazub, the boolean moving is set to true and the runTime
+	 * 			velocity of this Mazub, the horizontal acceleration is set to
+	 * 			the standard horizontal acceleration of a Mazub, the boolean moving is set to true and the runTime
 	 * 			is set to zero.
 	 * 			| new.getHorizontalVelocity() == this.getInitialHorizontalVelocity()
+	 * 			|	&& new.getHorizontalAcceleration() == horizontalAcceleration
 	 * 			|	&& new.getMoving() == true && new.getRunTime() == 0
 	 */
-	public void startMove(){
+	public void startMove(double horizontalAcceleration){
+		assert isValidHorizontalAcceleration(horizontalAcceleration);
+		this.setHorizontalAcceleration(horizontalAcceleration);
 		this.setHorizontalVelocity(this.getInitialHorizontalVelocity());
-		this.setHorizontalAcceleration(0.9);
 		this.setMoving(true);	
 		this.setRunTime(0);
 	}
@@ -662,16 +697,22 @@ public class Mazub {
 	/**
 	 * Ends horizontal movement in the direction Mazub is facing.
 	 * 
+	 * @param	horizontalAcceleration
+	 * 			The new horizontal acceleration for this Mazub.
+	 * @pre		The given horizontal acceleration must be a valid horizontal acceleration.
+	 * 			| isValidHorizontalAcceleration(horizontalAcceleration)
 	 * @post	The new horizontal velocity of this Mazub is equal to zero,
+	 * 			the new horizontal acceleration is set to the given horizontalAcceleration,
 	 * 			the boolean moving is set to false and the runTime is set to zero.
 	 * 			| new.getHorizontalVelocity() == 0 && new.getMoving == false
 	 * 			|	&& new.getRunTime == 0
 	 */
-	public void endMove() {
-		this.setHorizontalVelocity(0);
+	public void endMove(double horizontalAcceleration) {
+		assert isValidHorizontalAcceleration(horizontalAcceleration);
 		this.setHorizontalAcceleration(0);
+		this.setHorizontalVelocity(0);
 		this.setMoving(false);
-		this.setRunTime(0);
+		this.setRunTime(horizontalAcceleration);
 	}
 	
 	/**
@@ -686,7 +727,7 @@ public class Mazub {
 		
 	 */
 	public void startJump(){
-		if (Util.fuzzyEquals(this.getYPosition(), 0)) {
+		if (this.getMovingVertical() == false) {
 			this.setVerticalVelocity(this.getInitialVerticalVelocity());
 			this.setVerticalAcceleration(-10);
 			this.setMovingVertical(true);
