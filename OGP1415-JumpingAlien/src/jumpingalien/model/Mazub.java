@@ -249,9 +249,10 @@ public class Mazub {
 	 * 			| new.getMovingVertical == flag
 	 */
 	@Basic
-	private void setMovingVertical(boolean flag) throws IllegalStateException {
+	public void setMovingVertical(boolean flag) throws IllegalStateException {
 		if (this.getMovingVertical() == flag)
 			throw new IllegalStateException();
+		this.movingVertical = flag;	
 	}
 		
 	/**
