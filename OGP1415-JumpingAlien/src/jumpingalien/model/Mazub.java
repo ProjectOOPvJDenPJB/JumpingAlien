@@ -252,8 +252,6 @@ public class Mazub {
 	private void setMovingVertical(boolean flag) throws IllegalStateException {
 		if (this.getMovingVertical() == flag)
 			throw new IllegalStateException();
-		this.movingVertical = flag;
-	}
 		
 	/**
 	 *  Return the horizontal velocity of this Mazub.
