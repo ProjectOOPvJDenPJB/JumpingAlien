@@ -36,7 +36,6 @@ public class MazubTest {
 		alien.setHorizontalVelocity(-5);
 		velocity = alien.getHorizontalVelocity();
 		assertEquals(0.0,velocity,Util.DEFAULT_EPSILON);
-		//voor een of andere reden geeft die hier een fout, die geeft -5 terug terwijl die 0 zou moeten geven.
 	}
 	
 	@Test
@@ -46,6 +45,7 @@ public class MazubTest {
 		
 		alien.setVerticalVelocity(10);
 		velocity = alien.getVerticalVelocity();
+		//The maximum speed is limited by 8 [m/s]
 		assertEquals(8,velocity,Util.DEFAULT_EPSILON);
 		
 		alien.setVerticalVelocity(5);
@@ -117,14 +117,22 @@ public class MazubTest {
 	
 	@Test
 	public void changeHorizontalPosition_inValidPosition(){
-		Mazub alien = new Mazub(1024,0,spriteArrayForSize(2, 2));
-		alien.setDirection("right");
-		alien.setHorizontalVelocity(1);
-		alien.setHorizontalAcceleration(1);
+		Mazub alien1 = new Mazub(1024,0,spriteArrayForSize(2, 2));
+		alien1.setDirection("right");
+		alien1.setHorizontalVelocity(1);
+		alien1.setHorizontalAcceleration(1);
 		
-		alien.changeHorizontalPosition(1);
-		assertTrue(alien.getXPosition() == 1024);
-
+		alien1.changeHorizontalPosition(1);
+		assertTrue(alien1.getXPosition() == 1024);
+		
+		
+		Mazub alien2 = new Mazub(0,0,spriteArrayForSize(2, 2));
+		alien2.setDirection("left");
+		alien2.setHorizontalVelocity(1);
+		alien2.setHorizontalAcceleration(1);
+		
+		alien2.changeHorizontalPosition(1);
+		assertTrue(alien2.getXPosition() == 0);
 	}
 	
 	
@@ -171,7 +179,5 @@ public class MazubTest {
 		alien.changeVerticalPosition(1);
 		assertTrue(alien.getYPosition() == 500);
 	}
-	
-	
 	
 }

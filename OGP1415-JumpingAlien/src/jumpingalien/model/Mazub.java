@@ -713,10 +713,10 @@ public class Mazub {
 	 */
 	public void endMove(double horizontalAcceleration) {
 		assert isValidHorizontalAcceleration(horizontalAcceleration);
-		this.setHorizontalAcceleration(horizontalAcceleration);
 		this.setHorizontalVelocity(0);
+		this.setHorizontalAcceleration(horizontalAcceleration);
 		this.setMoving(false);
-		this.setRunTime(horizontalAcceleration);
+		this.setRunTime(0);
 	}
 	
 	/**
