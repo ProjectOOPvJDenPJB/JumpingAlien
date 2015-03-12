@@ -221,7 +221,7 @@ public class Mazub {
 	 * 			| new.getMoving == flag
 	 */
 	@Basic
-	private void setMoving(boolean flag){
+	private void setMoving(boolean flag) {
 		this.moving = flag;
 	}
 	
@@ -230,7 +230,7 @@ public class Mazub {
 	 * 	vertically or not.
 	 */
 	@Basic
-	private boolean getMovingVertical(){
+	private boolean getMovingVertical() {
 		return this.movingVertical;
 	}
 	
@@ -249,7 +249,9 @@ public class Mazub {
 	 * 			| new.getMovingVertical == flag
 	 */
 	@Basic
-	private void setMovingVertical(boolean flag){
+	private void setMovingVertical(boolean flag) throws IllegalStateException {
+		if (this.getMovingVertical() == flag)
+			throw new IllegalStateException();
 		this.movingVertical = flag;
 	}
 		
@@ -497,7 +499,9 @@ public class Mazub {
 	 * @post	The new ducking state of this Mazub is equal to the given flag
 	 * 			| new.getDucking == flag
 	 */
-	private void setDucking(boolean flag) {
+	private void setDucking(boolean flag) throws IllegalStateException {
+		if (this.getDucking() == flag)
+			throw new IllegalStateException();
 		this.ducking = flag;
 	}
 	
@@ -709,7 +713,7 @@ public class Mazub {
 	 */
 	public void endMove(double horizontalAcceleration) {
 		assert isValidHorizontalAcceleration(horizontalAcceleration);
-		this.setHorizontalAcceleration(0);
+		this.setHorizontalAcceleration(horizontalAcceleration);
 		this.setHorizontalVelocity(0);
 		this.setMoving(false);
 		this.setRunTime(horizontalAcceleration);
@@ -719,19 +723,22 @@ public class Mazub {
 	 * Initializes vertical movment.
 	 * 
 	 * @post	If the current Y position of this Mazub is equal to zero then
-	 * 			the new vertical velocity is set to the initial vertical velocity
+	 * 			the new vertical velocity is set to the initial vertical velocity, 
+	 * 			the new vertical acceleration is set to its default value
 	 * 			and the boolean movingVertical is set to true.
 	 * 			| if (this.getYPosition() == 0) 
-				|	then new.getVerticalVelocity() == this.getInitialVerticalVelocity()
-				|	&& new.getMovingVertical() == true
-		
+	 *			|	then new.getVerticalVelocity() == this.getInitialVerticalVelocity()
+	 *			|	&& new.getMovingVertical() == true
 	 */
-	public void startJump(){
-		if (this.getMovingVertical() == false) {
+	public void startJump() {
+		try{
+			this.setMovingVertical(true);
 			this.setVerticalVelocity(this.getInitialVerticalVelocity());
 			this.setVerticalAcceleration(-10);
-			this.setMovingVertical(true);
+		} catch (IllegalStateException exc) {
+			//Nothing happens if the Mazub is in an Illegal State.
 		}
+			
 	}
 	
 	/**
@@ -755,7 +762,11 @@ public class Mazub {
 	 * 			| new.getDucking() == true
 	 */
 	public void startDuck() {
-			this.setDucking(true);
+			try {
+				this.setDucking(true);
+			} catch (IllegalStateException exc) {
+				//Nothing happens if the Mazub is in an Illegal State.
+			}
 	}
 	
 	/**
@@ -765,7 +776,37 @@ public class Mazub {
 	 * 			| new.getDucking() == false
 	 */
 	public void endDuck() {
-		this.setDucking(false);
+		try {
+			this.setDucking(false);
+		} catch (IllegalStateException exc) {
+			//Nothing happens if the Mazub is in an Illegal State.
+		}
+	}
+	
+	/**
+	 * Checks whether the given timeInterval is a valid timeInterval for this Mazub.
+	 * 
+	 * @param 	timeInterval
+	 * 			The timeInterval to be checked.
+	 * @return	True if and only if the time interval is between 0 ands 0.2.
+	 * 			| result ==
+	 * 			|	(timeInterval >= 0) && (timeInterval <= 0.2)
+	 */
+	public static boolean isValidTimeInterval(double timeInterval) {
+		return Util.fuzzyGreaterThanOrEqualTo(timeInterval, 0) && Util.fuzzyLessThanOrEqualTo(timeInterval, 0.2);
+	}
+	
+	/**
+	 * Checks whether the given size is a valid size for this Mazub.
+	 * 
+	 * @param 	size
+	 * 			The size to be checked.
+	 * @return	True if and only if the size is greater or equal to 0.
+	 * 			| result ==
+	 * 			|	(size[0] > 0) && (size[1] > 0)
+	 */
+	public static boolean isValidSize(int[] size) {
+		return Util.fuzzyGreaterThanOrEqualTo(size[0], 0) && Util.fuzzyGreaterThanOrEqualTo(size[1], 0);
 	}
 	
 	/**
@@ -788,10 +829,15 @@ public class Mazub {
 	 * 			| this.changeHorizontalPosition(timeInterval)
 	 * @effect	The new Y position of this Mazub is changed using timeInterval if this Mazub is moving vertically.
 	 * 			| this.changeVerticalPosition(timeInterval)
+	 * @throws	IllegalTimeIntervalException
+	 * 			The given time interval is not a valid time interval for this Mazub.
+	 * 			| (! isValidTimeInterval(timeInterval))
 	 * @note	In the execution of the method advanceTime the maximum horizontal velocity may be limited to 1 if
 	 * 			this Mazub is ducking. After advanceTime is done running it is set back to its original value.
 	 */
-	public void advanceTime(double timeInterval){
+	public void advanceTime(double timeInterval) throws IllegalTimeIntervalException {
+		if (! isValidTimeInterval(timeInterval))
+			throw new IllegalTimeIntervalException(timeInterval);
 		double vHmax = this.getMaximumHorizontalVelocity();
 		if (this.getDucking() == true) {
 			this.setMaximumHorizontalVelocity(1);
@@ -913,13 +959,20 @@ public class Mazub {
 	
 	/**
 	 *TODO
-	 * @param sprite
-	 * @return
+	 * @param 	sprite
+	 * 			The sprite of which the size must be determined.
+	 * @return	Returns the size of the given sprite in an array of type int.
+	 * 			this array consists of two elements, the height and width respectively.
+	 * @throws	IllegalSizeException
+	 * 			The size of this sprite is not a valid size for a sprite of this Mazub.
+	 * 			| (! isValidSize([sprite.getHeight(),sprite.getWidth()]))
 	 */
-	public int[] getSize(Sprite sprite) {
+	public int[] getSize(Sprite sprite) throws IllegalSizeException {
 		int[] size = new int[2];
 		size[0] = sprite.getHeight();
 		size[1] = sprite.getWidth();
+		if (! isValidSize(size))
+			throw new IllegalSizeException(size);
 		return size;
 	}	
 }

@@ -1,12 +1,24 @@
 package jumpingalien.part1.facade;
 
+import jumpingalien.model.IllegalSizeException;
+import jumpingalien.model.IllegalTimeIntervalException;
+import jumpingalien.model.IllegalXPositionException;
+import jumpingalien.model.IllegalYPositionException;
 import jumpingalien.model.Mazub;
 import jumpingalien.util.Sprite;
 
 public class Facade implements IFacade {
+	
+	public Facade() {
+		
+	}
 
-	public Mazub createMazub(int pixelLeftX, int pixelBottomY, Sprite[] sprites) {
-		return new Mazub(pixelLeftX, pixelBottomY, sprites);
+	public Mazub createMazub(int pixelLeftX, int pixelBottomY, Sprite[] sprites) throws jumpingalien.util.ModelException {
+		try {
+			return new Mazub(pixelLeftX, pixelBottomY, sprites);
+		} catch (IllegalXPositionException | IllegalYPositionException exc) {
+			throw new jumpingalien.util.ModelException("Illegal positions", exc);
+		}
 	}
 
 	public int[] getLocation(Mazub alien) {
@@ -31,8 +43,12 @@ public class Facade implements IFacade {
 		return acceleration;
 	}
 
-	public int[] getSize(Mazub alien) {
-		return alien.getSize(alien.getCurrentSprite());
+	public int[] getSize(Mazub alien) throws jumpingalien.util.ModelException {
+		try {
+			return alien.getSize(alien.getCurrentSprite());
+		} catch (IllegalSizeException exc) {
+			throw new jumpingalien.util.ModelException("Illegal size", exc);
+		}
 	}
 
 	public Sprite getCurrentSprite(Mazub alien) {
@@ -77,8 +93,12 @@ public class Facade implements IFacade {
 		alien.endDuck();
 	}
 
-	public void advanceTime(Mazub alien, double dt) {
-		alien.advanceTime(dt);
+	public void advanceTime(Mazub alien, double dt) throws jumpingalien.util.ModelException {
+		try {
+			alien.advanceTime(dt);
+		} catch (IllegalTimeIntervalException exc) {
+			throw new jumpingalien.util.ModelException("Illegal time interval", exc);
+		}
 	}
 
 }
