@@ -249,7 +249,7 @@ public class Mazub {
 	 * 			| new.getMovingVertical == flag
 	 */
 	@Basic
-	private void setMovingVertical(boolean flag){
+	public void setMovingVertical(boolean flag){
 		this.movingVertical = flag;
 	}
 		
