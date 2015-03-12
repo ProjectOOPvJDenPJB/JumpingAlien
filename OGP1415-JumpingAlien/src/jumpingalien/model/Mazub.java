@@ -713,10 +713,10 @@ public class Mazub {
 	 */
 	public void endMove(double horizontalAcceleration) {
 		assert isValidHorizontalAcceleration(horizontalAcceleration);
-		this.setHorizontalAcceleration(horizontalAcceleration);
 		this.setHorizontalVelocity(0);
+		this.setHorizontalAcceleration(horizontalAcceleration);
 		this.setMoving(false);
-		this.setRunTime(horizontalAcceleration);
+		this.setRunTime(0);
 	}
 	
 	/**
@@ -859,8 +859,10 @@ public class Mazub {
 			
 	/**
 	 * Selects a sprite based on the previous and current actions of mazub.
+	 * @pre		The sprite array of this Mazub has to be a valid sprite array.
 	 */
 	public Sprite getCurrentSprite() {
+		assert (isValidSpriteArray(this.getSpriteArray()));
 		int Sprite;
 		if (this.getMoving() == false) {
 			Sprite = this.getNotMovingSprite();
@@ -873,8 +875,20 @@ public class Mazub {
 	
 	/**
 	 * Returns the sprite of this Mazub while not moving based on its current and previous actions.
+	 * @pre		This mazub cannot be moving when invoking this method.
+	 * @return	If this mazub has not moved within the last second and is ducking, sprite 1 is returned.
+	 * @return	If this mazub has not moved within the last second and is not ducking, sprite 0 is returned.
+	 * @return	If this mazub has moved within the last second, is faced to the right and
+	 * 			is ducking, sprite 6 is returned.
+	 * @return	If this mazub has moved within the last second, is faced to the right and
+	 * 			is not ducking, sprite 2 is returned.
+	 * @return	If this mazub has moved within the last second, is faced to the left and
+	 * 			is ducking, sprite 7 is returned.
+	 * @return	If this mazub has moved within the last second, is faced to the left and
+	 * 			is not ducking, sprite 3 is returned.
 	 */
 	private int getNotMovingSprite() {
+		assert (this.getMoving() == false);
 		if (Util.fuzzyGreaterThanOrEqualTo(this.getRunTime(),1)) {
 			if (this.getDucking() == true)
 				return 1;
@@ -895,8 +909,26 @@ public class Mazub {
 	
 	/**
 	 * Returns the sprite of this Mazub while moving based on its current and previous actions.
+	 * @pre		This mazub has to be moving when invoking this method.
+	 * @return	If this mazub is jumping and is faced to the right, sprite 4 is returned.
+	 * @return	If this mazub is jumping and is faced to the left, sprite 5 is returned.
+	 * @return	If this mazub is ducking and is faced to the right, sprite 6 is returned.
+	 * @return	If this mazub is ducking and is faced to the left, sprite 7 is returned.
+	 * @return	If this mazub is starting to move to to the right and is not jumping or ducking, sprite 8 is returned.
+	 * @return	If this mazub is starting to move to the left and is not jumping or ducking, sprite 9 + m is returned.
+	 * @return	If this mazub has been moving to the left or right and is not jumping or ducking
+	 * 			the result of the method runningSprite is returned.
+	 * @post	If this mazub is starting to move to to the right and is not jumping or ducking,
+	 * 			the new previous sprite is set to 8.
+	 * @post	If this mazub is starting to move to the left and and the runtimer is greater than 0.075
+	 * 			and this mazub is not jumping or ducking,
+	 * 			the new previous sprite is set to 9+m.
+	 * @post	If this mazub has been moving to the left or right and the runtimer is greater than 0.075
+	 * 			and this mazub is not jumping or ducking,
+	 * 			the new previous sprite is set to the result of the method runningSprite.
 	 */
 	private int getMovingSprite() {
+		assert (this.getMoving() == true);
 		if (this.getMovingVertical() == true) {
 			if (this.getDirection() == 1)
 				return 4;
@@ -937,8 +969,15 @@ public class Mazub {
 
 	/**
 	 * Returns the current sprite while running based on its previous sprite.
+	 * @pre		This mazub has to be moving when invoking this method.
+	 * @return	The current sprite is returned based on this mazub's previous sprite.
+	 * 			if the previous sprite was 8+m or 9+ 2*m the returned sprite is
+	 * 			8 & 9 respsectively. Otherwise the sprite returned is  previous sprite + 1.
+	 * @post	The run time is set to zero.
+	 * 
 	 */
 	private int runningSprite(int m) {
+		assert (this.getMoving() == true);
 		int Sprite;
 		if (this.getDirection() == 1) {
 			if (this.getPreviousSprite() == 8 + m)
@@ -958,7 +997,7 @@ public class Mazub {
 	}
 	
 	/**
-	 *TODO
+	 * Returns the size of a sprite of this Mazub.
 	 * @param 	sprite
 	 * 			The sprite of which the size must be determined.
 	 * @return	Returns the size of the given sprite in an array of type int.
