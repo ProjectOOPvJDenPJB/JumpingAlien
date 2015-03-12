@@ -2,6 +2,8 @@ package tests;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+//import static org.junit.Assert.assertFalse;
 //import static org.junit.Assert.assertTrue;
 import jumpingalien.part1.facade.Facade;
 import jumpingalien.part1.facade.IFacade;
@@ -15,6 +17,49 @@ import static jumpingalien.tests.util.TestUtils.*;
 public class FacadeTests {
 
 	@Test
+	public void testCorrectInitialised() {
+		IFacade facade = new Facade();
+
+		Mazub alien1 = facade.createMazub(-1, -1, spriteArrayForSize(2, 2));
+		assertArrayEquals(intArray(0, 0), facade.getLocation(alien1));
+		
+		Mazub alien2 = facade.createMazub(1028, 800, spriteArrayForSize(2, 2));
+		assertArrayEquals(intArray(1024, 768), facade.getLocation(alien2));
+	}
+	
+	@Test
+	public void startJumpCorrect() {
+		IFacade facade = new Facade();
+
+		Mazub alien = facade.createMazub(0, 0, spriteArrayForSize(2, 2));
+		facade.startJump(alien);
+		facade.advanceTime(alien, 0.2);
+		// y_new [m] = 0 + 8 [m/s] * 0.2[s] - 5 [m/s^2] * (0.2 [s])^2 =
+		// 1.40[m] = 140.0 [cm], which falls into pixel (21, 140)
+		assertArrayEquals(intArray(0, 140), facade.getLocation(alien));
+	}
+	@Test
+	public void endJump_whileVerticalVelocityIsGreaterThanZero(){
+		IFacade facade = new Facade();
+
+		Mazub alien = facade.createMazub(0, 10, spriteArrayForSize(2, 2));
+		facade.startJump(alien);
+		facade.endJump(alien);
+		assertArrayEquals(doubleArray(0, 0), facade.getVelocity(alien),
+				Util.DEFAULT_EPSILON);
+	}
+	
+	@Test
+	public void endJump_whileVerticalVelocityIsSmallerThanZero(){
+		IFacade facade = new Facade();
+
+		Mazub alien = facade.createMazub(0, 10, spriteArrayForSize(2, 2));
+		alien.setVerticalVelocity(-10);
+		facade.endJump(alien);
+		assertArrayEquals(doubleArray(0, -10), facade.getVelocity(alien),
+				Util.DEFAULT_EPSILON);
+	}
+	@Test
 	public void startMoveRightCorrect() {
 		IFacade facade = new Facade();
 
@@ -26,6 +71,20 @@ public class FacadeTests {
 		// 0.1045 [m] = 10.45 [cm], which falls into pixel (10, 0)
 
 		assertArrayEquals(intArray(10, 0), facade.getLocation(alien));
+	}
+	
+	@Test
+	public void endMoveRightCorrect(){
+		IFacade facade = new Facade();
+		
+		Mazub alien = facade.createMazub(0, 0, spriteArrayForSize(2, 2));
+		facade.startMoveRight(alien);
+		facade.endMoveRight(alien);
+		assertTrue(alien.getHorizontalVelocity() == 0);
+		
+		facade.startMoveLeft(alien);
+		facade.endMoveRight(alien);
+		assertTrue(alien.getHorizontalVelocity() == 1);
 	}
 	
 	@Test
@@ -43,15 +102,17 @@ public class FacadeTests {
 	}
 	
 	@Test
-	public void startJumpCorrect() {
+	public void endMoveLeftCorrect(){
 		IFacade facade = new Facade();
-
+		
 		Mazub alien = facade.createMazub(0, 0, spriteArrayForSize(2, 2));
-		facade.startJump(alien);
-		facade.advanceTime(alien, 0.2);
-		// y_new [m] = 0 + 8 [m/s] * 0.2[s] - 5 [m/s^2] * (0.2 [s])^2 =
-		// 1.40[m] = 140.0 [cm], which falls into pixel (21, 140)
-		assertArrayEquals(intArray(0, 140), facade.getLocation(alien));
+		facade.startMoveLeft(alien);
+		facade.endMoveLeft(alien);
+		assertTrue(alien.getHorizontalVelocity() == 0);
+		
+		facade.startMoveRight(alien);
+		facade.endMoveLeft(alien);
+		assertTrue(alien.getHorizontalVelocity() == 1);
 	}
 
 	@Test
@@ -110,17 +171,6 @@ public class FacadeTests {
 			System.out.println( facade.getCurrentSprite(alien));
 		}
 		assertEquals(sprites[8+m], facade.getCurrentSprite(alien));
-	}
-	
-	@Test
-	public void testCorrectInitialised() {
-		IFacade facade = new Facade();
-
-		Mazub alien1 = facade.createMazub(-1, -1, spriteArrayForSize(2, 2));
-		assertArrayEquals(intArray(0, 0), facade.getLocation(alien1));
-		
-		Mazub alien2 = facade.createMazub(1028, 800, spriteArrayForSize(2, 2));
-		assertArrayEquals(intArray(1024, 768), facade.getLocation(alien2));
 	}
 
 	@Test
