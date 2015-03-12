@@ -252,7 +252,7 @@ public class Mazub {
 	public void setMovingVertical(boolean flag) throws IllegalStateException {
 		if (this.getMovingVertical() == flag)
 			throw new IllegalStateException();
-		this.movingVertical = flag;	
+		this.movingVertical = flag;
 	}
 		
 	/**
@@ -293,7 +293,7 @@ public class Mazub {
 		if (horizontalVelocity  < 0) {
 			this.horizontalVelocity = 0;
 		}
-		if (Util.fuzzyGreaterThanOrEqualTo(horizontalVelocity,this.getMaximumHorizontalVelocity())) {
+		else if (Util.fuzzyGreaterThanOrEqualTo(horizontalVelocity,this.getMaximumHorizontalVelocity())) {
 			this.horizontalVelocity = this.getMaximumHorizontalVelocity();
 		}
 		else {
