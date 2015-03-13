@@ -10,7 +10,6 @@ import jumpingalien.util.Sprite;
 public class Facade implements IFacade {
 	
 	public Facade() {
-		
 	}
 
 	public Mazub createMazub(int pixelLeftX, int pixelBottomY, Sprite[] sprites) throws jumpingalien.util.ModelException {

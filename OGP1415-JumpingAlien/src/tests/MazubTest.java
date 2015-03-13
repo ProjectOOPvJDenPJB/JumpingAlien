@@ -1,24 +1,76 @@
 package tests;
 
 import static jumpingalien.tests.util.TestUtils.spriteArrayForSize;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 import jumpingalien.model.Mazub;
+import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
 
-import org.junit.Test;
+import org.junit.*;
 
 public class MazubTest {
-
+	
+	private Sprite[] defaultSprites;
+	
+	@Before
+	public void setUp() {
+		this.defaultSprites = spriteArrayForSize(2,2);
+	}
+	
+	@Test
+	public void extendedConstructor$LegalCase() {		
+		Mazub alien = new Mazub(0, 0, defaultSprites, 5, 3);
+		assertTrue(0 == alien.getXPosition());
+		assertTrue(0 == alien.getYPosition());
+		assertTrue(5 == alien.getMaximumHorizontalVelocity());
+		assertTrue(3 == alien.getInitialHorizontalVelocity());
+		assertArrayEquals(defaultSprites, alien.getSpriteArray());
+	}
+	
+	public void extendedConstructor$NegativePositions() {
+		Mazub alien = new Mazub(-6,-800,defaultSprites,5,3);
+		assertTrue(0 == alien.getXPosition());
+		assertTrue(0 == alien.getYPosition());
+		assertTrue(5 == alien.getMaximumHorizontalVelocity());
+		assertTrue(3 == alien.getInitialHorizontalVelocity());
+		assertArrayEquals(defaultSprites, alien.getSpriteArray());
+	}
+	
+	public void extendedConstructor$OutOfBoundsPositions() {
+		//Positions too big (out of bounds of gameworld)
+		Mazub alien = new Mazub(2000,6805,defaultSprites,5,3);
+		assertTrue(1024 == alien.getXPosition());
+		assertTrue(768 == alien.getYPosition());
+		assertTrue(5 == alien.getMaximumHorizontalVelocity());
+		assertTrue(3 == alien.getInitialHorizontalVelocity());
+		assertArrayEquals(defaultSprites, alien.getSpriteArray());
+	}
+	
 	@Test
 	public void testCorrectInitialisedWithOnlySpriteArrayGiven() {
-		
-		
+				
 		Mazub alien = new Mazub(spriteArrayForSize(2, 2));
 		assertTrue(0 == alien.getXPosition());
 		assertTrue(0 == alien.getYPosition());
+		assertTrue(3 == alien.getMaximumHorizontalVelocity());
+		assertTrue(1 == alien.getInitialHorizontalVelocity());
 	}
+	
+	@Test
+	public void setMovingVertical$LegalCase() throws Exception {
+		Mazub alien = new Mazub(spriteArrayForSize(2, 2));
+		alien.setMovingVertical(true);
+		assertTrue(alien.getMovingVertical());
+	}
+	
+	@Test(expected=IllegalStateException.class)
+	public void setMovingVertical$IllegalCase() throws Exception {
+		Mazub alien = new Mazub(spriteArrayForSize(2, 2));
+		alien.setMovingVertical(false);
+		assertFalse(alien.getMovingVertical());
+	}
+	
+	
 	
 	@Test
 	public void testSetHorizontalVelocity() {

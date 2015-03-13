@@ -230,7 +230,7 @@ public class Mazub {
 	 * 	vertically or not.
 	 */
 	@Basic
-	private boolean getMovingVertical() {
+	public boolean getMovingVertical() {
 		return this.movingVertical;
 	}
 	
