@@ -354,10 +354,23 @@ public class Mazub {
 	private double verticalAcceleration;
 	
 	/**
+	 * Sets the vertical acceleration of this Mazub to the given vertical acceleration.
 	 * 
-	 * @param verticalAcceleration
-	 */
+	 * @param 	verticalAcceleration
+	 * 			The new vertical acceleration for this mazub.
+	 * @post	If the vertical acceleration is not 0 or -10 the new
+	 * 			vertical acceleration is set to 0.
+	 * 			| if ((verticalAcceleration != 0) || (verticalAcceleration != -10))
+	 * 			|	new.getVerticalAcceleration() == 0
+	 * @post	If the vertical acceleration is 0 or -10 the new
+	 * 			vertical acceleration is set to the given vertical 
+	 * 			acceleration.
+	 * 			| if ((verticalAcceleration == 0) || (verticalAcceleration == -10))
+	 * 			|	new.getVerticalAcceleration() == verticalAcceleration
+	 */	
 	public void setVerticalAcceleration(double verticalAcceleration){
+		if ((verticalAcceleration != 0) || (verticalAcceleration != -10))
+			this.verticalAcceleration = 0;
 		this.verticalAcceleration = verticalAcceleration;
 	}
 	
