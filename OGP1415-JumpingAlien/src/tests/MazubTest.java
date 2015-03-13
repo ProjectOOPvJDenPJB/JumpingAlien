@@ -71,6 +71,59 @@ public class MazubTest {
 	}
 	
 	
+	@Test
+	public void isValidXPosition_False(){
+		assertFalse(Mazub.isValidXPosition(-5));
+		assertFalse(Mazub.isValidXPosition(1028));
+	}
+	
+	@Test
+	public void isValidXPosition_True(){
+		assertTrue(Mazub.isValidXPosition(0));
+		assertTrue(Mazub.isValidXPosition(1024));
+		assertTrue(Mazub.isValidXPosition(500));
+	}
+	
+	@Test
+	public void isValidYPosition_False(){
+		assertFalse(Mazub.isValidYPosition(-1));
+		assertFalse(Mazub.isValidYPosition(769));
+	}
+	
+	@Test
+	public void isValidYPosition_True(){
+		assertTrue(Mazub.isValidYPosition(0));
+		assertTrue(Mazub.isValidYPosition(768));
+		assertTrue(Mazub.isValidYPosition(500));
+	}
+	
+	@Test
+	public void testSetXposition$LegalCase() throws Exception{
+		Mazub alien = new Mazub(spriteArrayForSize(2, 2));
+		alien.setXPosition(5);
+		assertTrue(alien.getXPosition() == 5);
+	}
+	
+	@Test(expected = IllegalXPositionException.class)
+	public void testSetXposition$IllegalCase() throws Exception{
+		Mazub alien = new Mazub(spriteArrayForSize(2, 2));
+		alien.setXPosition(-5);
+		assertTrue(alien.getXPosition() == -5);
+	}
+	
+	@Test
+	public void testSetYposition$LegalCase() throws Exception{
+		Mazub alien = new Mazub(spriteArrayForSize(2, 2));
+		alien.setYPosition(5);
+		assertTrue(alien.getYPosition() == 5);
+	}
+	
+	@Test(expected = IllegalYPositionException.class)
+	public void testSetYposition$IllegalCase() throws Exception{
+		Mazub alien = new Mazub(spriteArrayForSize(2, 2));
+		alien.setYPosition(-5);
+		assertTrue(alien.getYPosition() == -5);
+	}
 	
 	@Test
 	public void testSetHorizontalVelocity() {
