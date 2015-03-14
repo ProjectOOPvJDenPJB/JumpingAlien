@@ -3,9 +3,6 @@ package tests;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import jumpingalien.model.IllegalTimeIntervalException;
-//import static org.junit.Assert.assertFalse;
-//import static org.junit.Assert.assertTrue;
 import jumpingalien.part1.facade.Facade;
 import jumpingalien.part1.facade.IFacade;
 import jumpingalien.model.Mazub;
@@ -211,8 +208,7 @@ public class FacadeTests {
 		assertArrayEquals(intArray(1024, 0), facade.getLocation(alien));
 	}
 	
-	//geeft een error omdat de exception nergens opgevangen wordt.
-	@Test(expected = IllegalTimeIntervalException.class)
+	@Test(expected = jumpingalien.util.ModelException.class)
 	public void advanceTime$IllegalCase() {
 		IFacade facade = new Facade();
 		Mazub alien = facade.createMazub(0, 0, spriteArrayForSize(2, 2));
