@@ -155,25 +155,6 @@ public class FacadeTests {
 	}
 
 	@Test
-	public void testWalkAnimationLastFrame() {
-		IFacade facade = new Facade();
-
-		int m = 10;
-		Sprite[] sprites = spriteArrayForSize(2, 2, 10 + 2 * m);
-		Mazub alien = facade.createMazub(0, 0, sprites);
-
-		facade.startMoveRight(alien);
-
-		facade.advanceTime(alien, 0.005);
-		System.out.println( facade.getCurrentSprite(alien));
-		for (int i = 0; i < m; i++) {
-			facade.advanceTime(alien, 0.075);
-			System.out.println( facade.getCurrentSprite(alien));
-		}
-		assertEquals(sprites[8+m], facade.getCurrentSprite(alien));
-	}
-
-	@Test
 	public void testAccellerationZeroWhenMovingAndJumping() {
 		IFacade facade = new Facade();
 
@@ -285,5 +266,157 @@ public class FacadeTests {
 				Util.DEFAULT_EPSILON);
 		}
 	
-	
+		@Test
+		public void testIsNotMovingAnimtionFrame() {
+			IFacade facade = new Facade();
+
+			int m = 10;
+			Sprite[] sprites = spriteArrayForSize(2, 2, 10 + 2 * m);
+			Mazub alien = facade.createMazub(0, 0, sprites);
+
+			assertEquals(sprites[0], facade.getCurrentSprite(alien));
+			
+			facade.startMoveRight(alien);
+			facade.endMoveRight(alien);
+			for (int i = 0; i < 5; i++) {
+				facade.advanceTime(alien, 0.);
+			}			
+			assertEquals(sprites[2], facade.getCurrentSprite(alien));
+			
+			facade.startMoveLeft(alien);
+			facade.endMoveLeft(alien);
+			for (int i = 0; i < 5; i++) {
+				facade.advanceTime(alien, 0.);
+			}			
+			assertEquals(sprites[3], facade.getCurrentSprite(alien));
+		}
+		
+		@Test
+		public void testWalkRightAnimationFrames() {
+			IFacade facade = new Facade();
+
+			int m = 10;
+			Sprite[] sprites = spriteArrayForSize(2, 2, 10 + 2 * m);
+			Mazub alien = facade.createMazub(0, 0, sprites);
+
+			facade.startMoveRight(alien);
+
+			facade.advanceTime(alien, 0.005);
+			assertEquals(sprites[8], facade.getCurrentSprite(alien));
+			for (int i = 0; i < m; i++) {
+				facade.advanceTime(alien, 0.075);
+				assertEquals(sprites[8+i+1], facade.getCurrentSprite(alien));
+			}
+			facade.advanceTime(alien, 0.075);
+			assertEquals(sprites[8], facade.getCurrentSprite(alien));
+		}
+		
+		@Test
+		public void testWalkLeftAnimationFrames() {
+			IFacade facade = new Facade();
+
+			int m = 10;
+			Sprite[] sprites = spriteArrayForSize(2, 2, 10 + 2 * m);
+			Mazub alien = facade.createMazub(0, 0, sprites);
+
+			facade.startMoveLeft(alien);
+
+			facade.advanceTime(alien, 0.005);
+			assertEquals(sprites[9+m], facade.getCurrentSprite(alien));
+			for (int i = 0; i < m; i++) {
+				facade.advanceTime(alien, 0.075);
+				assertEquals(sprites[9+m+1+i], facade.getCurrentSprite(alien));
+			}
+			facade.advanceTime(alien, 0.075);
+			assertEquals(sprites[9+m], facade.getCurrentSprite(alien));
+		}
+
+		@Test
+		public void testWasOrIsWalkingRightWhileDuckingAnimationFrame() {
+			IFacade facade = new Facade();
+
+			int m = 10;
+			Sprite[] sprites = spriteArrayForSize(2, 2, 10 + 2 * m);
+			Mazub alien = facade.createMazub(0, 0, sprites);
+
+			facade.startMoveRight(alien);
+			facade.startDuck(alien);
+			facade.advanceTime(alien, 0.005);
+			assertEquals(sprites[6], facade.getCurrentSprite(alien));
+			facade.endMoveRight(alien);
+			for (int i = 0; i < 5; i++) {
+				facade.advanceTime(alien, 0.199);
+			}
+			//The last movement to the right was 0.995 seconds ago.
+			assertEquals(sprites[6], facade.getCurrentSprite(alien));
+			facade.advanceTime(alien, 0.006);
+			assertEquals(sprites[1], facade.getCurrentSprite(alien));
+		}
+		
+		@Test
+		public void testWasOrIsWalkingLeftWhileDuckingAnimationFrame() {
+			IFacade facade = new Facade();
+
+			int m = 10;
+			Sprite[] sprites = spriteArrayForSize(2, 2, 10 + 2 * m);
+			Mazub alien = facade.createMazub(0, 0, sprites);
+
+			facade.startMoveLeft(alien);
+			facade.startDuck(alien);
+			facade.advanceTime(alien, 0.005);
+			assertEquals(sprites[7], facade.getCurrentSprite(alien));
+			facade.endMoveLeft(alien);
+			for (int i = 0; i < 5; i++) {
+				facade.advanceTime(alien, 0.199);
+			}
+			//The last movement to the left was 0.995 seconds ago.
+			assertEquals(sprites[7], facade.getCurrentSprite(alien));
+			facade.advanceTime(alien, 0.006);
+			assertEquals(sprites[1], facade.getCurrentSprite(alien));
+		}
+		
+		@Test
+		public void testIsWalkingRightWhileJumpingAnimationFrame() {
+			IFacade facade = new Facade();
+
+			int m = 10;
+			Sprite[] sprites = spriteArrayForSize(2, 2, 10 + 2 * m);
+			Mazub alien = facade.createMazub(0, 0, sprites);
+
+			facade.startMoveRight(alien);
+			facade.startJump(alien);
+			facade.advanceTime(alien, 0.005);
+			assertEquals(sprites[4], facade.getCurrentSprite(alien));
+			facade.endJump(alien);
+			facade.advanceTime(alien, 0.005);
+			assertEquals(sprites[4], facade.getCurrentSprite(alien));
+			facade.endMoveRight(alien);
+			facade.advanceTime(alien, 0.015);
+			assertEquals(sprites[2], facade.getCurrentSprite(alien));
+		}
+		
+		@Test
+		public void testIsWalkingLeftWhileJumpingAnimationFrame() {
+			IFacade facade = new Facade();
+
+			int m = 10;
+			Sprite[] sprites = spriteArrayForSize(2, 2, 10 + 2 * m);
+			Mazub alien = facade.createMazub(0, 0, sprites);
+
+			facade.startMoveLeft(alien);
+			facade.startJump(alien);
+			facade.advanceTime(alien, 0.005);
+			assertEquals(sprites[5], facade.getCurrentSprite(alien));
+			facade.endJump(alien);
+			facade.advanceTime(alien, 0.005);
+			assertEquals(sprites[5], facade.getCurrentSprite(alien));
+			facade.endMoveLeft(alien);
+			facade.advanceTime(alien, 0.015);
+			assertEquals(sprites[3], facade.getCurrentSprite(alien));
+		}
+		
+
+		
+		
+		
 }
