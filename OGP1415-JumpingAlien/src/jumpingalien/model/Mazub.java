@@ -369,9 +369,10 @@ public class Mazub {
 	 * 			|	new.getVerticalAcceleration() == verticalAcceleration
 	 */	
 	public void setVerticalAcceleration(double verticalAcceleration){
-		if ((verticalAcceleration != 0) || (verticalAcceleration != -10))
+		if ((verticalAcceleration != 0) && (verticalAcceleration != -10))
 			this.verticalAcceleration = 0;
-		this.verticalAcceleration = verticalAcceleration;
+		else
+			this.verticalAcceleration = verticalAcceleration;
 	}
 	
 	/**
@@ -810,6 +811,25 @@ public class Mazub {
 	}
 	
 	/**
+	 * Returns the size of a sprite of this Mazub.
+	 * @param 	sprite
+	 * 			The sprite of which the size must be determined.
+	 * @return	Returns the size of the given sprite in an array of type int.
+	 * 			this array consists of two elements, the height and width respectively.
+	 * @throws	IllegalSizeException
+	 * 			The size of this sprite is not a valid size for a sprite of this Mazub.
+	 * 			| (! isValidSize([sprite.getHeight(),sprite.getWidth()]))
+	 */
+	public static int[] getSize(Sprite sprite) throws IllegalSizeException {
+		int[] size = new int[2];
+		size[0] = sprite.getHeight();
+		size[1] = sprite.getWidth();
+		if (! isValidSize(size))
+			throw new IllegalSizeException(size);
+		return size;
+	}
+	
+	/**
 	 * Checks whether the given size is a valid size for this Mazub.
 	 * 
 	 * @param 	size
@@ -1008,23 +1028,4 @@ public class Mazub {
 		this.setRunTime(0); 
 		return Sprite;			
 	}
-	
-	/**
-	 * Returns the size of a sprite of this Mazub.
-	 * @param 	sprite
-	 * 			The sprite of which the size must be determined.
-	 * @return	Returns the size of the given sprite in an array of type int.
-	 * 			this array consists of two elements, the height and width respectively.
-	 * @throws	IllegalSizeException
-	 * 			The size of this sprite is not a valid size for a sprite of this Mazub.
-	 * 			| (! isValidSize([sprite.getHeight(),sprite.getWidth()]))
-	 */
-	public int[] getSize(Sprite sprite) throws IllegalSizeException {
-		int[] size = new int[2];
-		size[0] = sprite.getHeight();
-		size[1] = sprite.getWidth();
-		if (! isValidSize(size))
-			throw new IllegalSizeException(size);
-		return size;
-	}	
 }

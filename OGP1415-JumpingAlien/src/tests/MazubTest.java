@@ -2,7 +2,14 @@ package tests;
 
 import static jumpingalien.tests.util.TestUtils.spriteArrayForSize;
 import static org.junit.Assert.*;
+
+import java.util.Arrays;
+
+import jumpingalien.model.IllegalSizeException;
+import jumpingalien.model.IllegalXPositionException;
+import jumpingalien.model.IllegalYPositionException;
 import jumpingalien.model.Mazub;
+import jumpingalien.tests.util.TestUtils;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
 
@@ -126,6 +133,20 @@ public class MazubTest {
 	}
 	
 	@Test
+	public void isValidHorizontalAcceleration_True() {
+		assertTrue(Mazub.isValidHorizontalAcceleration(0));
+		assertTrue(Mazub.isValidHorizontalAcceleration(800));
+		assertTrue(Mazub.isValidHorizontalAcceleration(27));
+	}
+	
+	@Test
+	public void isValidHorizontalAcceleration_False() {
+		assertFalse(Mazub.isValidHorizontalAcceleration(-0.1));
+		assertFalse(Mazub.isValidHorizontalAcceleration(-9));
+		assertFalse(Mazub.isValidHorizontalAcceleration(-531));
+	}
+	
+	@Test
 	public void testSetHorizontalVelocity() {
 		Mazub alien = new Mazub(spriteArrayForSize(2, 2));
 		double velocity;
@@ -156,6 +177,28 @@ public class MazubTest {
 		alien.setVerticalVelocity(5);
 		velocity = alien.getVerticalVelocity();
 		assertEquals(5,velocity,Util.DEFAULT_EPSILON);
+	}
+	
+	@Test
+	public void setVerticalAcceleration$LegalCase() {
+		Mazub alien = new Mazub(defaultSprites);
+		
+		alien.setVerticalAcceleration(0);
+		assertEquals(0,alien.getVerticalAcceleration(),Util.DEFAULT_EPSILON);
+		
+		alien.setVerticalAcceleration(-10);
+		assertEquals(-10,alien.getVerticalAcceleration(),Util.DEFAULT_EPSILON);
+	}
+	
+	@Test
+	public void setVerticalAcceleration$IllegalCase() {
+		Mazub alien = new Mazub(defaultSprites);
+		
+		alien.setVerticalAcceleration(100);
+		assertEquals(0, alien.getVerticalAcceleration(),Util.DEFAULT_EPSILON);
+		
+		alien.setVerticalAcceleration(-506);
+		assertEquals(0, alien.getVerticalAcceleration(),Util.DEFAULT_EPSILON);
 	}
 	
 	@Test
@@ -193,6 +236,21 @@ public class MazubTest {
 		Mazub alien = new Mazub(spriteArrayForSize(2, 2));
 		alien.setDirection("right");
 		assertTrue(alien.getDirection() == 1);
+	}
+	
+	@Test
+	public void isValidSpriteArray_True() {
+		assertTrue(Mazub.isValidSpriteArray(spriteArrayForSize(2, 2)));
+		assertTrue(Mazub.isValidSpriteArray(spriteArrayForSize(2, 2, 10)));
+		assertTrue(Mazub.isValidSpriteArray(spriteArrayForSize(2, 2, 12)));
+		assertTrue(Mazub.isValidSpriteArray(spriteArrayForSize(2, 2, 32)));
+	}
+	
+	@Test
+	public void isValidSpriteArray_False() {
+		assertFalse(Mazub.isValidSpriteArray(spriteArrayForSize(2, 2, 0)));
+		assertFalse(Mazub.isValidSpriteArray(spriteArrayForSize(2, 2, 13)));
+		assertFalse(Mazub.isValidSpriteArray(spriteArrayForSize(2, 2, 8)));
 	}
 	
 	@Test
@@ -245,12 +303,12 @@ public class MazubTest {
 	public void changeVerticalPosition_validPositionAndMovingVertically(){
 		Mazub alien = new Mazub(spriteArrayForSize(2, 2));
 		alien.setMovingVertical(true);
-		alien.setVerticalVelocity(1);
-		alien.setVerticalAcceleration(-1);
+		alien.setVerticalVelocity(8);
+		alien.setVerticalAcceleration(-10);
 		
 		alien.changeVerticalPosition(1);
-		// newPosition = 0 + (100 * 1*1) - 50 * 1*1^2) = 50;
-		assertTrue(alien.getYPosition() == 50);
+		// newPosition = 0 + (100 * 8 * 1) - 50 * 10*1^2) = 300;
+		assertTrue(alien.getYPosition() == 300);
 	}
 	
 	@Test
@@ -283,6 +341,57 @@ public class MazubTest {
 		
 		alien.changeVerticalPosition(1);
 		assertTrue(alien.getYPosition() == 500);
+	}
+	
+	@Test
+	public void isValidTimeInterval_True() {
+		assertTrue(Mazub.isValidTimeInterval(0));
+		assertTrue(Mazub.isValidTimeInterval(0.2));
+		assertTrue(Mazub.isValidTimeInterval(0.12));
+	}
+	
+	@Test
+	public void isValidTimeInterval_False() {
+		assertFalse(Mazub.isValidTimeInterval(-0.1));
+		assertFalse(Mazub.isValidTimeInterval(-3));
+		assertFalse(Mazub.isValidTimeInterval(0.21));
+		assertFalse(Mazub.isValidTimeInterval(6));
+	}
+	
+	@Test
+	public void getSize$LegalCase() throws Exception {
+		Sprite sprite1 = new Sprite("Sprite test1",2,2);
+		Sprite sprite2 = new Sprite("Sprite test2", 0, 0);
+		Sprite sprite3 = new Sprite("Sprite test3",50,50);
+		
+		assertEquals(Arrays.toString(TestUtils.intArray(2,2)), Arrays.toString(Mazub.getSize(sprite1)));
+		assertEquals(Arrays.toString(TestUtils.intArray(0,0)), Arrays.toString(Mazub.getSize(sprite2)));
+		assertEquals(Arrays.toString(TestUtils.intArray(50,50)), Arrays.toString(Mazub.getSize(sprite3)));
+	}
+	
+	@Test(expected=IllegalSizeException.class)
+	public void getSize$IllegalCase() throws Exception {
+		Sprite sprite1 = new Sprite("Sprite test1",-1,-1);
+		Sprite sprite2 = new Sprite("Sprite test2",-5,80);
+		Sprite sprite3 = new Sprite("Sprite test3",20,-8);
+		
+		Mazub.getSize(sprite1);
+		Mazub.getSize(sprite2);
+		Mazub.getSize(sprite3);
+	}
+	
+	@Test
+	public void isValidSize_True() {
+		assertTrue(Mazub.isValidSize(TestUtils.intArray(0,0)));
+		assertTrue(Mazub.isValidSize(TestUtils.intArray(8,8)));
+		assertTrue(Mazub.isValidSize(TestUtils.intArray(37,87)));
+	}
+	
+	@Test
+	public void isValidSize_False() {
+		assertFalse(Mazub.isValidSize(TestUtils.intArray(-1,-1)));
+		assertFalse(Mazub.isValidSize(TestUtils.intArray(-8,42)));
+		assertFalse(Mazub.isValidSize(TestUtils.intArray(42,-68)));
 	}
 	
 }
