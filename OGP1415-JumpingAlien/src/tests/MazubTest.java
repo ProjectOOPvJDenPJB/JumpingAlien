@@ -15,6 +15,11 @@ import jumpingalien.util.Util;
 
 import org.junit.*;
 
+/**
+ * Test file for the Mazub class. This test file doesn't include methods implemented in the Facade class which are just
+ * merely called in the Facade class without further adjustments.
+ *
+ */
 public class MazubTest {
 	
 	private Sprite[] defaultSprites;

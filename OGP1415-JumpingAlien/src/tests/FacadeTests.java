@@ -420,9 +420,4 @@ public class FacadeTests {
 			facade.advanceTime(alien, 0.015);
 			assertEquals(sprites[3], facade.getCurrentSprite(alien));
 		}
-		
-
-		
-		
-		
 }

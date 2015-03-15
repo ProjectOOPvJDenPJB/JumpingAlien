@@ -441,7 +441,7 @@ public class Mazub {
 	 * @post	The new maximum horizontal velocity of this Mazub is equal to the given maximum horizontal velocity.
 	 * 			| new.getMaximumHorizontalVelocity() == maximumHorizontalVelocity
 	 */
-	public void setMaximumHorizontalVelocity(double maximumHorizontalVelocity) {
+	private void setMaximumHorizontalVelocity(double maximumHorizontalVelocity) {
 		assert isValidMaximumHorizontalVelocity(maximumHorizontalVelocity, this.getInitialHorizontalVelocity());
 		this.maximumHorizontalVelocity = maximumHorizontalVelocity;
 	}
