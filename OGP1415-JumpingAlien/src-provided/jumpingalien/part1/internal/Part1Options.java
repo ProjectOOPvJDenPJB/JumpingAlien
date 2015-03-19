@@ -15,7 +15,7 @@ public class Part1Options implements JumpingAlienGameOptions, JumpingAlienGUIOpt
 	/**
 	 * Target framerate (default: 30 frames per second).
 	 */
-	private int targetFPS = 80;
+	private int targetFPS = 30;
 
 	/**
 	 * Print debug info on the screen (default: true).
@@ -85,7 +85,7 @@ public class Part1Options implements JumpingAlienGameOptions, JumpingAlienGUIOpt
 	}
 
 	@Override
-	public boolean getDebugShowAlienLocationAndSize() {
+	public boolean getDebugShowObjectLocationAndSize() {
 		return debugShowAlienLocationAndSize;
 	}
 	
