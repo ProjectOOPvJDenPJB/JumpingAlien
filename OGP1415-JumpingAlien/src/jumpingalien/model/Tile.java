@@ -2,23 +2,41 @@ package jumpingalien.model;
 
 public class Tile {
 	
-	public Tile(int length, int leftX, int bottomY, TileType tileType) {
-		this.length = length;
+	public Tile(int leftX, int bottomY, TileType tileType) {
 		this.leftX = leftX;
 		this.bottomY = bottomY;
 		this.type = tileType;
 	}
 	
-	/**
-	 * Return the length of this tile.
-	 */
-	public int getLength() {
-		return this.length;
+	public Tile(int leftX, int bottomY, int tileType) {
+		if (tileType == 1) {
+			this.leftX = leftX;
+			this.bottomY = bottomY;
+			this.type = TileType.GROUND;
+		}
+		else if (tileType == 2) {
+			this.leftX = leftX;
+			this.bottomY = bottomY;
+			this.type = TileType.WATER;
+		}
+		else if (tileType == 3) {
+			this.leftX = leftX;
+			this.bottomY = bottomY;
+			this.type = TileType.MAGMA;
+		}
+		else {
+			this.leftX = leftX;
+			this.bottomY = bottomY;
+			this.type = TileType.AIR;
+		}
 	}
-	/**
-	 * Variable registering the length of the tile.
-	 */
-	public final int length;
+	
+	public Tile(int leftX, int bottomY) {
+		this.leftX = leftX;
+		this.bottomY = bottomY;
+		this.type = TileType.AIR;
+	}
+	
 	/**
 	 * Return the X position of the leftmost pixel of this tile.
 	 */
@@ -51,12 +69,10 @@ public class Tile {
 	public final TileType type;
 	
 	/**
-	 * TODO
-	 * @param position
-	 * @return
+	 * Return the position of this tile in an int array of the form [leftX, bottomY].
 	 */
-	public boolean getInTile(int[] position) {
-		return ((position[0] >= leftX) && (position[0] < leftX + length)) &&
-				((position[1] >= bottomY) && (position[1] < bottomY + length));
+	public int[] getPosition() {
+		int[] position = new int[]{this.getLeftX(),this.getBottomY()};
+		return position;
 	}
 }

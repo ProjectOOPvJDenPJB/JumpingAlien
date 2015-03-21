@@ -1,8 +1,9 @@
 package jumpingalien.model;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
+
+import be.kuleuven.cs.som.annotate.*;
 
 /**
  * @author Joren Dhont (Ingenieurswetenschappen: Computerwetenschappen - Elektrotechniek) 
@@ -87,14 +88,73 @@ public class World {
 	 */
 	public final int tileSize;
 
-	public TileType getTileType(int[] position) {
-		if (position == null)
-				return null;
-		return tiles.get(position).getType();
+		
+	/**
+	 * Return the width of this world expressed in pixels.
+	 * @return	...
+	 * 			| result == this.getNbTilesX() * this.tileSize
+	 */
+	public int getPixelWidth() {
+		return getNbTilesX() * tileSize;
 	}
 	
 	/**
-	 * 
+	 * Return the height of this world expressed in pixels.
+	 * @return	...
+	 * 			| result == this.getNbTilesY() * this.tileSize
 	 */
-	private final Map<int[], Tile> tiles = new HashMap<int[], Tile>();
+	public int getPixelHeight() {
+		return getNbTilesY() * tileSize;
+	}
+	
+	/**
+	 * TODO
+	 * @param pixelX
+	 * @param pixelY
+	 * @return
+	 */
+	public int[] getTile(int pixelX,int pixelY) {
+		int[] position = new int[2];
+		position[0] = (pixelX - (pixelX % tileSize));
+		position[1] = (pixelY - (pixelY % tileSize));
+		return position;
+	}
+	
+	/**
+	 * TODO
+	 * @param tileX
+	 * @param tileY
+	 * @param tileSize
+	 * @return
+	 */
+	public static boolean isValidTilePosition(int tileX, int tileY, int tileSize) {
+		return (tileX % tileSize == 0) && (tileY % tileSize == 0);
+	}
+	
+	/**
+	 * TODO
+	 * @param tile
+	 */
+	@Raw
+	public void addTileType(Tile tile) {
+		tileTypes.put(tile.getPosition(), tile.getType());
+	}
+	
+	/**
+	 * TODO
+	 * @param leftX
+	 * @param bottomY
+	 * @return
+	 */
+	public int getTileType(int leftX, int bottomY) throws IllegalTileException {
+		if (!isValidTilePosition(leftX, bottomY, getTileSize()))
+			throw new IllegalTileException(leftX, bottomY);
+		int[] position = new int[]{leftX,bottomY};
+		return tileTypes.get(position).getInt();
+	}
+	
+	/**
+	 * TODO
+	 */
+	private final Map<int[], TileType> tileTypes = new HashMap<int[], TileType>();
 }

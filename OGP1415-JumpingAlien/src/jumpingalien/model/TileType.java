@@ -11,6 +11,13 @@ public enum TileType {
 		public boolean getPassable() {
 			return true;
 		}
+		
+		/**
+		 * Return the integer linked to the type.
+		 */
+		public int getInt() {
+			return 0;
+		}
 	},
 	
 	WATER {
@@ -21,6 +28,13 @@ public enum TileType {
 		 */
 		public boolean getPassable() {
 			return true;
+		}
+		
+		/**
+		 * Return the integer linked to the type.
+		 */
+		public int getInt() {
+			return 2;
 		}
 	},
 	
@@ -33,6 +47,13 @@ public enum TileType {
 		public boolean getPassable() {
 			return true;
 		}
+		
+		/**
+		 * Return the integer linked to the type.
+		 */
+		public int getInt() {
+			return 3;
+		}
 	},
 	
 	GROUND {
@@ -44,9 +65,17 @@ public enum TileType {
 		public boolean getPassable() {
 			return false;
 		}
+		
+		/**
+		 * Return the integer linked to the type.
+		 */
+		public int getInt() {
+			return 1;
+		}
 	};
 	
 	
 	public abstract boolean getPassable();
+	public abstract int getInt();
 
 }
