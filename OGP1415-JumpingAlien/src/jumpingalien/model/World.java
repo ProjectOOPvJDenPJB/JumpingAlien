@@ -1,6 +1,8 @@
 package jumpingalien.model;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 /**
  * @author Joren Dhont (Ingenieurswetenschappen: Computerwetenschappen - Elektrotechniek) 
@@ -8,57 +10,65 @@ import java.util.HashSet;
  * @version 0.1
  */
 public class World {
+	
+	public World(int tileSize, int nbTilesX, int nbTilesY) {
+		assert isValidTileSize(tileSize, nbTilesX * tileSize, nbTilesY * tileSize);
+		// Aangezien we me nbTiles werken, is dit eigenlijk ni nodig.
+		this.tileSize = tileSize;
+		setNbTilesX(nbTilesX);
+		setNbTilesY(nbTilesY);
+	}
 
 	/**
-	 * Return the width of this World.
-	 * 	The width is expressed in pixels.
+	 * Return the amount of tiles on the X axis of this world.
 	 */
-	public int getPixelWidth() {
-		return pixelWidth;
+	public int getNbTilesX() {
+		return nbTilesX;
 	}
 	/**
-	 * Variable registering the width of this World measured in pixels.
+	 * Variable registering the amount of tiles on the X axis of this world.
 	 */
-	public int pixelWidth;
+	public int nbTilesX;
 	/**
-	 * Set the width of this World to the given width.
-	 * @param 	pixelWidth
-	 * 			The new width of this World expressed in pixels.
-	 * @post	The new width of this World expressed in pixels is equal to the given pixelWidth.
+	 * Set the amount of tiles on the X axis of this world to a given amount.
+	 * @param 	nbTilesX
+	 * 			The new amount of tiles on the X axis of this world.
+	 * @post	The new amount of tiles on the X axis of this world is equal to the
+	 * 			given amount of tiles.
 	 */
-	public void setPixelWidth(int pixelWidth) {
-		this.pixelWidth = pixelWidth;
+	public void setNbTilesX(int nbTilesX) {
+		this.nbTilesX = nbTilesX;
 	}
 	/**
-	 * Return the height of this World
-	 * 	The height is expressed in pixels.
+	 * Return the amount of tiles on the Y axis of this world.
 	 */
-	public int getPixelHeight() {
-		return pixelHeight;
+	public int getNbTilesY() {
+		return nbTilesY;
 	}
 	/**
-	 * Variable registering the Height of this World measured in pixels.
+	 * Variable registering the amount of tiles on the Y axis of this world.
 	 */
-	public int pixelHeight;
+	public int nbTilesY;
 	/**
-	 * Set the height of this World to the given height.
-	 * @param 	pixelHeight
-	 *  		The new height of this World expressed in pixels.
-	 * @post	The new height of this World expressed in pixels is equal to the given pixelHeight.
+	 * Set the amount of tiles on the Y axis of this world to a given amount.
+	 * @param 	nbTilesY
+	 *  		The new amount of tiles on the Y axis of this world.
+	 * @post	The new amount of tiles on the Y axis of this world is equal to the
+	 * 			given amount of tiles.
 	 */
-	public void setPixelHeight(int pixelHeight) {
-		this.pixelHeight = pixelHeight;
+	public void setNbTilesY(int nbTilesY) {
+		this.nbTilesY = nbTilesY;
 	}
 	/**
 	 * Return the length of the tiles in this World.
 	 * 	The length is expressed in pixels.
 	 */
-	public int getTileLength() {
-		return tileLength;
+	public int getTileSize() {
+		return tileSize;
 	}
 	/**
-	 * Checks whether a given tileLength is a valid tileLength.
-	 * @param 	tileLength
+	 * Checks whether a given tileSize is a valid tileSize.
+	 * @param 	tileSize
 	 * 			The length of tiles to check.
 	 * @param 	width
 	 * 			The width of this World to check against.
@@ -66,27 +76,25 @@ public class World {
 	 * 			The height of this World to check against.
 	 * @return	...
 	 * 			| result ==
-	 * 			|	((width % tileLength) == 0) && ((height % tileLength) == 0)
+	 * 			|	((width % tileSize) == 0) && ((height % tileSize) == 0)
 	 */
-	public static boolean isValidTileLength(int tileLength, int width, int height) {
-		return ((width % tileLength) == 0) && ((height % tileLength) == 0);
+	public static boolean isValidTileSize(int tileSize, int width, int height) {
+		return ((width % tileSize) == 0) && ((height % tileSize) == 0);
 	}
 	/**
 	 * Variable registering the length of the tiles in this World.
 	 * 	The length is expressed in pixels.
 	 */
-	public int tileLength;
-	/**
-	 * Set the length of tiles in this world to the given length.
-	 * @param 	tileLength
-	 * 			The new length of the tiles in this World expressed in pixels.
-	 * @post	The new length of the tiles in this World expressed in pixels is equal to the given tileLength.
-	 */
-	public void setTileLength(int tileLength) {
-		this.tileLength = tileLength;
+	public final int tileSize;
+
+	public TileType getTileType(int[] position) {
+		if (position == null)
+				return null;
+		return tiles.get(position).getType();
 	}
+	
 	/**
 	 * 
 	 */
-	public HashSet<?> objects;
+	private final Map<int[], Tile> tiles = new HashMap<int[], Tile>();
 }
