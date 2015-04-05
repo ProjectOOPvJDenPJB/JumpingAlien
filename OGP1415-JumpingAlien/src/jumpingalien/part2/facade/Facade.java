@@ -8,6 +8,10 @@ import jumpingalien.model.IllegalTimeIntervalException;
 import jumpingalien.model.IllegalXPositionException;
 import jumpingalien.model.IllegalYPositionException;
 import jumpingalien.model.Mazub;
+import jumpingalien.model.Plant;
+import jumpingalien.model.School;
+import jumpingalien.model.Shark;
+import jumpingalien.model.Slime;
 import jumpingalien.model.Tile;
 import jumpingalien.model.World;
 import jumpingalien.util.ModelException;
@@ -199,12 +203,6 @@ class Facade implements IFacadePart2  {
 	}
 
 	@Override
-	public Plant createPlant(int x, int y, Sprite[] sprites) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void addPlant(World world, Plant plant) {
 		// TODO Auto-generated method stub
 		
@@ -224,12 +222,6 @@ class Facade implements IFacadePart2  {
 
 	@Override
 	public Sprite getCurrentSprite(Plant plant) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Shark createShark(int x, int y, Sprite[] sprites) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -259,18 +251,6 @@ class Facade implements IFacadePart2  {
 	}
 
 	@Override
-	public School createSchool() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Slime createSlime(int x, int y, Sprite[] sprites, School school) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void addSlime(World world, Slime slime) {
 		// TODO Auto-generated method stub
 		
@@ -295,12 +275,6 @@ class Facade implements IFacadePart2  {
 	}
 
 	@Override
-	public School getSchool(Slime slime) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Plant createPlant(int x, int y, Sprite[] sprites) {
 		// TODO Auto-generated method stub
 		return null;
@@ -313,31 +287,7 @@ class Facade implements IFacadePart2  {
 	}
 
 	@Override
-	public School createSchool() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Slime createSlime(int x, int y, Sprite[] sprites, School school) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public School getSchool(Slime slime) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Plant createPlant(int x, int y, Sprite[] sprites) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Shark createShark(int x, int y, Sprite[] sprites) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -348,11 +298,6 @@ class Facade implements IFacadePart2  {
 		return null;
 	}
 
-	@Override
-	public Slime createSlime(int x, int y, Sprite[] sprites, School school) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public School getSchool(Slime slime) {
