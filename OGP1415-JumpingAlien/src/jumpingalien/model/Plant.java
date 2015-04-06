@@ -1,7 +1,7 @@
 package jumpingalien.model;
 import jumpingalien.util.Sprite;
 
-public class Plant {
+public class Plant extends LivingCreatures{
 
 	/**
 	 * Initialize this new Plant with given position en sprites
@@ -26,10 +26,8 @@ public class Plant {
 	 * 			| ! isValidYPosition(positionBottomY)
 	 * 
 	 */
-	public Plant(int positionX, int positionY, Sprite[] sprites, World world){
-		this.positionX = positionX;
-		this.positionY = positionY;
-		this.inWorld = world;
+	public Plant(int positionX, int positionY, double horizontalVelocity, Sprite[] sprites, World world){
+		super(positionX,positionY, horizontalVelocity,0,world);
 	}
 
 	/**
@@ -47,7 +45,7 @@ public class Plant {
 	 */
 	
 	public Plant(int positionX, int positionY, Sprite[] sprites){
-		this(positionX,positionY,sprites, null);	
+		this(positionX,positionY,0,sprites, null);	
 	}
 	
 	/**
@@ -60,58 +58,43 @@ public class Plant {
 	 * 			| this(0,0,sprites, null)
 	 */
 	public Plant(Sprite[] sprites){
-		this(0,0,sprites, null);	
+		this(0,0,0,sprites, null);	
 
 	}
 	
-	//ik was aan het denken om een aparte class voor positie te maken aangezien we dat
-	//toch overal nodig hebben.
-	private int positionX;
-	private int positionY;
-	private World inWorld;
+	public void startMoveRight(){
+		this.setHorizontalVelocity(0.5);
+		this.setRunTime(0);
+	}
 	
-	public boolean isInWorld(){
-		return (this.getWorld() != null);
+	public void startMoveLeft(){
+		this.setHorizontalVelocity(0.5);
+		this.setRunTime(0);
+	}
+	/**
+	 * Return the runtimer of this Mazub.
+	 */
+	private double getRunTime() {
+		return this.runTime;
 	}
 	
 	/**
-	 * Return the World in which the Plant is Located
+	 * Variable registering the time since Mazub stopped running when Mazub is not moving horizontally.
+	 * When Mazub moves horizontally, the variable registers the time since the last spritechange.
 	 */
-	public World getWorld(){
-		return this.inWorld;
-	}
-	
+	private double runTime = 1;
 
 	/**
-	 * Set the World in which the plant is located to the given world.
-	 * @param	world
-	 * 			The new world in which the plant will be located.
-	 * @post	The new world of the plant is equal to the
-	 * 			given world if the plant isn't already in an other world.
+	 * Sets the runTimer of this Mazub to the given time.
+	 * 
+	 * @param 	runTimer
+	 * 			The new time for the runTimer for this Mazub.
+	 * @post	The new runTimer for this Mazub is equal to the given
+	 * 			runTimer.
+	 * 			| new.getRunTime == runTime
 	 */
-	public void setWorld(World world){
-		if (!isInWorld()){
-			this.inWorld = world;
-		}
-	}
-	
-	/**
-	 * Register a removal from this plant from a world. If the plant is in a world.
-	 *
-	 * @post   This plant is no longer in a world.
-	 *	     | ! new.isInWorld()
-	 * @post   The former world of this plant, no longer contains this plant
-	 */
-	public void removeFromWorld(){
-		if (this.isInWorld()){
-			this.getWorld().removeObject(this);
-			/* 
-			 * Ik ben er voorlopig vanuit gegaan dat we in world bijhouden wat er allemaal in zit
-			 * maar we maken best een superclass aan waarin wordt bijgehouden wat er allemaal op welke
-			 * positie in een gegeven wereld is.
-			 */
-			this.setWorld(null);
-		}
+	private void setRunTime(double runTime) {
+		this.runTime = runTime;
 	}
 	}
 	
