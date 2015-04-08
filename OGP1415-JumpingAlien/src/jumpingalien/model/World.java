@@ -108,10 +108,11 @@ public class World {
 	}
 	
 	/**
-	 * TODO
-	 * @param pixelX
-	 * @param pixelY
-	 * @return
+	 *  Returns the position of the tile in which the given position is situated.
+	 * @param 	pixelX
+	 * 			The X coordinate of the given position.
+	 * @param 	pixelY
+	 * 			The Y coordinate of the given position.
 	 */
 	public int[] getTile(int pixelX,int pixelY) {
 		int[] position = new int[2];
@@ -121,19 +122,28 @@ public class World {
 	}
 	
 	/**
-	 * TODO
-	 * @param tileX
-	 * @param tileY
-	 * @param tileSize
-	 * @return
+	 * Check whether the given position of a tile is a valid position of a tile.
+	 * 
+	 * @param 	tileX
+	 * 			The X coordinate of the tile to check, expressed in pixels.
+	 * @param	tileY
+	 * 			The Y coordinate of the tile to check, expressed in pixels.
+	 * @param 	tileSize
+	 * 			The size of the tile to check against.
+	 * @return	...
+	 * 			| result ==
+	 * 			|	(tileX % tileSize == 0) && (tileY % tileSize == 0)
 	 */
 	public static boolean isValidTilePosition(int tileX, int tileY, int tileSize) {
 		return (tileX % tileSize == 0) && (tileY % tileSize == 0);
 	}
 	
 	/**
-	 * TODO
-	 * @param tile
+	 * Adds a tile type to the map of tile types.
+	 * @param 	tile
+	 * 			The tile of which the tile type has to be added.
+	 * @post	...
+	 * 			| new.getTileType(tile.getLeftX(),tile.getBottomY()) == tile.getType
 	 */
 	@Raw
 	public void addTileType(Tile tile) {
@@ -141,10 +151,15 @@ public class World {
 	}
 	
 	/**
-	 * TODO
-	 * @param leftX
-	 * @param bottomY
-	 * @return
+	 * Return the tile type of the tile with given position.
+	 * @param 	leftX
+	 * 			The X position of the tile to get the type from.
+	 * @param 	bottomY
+	 * 			The Y position of the tile to get the type from.
+	 * @throws	IllegalTileException
+	 * 			The given position is not a valid position for a tile in this World.
+	 * 			| ! isValidTilePosition(leftX,bottomY)
+	 * 			
 	 */
 	public int getTileType(int leftX, int bottomY) throws IllegalTileException {
 		if (!isValidTilePosition(leftX, bottomY, getTileSize()))
@@ -154,7 +169,7 @@ public class World {
 	}
 	
 	/**
-	 * TODO
+	 * Variable registering the different tileTypes for each tile in the this World.
 	 */
 	private final Map<int[], TileType> tileTypes = new HashMap<int[], TileType>();
 }
