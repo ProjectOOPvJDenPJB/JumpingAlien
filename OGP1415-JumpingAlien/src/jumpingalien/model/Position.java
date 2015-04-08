@@ -72,6 +72,13 @@ public class Position {
 	
 	private final double YPos;
 	
+	public int[] getPosition() {
+		int[] Position = new int[2];
+		Position[0] = (int) getXPosition();
+		Position[1] = (int) getYPosition();
+		return Position;
+	}
+	
 	private World getWorld() {
 		return this.world;
 	}

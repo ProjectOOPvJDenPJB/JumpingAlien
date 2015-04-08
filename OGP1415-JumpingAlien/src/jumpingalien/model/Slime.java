@@ -2,7 +2,7 @@ package jumpingalien.model;
 
 import jumpingalien.util.Sprite;
 
-public class Slime {
+public class Slime extends LivingCreatures {
 	/**
 	 * Initialize this new Slime with given position en sprites
 	 * 
@@ -17,7 +17,7 @@ public class Slime {
 	 * @post	The position of this new Slime is the same as the given position.
 	 * 			| (new.getXPosition() == positionLeftX) && (new.getYPosition() == positionY)
 	 * @Post	The world in which the Slime is located is the same as the given world
-	 * 			| (new.getWorld() == world) && (new.isInWorld == True)
+	 * 			| (new.getWorld() == world) && (new.isworld == True)
 	 * @throws	IllegalXPositionException
 	 * 			The given X position is not a valid X position for a Mazub.
 	 * 			| ! isValidXPosition(positionLeftX)
@@ -27,9 +27,7 @@ public class Slime {
 	 * 
 	 */
 	public Slime(int positionX, int positionY, Sprite[] sprites, World world){
-		this.positionX = positionX;
-		this.positionY = positionY;
-		this.inWorld = world;
+		super(positionX,positionY,world,sprites);
 	}
 
 	/**
@@ -62,22 +60,12 @@ public class Slime {
 		this(0,0,sprites, null);	
 
 	}
-	
-	//ik was aan het denken om een aparte class voor positie te maken aangezien we dat
-	//toch overal nodig hebben.
-	private int positionX;
-	private int positionY;
-	private World inWorld;
-	
-	public boolean isInWorld(){
-		return (this.getWorld() != null);
-	}
-	
+
 	/**
 	 * Return the World in which the Slime is Located
 	 */
 	public World getWorld(){
-		return this.inWorld;
+		return world;
 	}
 	
 
@@ -90,7 +78,7 @@ public class Slime {
 	 */
 	public void setWorld(World world){
 		if (!isInWorld()){
-			this.inWorld = world;
+			this.world = world;
 		}
 	}
 	
@@ -98,7 +86,7 @@ public class Slime {
 	 * Register a removal from this Slime from a world. If the Slime is in a world.
 	 *
 	 * @post   This Slime is no longer in a world.
-	 *	     | ! new.isInWorld()
+	 *	     | ! new.isworld()
 	 * @post   The former world of this Slime, no longer contains this Slime
 	 */
 	public void removeFromWorld(){

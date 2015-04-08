@@ -505,7 +505,7 @@ public class Mazub extends LivingCreatures {
 			this.setHorizontalAcceleration(0);
 		double newPositionX = this.getXPosition() + this.getDirection() * (100 * this.getHorizontalVelocity()*timeInterval 
 				+ 50 * this.getHorizontalAcceleration()*timeInterval*timeInterval); 
-		setPosition(newPositionX, getYPosition());
+		setXPosition(newPositionX);
 	}
 	 /**
 	  * @param 	timeInterval
@@ -519,7 +519,7 @@ public class Mazub extends LivingCreatures {
 			double newPositionY = this.getYPosition() 
 					+ 100 * this.getVerticalVelocity() * timeInterval
 					+ 50 * this.getVerticalAcceleration() * timeInterval * timeInterval;
-			setPosition(getXPosition(), newPositionY);
+			setYPosition(newPositionY);
 
 			if (Util.fuzzyEquals(0, getYPosition())) {
 				this.endJump();

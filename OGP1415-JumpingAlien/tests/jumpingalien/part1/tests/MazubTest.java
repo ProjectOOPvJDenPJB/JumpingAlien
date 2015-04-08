@@ -6,8 +6,8 @@ import static org.junit.Assert.*;
 import java.util.Arrays;
 
 import jumpingalien.model.IllegalSizeException;
-import jumpingalien.model.IllegalXPositionException;
-import jumpingalien.model.IllegalYPositionException;
+//import jumpingalien.model.IllegalXPositionException;
+//import jumpingalien.model.IllegalYPositionException;
 import jumpingalien.model.Mazub;
 import jumpingalien.tests.util.TestUtils;
 import jumpingalien.util.Sprite;
@@ -32,7 +32,7 @@ public class MazubTest {
 	
 	@Test
 	public void extendedConstructor$LegalCase() {		
-		Mazub alien = new Mazub(0, 0, defaultSprites, 5, 3);
+		Mazub alien = new Mazub(0, 0, defaultSprites, 5, 3, null);
 		assertTrue(0 == alien.getXPosition());
 		assertTrue(0 == alien.getYPosition());
 		assertTrue(5 == alien.getMaximumHorizontalVelocity());
@@ -41,7 +41,7 @@ public class MazubTest {
 	}
 	
 	public void extendedConstructor$NegativePositions() {
-		Mazub alien = new Mazub(-6,-800,defaultSprites,5,3);
+		Mazub alien = new Mazub(-6,-800,defaultSprites,5,3, null);
 		assertTrue(0 == alien.getXPosition());
 		assertTrue(0 == alien.getYPosition());
 		assertTrue(5 == alien.getMaximumHorizontalVelocity());
@@ -51,7 +51,7 @@ public class MazubTest {
 	
 	public void extendedConstructor$OutOfBoundsPositions() {
 		//Positions too big (out of bounds of gameworld)
-		Mazub alien = new Mazub(2000,6805,defaultSprites,5,3);
+		Mazub alien = new Mazub(2000,6805,defaultSprites,5,3, null);
 		assertTrue(1024 == alien.getXPosition());
 		assertTrue(768 == alien.getYPosition());
 		assertTrue(5 == alien.getMaximumHorizontalVelocity());
@@ -83,33 +83,7 @@ public class MazubTest {
 		assertFalse(alien.getMovingVertical());
 	}
 	
-	
-	@Test
-	public void isValidXPosition_False(){
-		assertFalse(Mazub.isValidXPosition(-5));
-		assertFalse(Mazub.isValidXPosition(1028));
-	}
-	
-	@Test
-	public void isValidXPosition_True(){
-		assertTrue(Mazub.isValidXPosition(0));
-		assertTrue(Mazub.isValidXPosition(1024));
-		assertTrue(Mazub.isValidXPosition(500));
-	}
-	
-	@Test
-	public void isValidYPosition_False(){
-		assertFalse(Mazub.isValidYPosition(-1));
-		assertFalse(Mazub.isValidYPosition(769));
-	}
-	
-	@Test
-	public void isValidYPosition_True(){
-		assertTrue(Mazub.isValidYPosition(0));
-		assertTrue(Mazub.isValidYPosition(768));
-		assertTrue(Mazub.isValidYPosition(500));
-	}
-	
+
 	@Test
 	public void testSetXposition$LegalCase() throws Exception{
 		Mazub alien = new Mazub(spriteArrayForSize(2, 2));
@@ -117,12 +91,12 @@ public class MazubTest {
 		assertTrue(alien.getXPosition() == 5);
 	}
 	
-	@Test(expected = IllegalXPositionException.class)
-	public void testSetXposition$IllegalCase() throws Exception{
-		Mazub alien = new Mazub(spriteArrayForSize(2, 2));
-		alien.setXPosition(-5);
-		assertTrue(alien.getXPosition() == -5);
-	}
+//	@Test(expected = IllegalXPositionException.class)
+//	public void testSetXposition$IllegalCase() throws Exception{
+//		Mazub alien = new Mazub(spriteArrayForSize(2, 2));
+//		alien.setXPosition(-5);
+//		assertTrue(alien.getXPosition() == -5);
+//	}
 	
 	@Test
 	public void testSetYposition$LegalCase() throws Exception{
@@ -131,12 +105,12 @@ public class MazubTest {
 		assertTrue(alien.getYPosition() == 5);
 	}
 	
-	@Test(expected = IllegalYPositionException.class)
-	public void testSetYposition$IllegalCase() throws Exception{
-		Mazub alien = new Mazub(spriteArrayForSize(2, 2));
-		alien.setYPosition(-5);
-		assertTrue(alien.getYPosition() == -5);
-	}
+//	@Test(expected = IllegalYPositionException.class)
+//	public void testSetYposition$IllegalCase() throws Exception{
+//		Mazub alien = new Mazub(spriteArrayForSize(2, 2));
+//		alien.setYPosition(-5);
+//		assertTrue(alien.getYPosition() == -5);
+//	}
 	
 	@Test
 	public void isValidHorizontalAcceleration_True() {

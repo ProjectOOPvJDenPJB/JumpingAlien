@@ -1,5 +1,8 @@
 package jumpingalien.model;
 
+import be.kuleuven.cs.som.annotate.Value;
+
+@Value
 public class Tile {
 	
 	public Tile(int leftX, int bottomY, TileType tileType) {
@@ -46,7 +49,7 @@ public class Tile {
 	/**
 	 * Variable registering the X position of the leftmost pixel of this tile.
 	 */
-	public final int leftX;
+	private final int leftX;
 	/**
 	 * Return the Y position of the bottom pixel of this tile.
 	 */
@@ -56,7 +59,7 @@ public class Tile {
 	/**
 	 * Variable registering the T position of the bottom pixel of this tile.
 	 */
-	public final int bottomY;
+	private final int bottomY;
 	/**
 	 * Return the type of this tile.
 	 */
@@ -66,13 +69,13 @@ public class Tile {
 	/**
 	 * Variable registering the type of this tile.
 	 */
-	public final TileType type;
+	private final TileType type;
 	
 	/**
 	 * Return the position of this tile in an int array of the form [leftX, bottomY].
 	 */
 	public int[] getPosition() {
 		int[] position = new int[]{this.getLeftX(),this.getBottomY()};
-		return position;
+		return position.clone();
 	}
 }

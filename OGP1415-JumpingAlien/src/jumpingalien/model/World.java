@@ -1,5 +1,7 @@
 package jumpingalien.model;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -172,4 +174,120 @@ public class World {
 	 * Variable registering the different tileTypes for each tile in the this World.
 	 */
 	private final Map<int[], TileType> tileTypes = new HashMap<int[], TileType>();
+	
+	
+	public static boolean hasValidAmountOfObjects(World world) {
+		int size = world.slimes.size() + world.plants.size() + world.sharks.size();
+		return (size < 100) && (size >= 0);
+	}
+	
+	public Collection<Plant> getPlants(){
+		Collection<Plant> elements = plants.values();
+		return new ArrayList<Plant>(elements);
+	}
+	
+	private final Map<String,Plant> plants = new HashMap<String,Plant>();
+	
+	public void addPlant(Plant plant) {
+		assert plant.canHaveAsWorld(this);
+		plant.setKey("Plant"+plants.size());
+		plants.put(plant.getKey(), plant);
+		plant.setWorld(this);
+	}
+	
+	public Collection<Slime> getSlimes(){
+		Collection<Slime> elements = slimes.values();
+		return new ArrayList<Slime>(elements);
+	}
+	
+	private final Map<String,Slime> slimes = new HashMap<String,Slime>();
+	
+	public void addSlime(Slime slime) {
+		assert slime.canHaveAsWorld(this);
+		slime.setKey("Slime"+slimes.size());
+		slimes.put(slime.getKey(), slime);
+		slime.setWorld(this);
+	}
+	
+	public Collection<Shark> getSharks(){
+		Collection<Shark> elements = sharks.values();
+		return new ArrayList<Shark>(elements);
+	}
+	
+	private final Map<String,Shark> sharks = new HashMap<String,Shark>();
+	
+	public void addShark(Shark shark) {
+		assert shark.canHaveAsWorld(this);
+		shark.setKey("Shark"+sharks.size());
+		sharks.put(shark.getKey(), shark);
+		shark.setWorld(this);
+	}
+	
+	public boolean canHaveAsObject(Object object) {
+		assert hasValidAmountOfObjects(this);
+		assert (object instanceof LivingCreatures);
+		if (isTerminated())
+			return object == null;
+		return (object != null) && (((LivingCreatures) object).canHaveAsWorld(this));
+	}
+
+	
+	private Mazub mazub;
+		
+	public void setMazub(Mazub alien) {
+		assert canHaveAsMazub(alien);
+		mazub = alien;
+	}
+	
+	public boolean canHaveAsMazub(Mazub alien) {
+		if (isTerminated())
+			return alien == null;
+		return (alien != null) && (alien.canHaveAsWorld(this));
+	}
+	
+	/**
+	 * Check whether this world is terminated.
+	 */
+	@Basic @Raw
+	public boolean isTerminated() {
+		return this.getState() == State.TERMINATED;
+	}
+	
+	private static enum State {
+		INITIALISED, STARTED, TERMINATED;
+	}
+	
+	/**
+	 * Return the state of this world.
+	 */
+	@Raw
+	private State getState() {
+		return this.state;
+	}
+	
+
+	/**
+	 * Variable registering the state of this world.
+	 */
+	private State state = State.INITIALISED;
+	
+	/**
+	 * Set the state of this world to the given state.
+	 * 
+	 * @param  state
+	 *         The new state for this world.
+	 * @pre    The given state must be effective.
+	 *       | state != null
+	 * @post   The state of this world is the same as the
+	 *         given state.
+	 *       | new.getState() == state
+	 */
+	private void setState(State state) {
+		assert (state != null);
+		this.state = state;
+	}
+
+
+	
+	
 }

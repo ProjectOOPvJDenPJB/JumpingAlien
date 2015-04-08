@@ -10,12 +10,10 @@ public class LivingCreatures {
 			double verticalVelocity, World world, Sprite[] sprites){
 		isValidSpriteArray(sprites);
 		this.setWorld(world);
-		this.setIsInWorld(true);
 		this.setPosition(XPosition, YPosition);
 		this.setHorizontalVelocity(horizontalVelocity);
 		this.setVerticalVelocity(verticalVelocity);
-		this.spriteArray = sprites;
-		
+		this.spriteArray = sprites;		
 	}
 	
 	protected LivingCreatures(int XPosition, int YPosition, World world, Sprite[] sprites){
@@ -46,6 +44,9 @@ public class LivingCreatures {
 		return position.getYPosition();
 	}
 	
+	public int[] getPosition() {
+		return position.getPosition();
+	}
 
 	private Position position = new Position();
 
@@ -75,6 +76,14 @@ public class LivingCreatures {
 				positionBottomY = position.getHeight();
 		}
 		position =  new Position(positionLeftX, positionBottomY,getWorld());
+	}
+	
+	public void setXPosition(double positionLeftX) {
+		setPosition(positionLeftX, getYPosition());
+	}
+	
+	public void setYPosition(double positionBottomY) {
+		setPosition(getXPosition(), positionBottomY);
 	}
 	
 	@Basic
@@ -131,8 +140,7 @@ public class LivingCreatures {
 	}
 	
 	
-	private World world;
-	private boolean isInWorld;
+	protected World world;
 	
 	
 	/**
@@ -143,6 +151,7 @@ public class LivingCreatures {
 	 * 			given world.
 	 */
 	public void setWorld(World world){
+		assert canHaveAsWorld(world);
 		this.world = world;
 	}
 	
@@ -155,29 +164,18 @@ public class LivingCreatures {
 	
 	public void removeFromWorld(){
 		this.setWorld(null);
-		this.setIsInWorld(false);
 	}
 	
-	/**
-	 * Sets the boolean indicating whether a living creature is in a world
-	 * or not.
-	 * @param	flag
-	 * 			The new state for this living creature.
-	 * @post	The new state for the living creature is equal to the
-	 * 			given flag.
-	 */
-	public void setIsInWorld(boolean flag){
-		this.isInWorld = flag;
-	}
-	
-	/**
-	 * Return the boolean indicating whether this living creature is
-	 * 	in a world or not.
-	 */
 	public boolean isInWorld(){
-		return this.isInWorld;
+		if (world != null)
+			return true;
+		else
+			return false;
 	}
 	
+	public boolean canHaveAsWorld(World world) {
+		return (world != null) && (world.canHaveAsObject(this));
+	}
 
 	/**
 	 * Return a clone of the spriteArray of this Mazub.
@@ -204,5 +202,15 @@ public class LivingCreatures {
 	 * Variable registering the spriteArray of this Mazub.
 	 */
 	private final Sprite[] spriteArray;
+	
+	public String getKey() {
+		return this.key;
+	}
+	
+	private String key;
+	
+	public void setKey(String key) {
+		this.key = key;
+	}
 }
 
