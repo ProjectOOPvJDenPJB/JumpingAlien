@@ -1,28 +1,29 @@
 package jumpingalien.model;
 
-import jumpingalien.util.Util;
+import jumpingalien.util.Sprite;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
 
 public class LivingCreatures {
 
 	protected LivingCreatures(int XPosition, int YPosition,double horizontalVelocity, 
-			double verticalVelocity, World world){
+			double verticalVelocity, World world, Sprite[] sprites){
+		isValidSpriteArray(sprites);
 		this.setWorld(world);
 		this.setIsInWorld(true);
-		this.setXPosition(XPosition);
-		this.setYPosition(YPosition);
+		this.setPosition(XPosition, YPosition);
 		this.setHorizontalVelocity(horizontalVelocity);
 		this.setVerticalVelocity(verticalVelocity);
+		this.spriteArray = sprites;
+		
 	}
 	
-	protected LivingCreatures(int XPosition, int YPosition, World world){
-		this.setWorld(world);
-		this.setIsInWorld(true);
-		this.setXPosition(XPosition);
-		this.setYPosition(YPosition);
-		this.setHorizontalVelocity(0);
-		this.setVerticalVelocity(0);
+	protected LivingCreatures(int XPosition, int YPosition, World world, Sprite[] sprites){
+		this(XPosition,YPosition,0,0,world, sprites);
+	}
+	
+	protected LivingCreatures(int XPosition, int Yposition,Sprite[] sprites) {
+		this(XPosition,Yposition,null,sprites);
 	}
 	
 	/**
@@ -32,27 +33,21 @@ public class LivingCreatures {
 	 */
 	@Basic
 	public double getXPosition() {
-		return this.positionX;
+		return position.getXPosition();
 	}
-
-	/**
-	 * Check whether the given X position is a valid X position for a living creature.
-	 * 
-	 * @param xPosition
-	 * 			The position on the X-axis to check against.
-	 * @return	True if the given position is a valid position:
-	 * 			| result ==
-	 * 			|	(position <= 1024) && (position >= 0)
-	 */
-	public static boolean isValidXPosition(double xPosition) {
-		return Util.fuzzyLessThanOrEqualTo(xPosition,1024) && Util.fuzzyGreaterThanOrEqualTo(xPosition, 0);
-		//TODO isPassable() 
-		}
 	
 	/**
-	 * Variable registering the X position of the leftmost pixel of living creature.
+	 * Return the Y position of this living creature.
+	 * 	The position is the actual position of the bottom Y pixel of
+	 * 	the living creature character in the gameworld.
 	 */
-	private double positionX;
+	@Basic
+	public double getYPosition () {
+		return position.getYPosition();
+	}
+	
+
+	private Position position = new Position();
 
 	/**
 	 * Set the X position of this living creature to the given X position.
@@ -65,56 +60,21 @@ public class LivingCreatures {
 	 * 			| ! isValidXPosition(xPosition)
 	 */
 	@Basic @Raw
-	public void setXPosition(double positionX) throws IllegalXPositionException {
-		if (! isValidXPosition(positionX))
-			throw new IllegalXPositionException(positionX);
-		this.positionX = positionX;
-	}
-	
-	/**
-	 * Return the Y position of this living creature.
-	 * 	The position is the actual position of the bottom Y pixel of
-	 * 	the living creature character in the gameworld.
-	 */
-	@Basic
-	public double getYPosition () {
-		return this.positionY;
-	}
-	
-	
-	/**
-	 * Check whether the given Y position is a valid Y position for a living creature.
-	 * 
-	 * @param 	positionY
-	 * 			The position on the Y-axis to check against.
-	 * @return	True if the given Y position is a valid Y position.
-	 * 			| result ==
-	 * 			|	(position <= 768) && (position >= 0)
-	 */
-	public static boolean isValidYPosition(double positionY) {
-		return Util.fuzzyLessThanOrEqualTo(positionY,768) && Util.fuzzyGreaterThanOrEqualTo(positionY,0);
-	}
-	
-	/**
-	 * Variable registering the Y position of the bottom pixel of this living creature.
-	 */
-	private double positionY;
-	
-	/**
-	 * Set the Y position of this living creature to the given Y position.
-	 * @param	yPosition
-	 * 			The new position on the Y-axis of the bottom pixel for this living creature.
-	 * @post	The new Y position of the bottom pixel of the living creature is equal to the
-	 * 			given yPosition.
-	 * @throws 	IllegalYPositionException
-	 * 			The given Y position is not a valid Y position for a living creature.
-	 * 			| ! isValidYPosition(yPosition)
-	 */
-	@Basic @Raw
-	public void setYPosition(double positionY) throws IllegalYPositionException {
-		if (! isValidYPosition(positionY))
-			throw new IllegalYPositionException(positionY);
-		this.positionY = positionY;
+	public void setPosition(double positionLeftX, double positionBottomY) throws IllegalXPositionException, IllegalYPositionException {
+		try {
+			position =  new Position(positionLeftX,positionBottomY,getWorld());
+		} catch (IllegalXPositionException | IllegalYPositionException exc) {
+			if (positionLeftX < 0) {
+				positionLeftX = 0;
+			}
+			else if (positionLeftX > position.getWidth())
+				positionLeftX = position.getWidth();
+			if (positionBottomY < 0)
+				positionBottomY = 0;
+			else if (positionBottomY > position.getHeight())
+				positionBottomY = position.getHeight();
+		}
+		position =  new Position(positionLeftX, positionBottomY,getWorld());
 	}
 	
 	@Basic
@@ -217,5 +177,32 @@ public class LivingCreatures {
 	public boolean isInWorld(){
 		return this.isInWorld;
 	}
+	
+
+	/**
+	 * Return a clone of the spriteArray of this Mazub.
+	 */
+	public Sprite[] getSpriteArray() {
+		return this.spriteArray.clone();
+	}
+	
+	/**
+	 * Checks whether the given spriteArray is a valid spriteArray.
+	 * 
+	 * @param 	spriteArray
+	 * 			The spriteArray to check against.
+	 * @return	True if the spriteArray is a valid spriteArray.
+	 * 			| result ==
+	 * 			|	(spriteArray.length >= 0) &&  (spriteArray.length % 2 == 0)
+	 */
+	public static boolean isValidSpriteArray(Sprite[] spriteArray) {
+		int length = spriteArray.length;
+		return (length >= 10) && (length % 2 == 0);
+	}
+	
+	/**
+	 * Variable registering the spriteArray of this Mazub.
+	 */
+	private final Sprite[] spriteArray;
 }
 

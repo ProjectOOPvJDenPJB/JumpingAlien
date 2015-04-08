@@ -10,7 +10,7 @@ import be.kuleuven.cs.som.annotate.*;
  * 	& Pieterjan Beerden (Ingenieurswetenschappen: Elektrotechniek - Computerwetenschappen)
  * @version 0.1
  */
-public class Mazub {
+public class Mazub extends LivingCreatures {
 	
 	/**
 	 * Initialize this new Mazub with given position, sprites, maximum horizontal velocity and
@@ -47,34 +47,13 @@ public class Mazub {
 	 * 			| ! isValidYPosition(positionBottomY)
 	 * 
 	 */
-	public Mazub(int positionLeftX,int positionBottomY,	Sprite[] spriteArray,
-			double maximumHorizontalVelocity,double initialHorizontalVelocity) throws IllegalXPositionException, IllegalYPositionException {
+	public Mazub(int positionLeftX,int positionBottomY,	Sprite[] sprites,
+			double maximumHorizontalVelocity,double initialHorizontalVelocity, World world) {
+		super(positionLeftX,positionBottomY,world,sprites);
 		assert isValidInitialVelocity(initialHorizontalVelocity, maximumHorizontalVelocity);
 		assert isValidMaximumHorizontalVelocity(maximumHorizontalVelocity, initialHorizontalVelocity);
-		assert isValidSpriteArray(spriteArray);
-		try {
-			this.setXPosition(positionLeftX);
-		} catch (IllegalXPositionException exc) {
-			if (positionLeftX < 0)
-				this.setXPosition(0);
-			else if (positionLeftX > 1024)
-				this.setXPosition(1024);
-			else
-				throw exc;
-		}
-		try {
-			this.setYPosition(positionBottomY);
-		} catch (IllegalYPositionException exc) {
-			if (positionBottomY < 0)
-				this.setYPosition(0);
-			else if (positionBottomY > 768)
-				this.setYPosition(768);
-			else
-				throw exc;
-		}
 		this.initialHorizontalVelocity = initialHorizontalVelocity;
 		this.setMaximumHorizontalVelocity(maximumHorizontalVelocity);
-		this.spriteArray = spriteArray;
 	}
 	
 	/**
@@ -92,7 +71,7 @@ public class Mazub {
 	 * 			| this(positionLeftX,positionBottomY,spriteArray, 3, 1)
 	 */
 	public Mazub(int positionLeftX, int positionBottomY, Sprite[] spriteArray) throws IllegalXPositionException, IllegalYPositionException {
-		this(positionLeftX,positionBottomY,spriteArray, 3, 1);	
+		this(positionLeftX,positionBottomY,spriteArray, 3, 1,null);	
 	}
 	
 	/**
@@ -107,98 +86,7 @@ public class Mazub {
 	public Mazub(Sprite[] spriteArray) {
 		this(0,0,spriteArray);
 	}
-	
-	/**
-	 * Return the X position of this mazub.
-	 * 	The position is the actual position of the left X pixel of
-	 * 	the Mazub character in the gameworld.
-	 */
-	@Basic
-	public double getXPosition() {
-		return this.positionLeftX;
-	}
-
-	/**
-	 * Check whether the given X position is a valid X position for a Mazub.
-	 * 
-	 * @param positionX
-	 * 			The position on the X-axis to check against.
-	 * @return	True if the given position is a valid position:
-	 * 			| result ==
-	 * 			|	(position <= 1024) && (position >= 0)
-	 */
-	public static boolean isValidXPosition(double positionX) {
-		return Util.fuzzyLessThanOrEqualTo(positionX,1024) && Util.fuzzyGreaterThanOrEqualTo(positionX, 0);
-	}
-	
-	/**
-	 * Variable registering the X position of the leftmost pixel of Mazub.
-	 */
-	private double positionLeftX;
-
-	/**
-	 * Set the X position of this Mazub to the given X position.
-	 * @param	positionLeftX
-	 * 			The new position on the X-axis of the leftmost pixel for this Mazub.
-	 * @post	The new X position of the leftmost pixel of the Mazub is equal to the
-	 * 			given positionLeftX.
-	 * @throws 	IllegalXPositionException
-	 * 			The given X position is not a valid X position for a Mazub.
-	 * 			| ! isValidXPosition(positionLeftX)
-	 */
-	@Basic @Raw
-	public void setXPosition(double positionLeftX) throws IllegalXPositionException {
-		if (! isValidXPosition(positionLeftX))
-			throw new IllegalXPositionException(positionLeftX);
-		this.positionLeftX = positionLeftX;
-	}
-	
-	/**
-	 * Return the Y position of this mazub.
-	 * 	The position is the actual position of the bottom Y pixel of
-	 * 	the Mazub character in the gameworld.
-	 */
-	@Basic
-	public double getYPosition () {
-		return this.positionBottomY;
-	}
-	
-	
-	/**
-	 * Check whether the given Y position is a valid Y position for a Mazub.
-	 * 
-	 * @param 	positionY
-	 * 			The position on the Y-axis to check against.
-	 * @return	True if the given Y position is a valid Y position.
-	 * 			| result ==
-	 * 			|	(position <= 768) && (position >= 0)
-	 */
-	public static boolean isValidYPosition(double positionY) {
-		return Util.fuzzyLessThanOrEqualTo(positionY,768) && Util.fuzzyGreaterThanOrEqualTo(positionY,0);
-	}
-	
-	/**
-	 * Variable registering the Y position of the bottom pixel of this Mazub.
-	 */
-	private double positionBottomY;
-	
-	/**
-	 * Set the Y position of this Mazub to the given Y position.
-	 * @param	positionBottomY
-	 * 			The new position on the Y-axis of the bottom pixel for this Mazub.
-	 * @post	The new Y position of the bottom pixel of the Mazub is equal to the
-	 * 			given positionBottomY.
-	 * @throws 	IllegalYPositionException
-	 * 			The given Y position is not a valid Y position for a Mazub.
-	 * 			| ! isValidYPosition(positionBottomY)
-	 */
-	@Basic @Raw
-	public void setYPosition(double positionBottomY) throws IllegalYPositionException {
-		if (! isValidYPosition(positionBottomY))
-			throw new IllegalYPositionException(positionBottomY);
-		this.positionBottomY = positionBottomY;
-	}
-		
+			
 	/**
 	 * Return the boolean indicating whether this Mazub is moving
 	 * 	horizontally or not.
@@ -604,31 +492,6 @@ public class Mazub {
 		this.runTime = runTime;
 	}
 	
-	/**
-	 * Return the spriteArray of this Mazub.
-	 */
-	public Sprite[] getSpriteArray() {
-		return this.spriteArray;
-	}
-	
-	/**
-	 * Checks whether the given spriteArray is a valid spriteArray.
-	 * 
-	 * @param 	spriteArray
-	 * 			The spriteArray to check against.
-	 * @return	True if the spriteArray is a valid spriteArray.
-	 * 			| result ==
-	 * 			|	(spriteArray.length >= 0) &&  (spriteArray.length % 2 == 0)
-	 */
-	public static boolean isValidSpriteArray(Sprite[] spriteArray) {
-		int length = spriteArray.length;
-		return (length >= 10) && (length % 2 == 0);
-	}
-	
-	/**
-	 * Variable registering the spriteArray of this Mazub.
-	 */
-	private final Sprite[] spriteArray;
 		
 	/**
 	 * @param 	timeInterval 
@@ -640,22 +503,9 @@ public class Mazub {
 	public void changeHorizontalPosition(double timeInterval){
 		if (Util.fuzzyGreaterThanOrEqualTo(horizontalVelocity,this.getMaximumHorizontalVelocity())) 
 			this.setHorizontalAcceleration(0);
-		double newPosition = this.getXPosition() + this.getDirection() * (100 * this.getHorizontalVelocity()*timeInterval 
-				+ 50 * this.getHorizontalAcceleration()*timeInterval*timeInterval);
-			try { 
-				this.setXPosition(newPosition);
-			} catch (IllegalXPositionException exc) {
-				if (newPosition < 0){
-					this.setXPosition(0);
-				// if the new X position calculated is smaller than zero then the 
-				// X position is set to 0, which is the left border of the gameworld.
-				}
-				else {
-					this.setXPosition(1024);
-				// if the new X position calculated is greater than 1024 then the
-				// X position is set to 1024, which is the right border of the gameworld.
-				}
-			}
+		double newPositionX = this.getXPosition() + this.getDirection() * (100 * this.getHorizontalVelocity()*timeInterval 
+				+ 50 * this.getHorizontalAcceleration()*timeInterval*timeInterval); 
+		setPosition(newPositionX, getYPosition());
 	}
 	 /**
 	  * @param 	timeInterval
@@ -666,26 +516,16 @@ public class Mazub {
 	  */
 	public void changeVerticalPosition(double timeInterval) {
 		if (this.getMovingVertical() == true){
-			double newPosition = this.getYPosition() 
+			double newPositionY = this.getYPosition() 
 					+ 100 * this.getVerticalVelocity() * timeInterval
 					+ 50 * this.getVerticalAcceleration() * timeInterval * timeInterval;
-			try {
-				this.setYPosition(newPosition);
-			} catch (IllegalYPositionException exc) {
-				if (newPosition < 0) {
-					this.endJump();
-					this.setMovingVertical(false);
-					this.setYPosition(0);
-					this.setVerticalVelocity(0);
-					this.setVerticalAcceleration(0);
-				// If the new Y position calculated is smaller than zero then the 
-				// Y position is set to 0, which is the bottom border of the gameworld.
-				}
-				else {
-					this.setYPosition(768);
-				// If the new Y position calculated is greater than 768 then the
-				// Y position is set to 768, which is the top border of the gameworld.
-				}
+			setPosition(getXPosition(), newPositionY);
+
+			if (Util.fuzzyEquals(0, getYPosition())) {
+				this.endJump();
+				this.setMovingVertical(false);
+				this.setVerticalVelocity(0);
+				this.setVerticalAcceleration(0);
 			}
 		}
 	}

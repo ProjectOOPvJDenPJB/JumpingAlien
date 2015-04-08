@@ -2,7 +2,7 @@ package jumpingalien.model;
 
 import jumpingalien.util.Sprite;
 
-public class Shark {
+public class Shark extends LivingCreatures {
 	
 	/**
 	 * Initialize this new Shark with given position en sprites
@@ -27,10 +27,8 @@ public class Shark {
 	 * 			| ! isValidYPosition(positionBottomY)
 	 * 
 	 */
-	public Shark(int positionX, int positionY, Sprite[] sprites, World world){
-		this.positionX = positionX;
-		this.positionY = positionY;
-		this.inWorld = world;
+	public Shark(int positionX, int positionY, World world,Sprite[] sprites){
+		super(positionX,positionY,world,sprites);
 	}
 
 	/**
@@ -47,7 +45,7 @@ public class Shark {
 	 * 			| this(positionX,positionY,sprites, null)
 	 */
 	public Shark(int positionX, int positionY, Sprite[] sprites){
-		this(positionX,positionY,sprites, null);	
+		this(positionX,positionY,null,sprites);	
 	}
 	
 	/**
@@ -60,14 +58,12 @@ public class Shark {
 	 * 			| this(0,0,sprites, null)
 	 */
 	public Shark(Sprite[] sprites){
-		this(0,0,sprites, null);	
+		this(0,0, null,sprites);	
 
 	}
 	
 	//ik was aan het denken om een aparte class voor positie te maken aangezien we dat
 	//toch overal nodig hebben.
-	private int positionX;
-	private int positionY;
 	private World inWorld;
 	
 	public boolean isInWorld(){
