@@ -8,7 +8,7 @@ public class LivingCreatures {
 
 	protected LivingCreatures(int XPosition, int YPosition,double horizontalVelocity, 
 			double verticalVelocity, World world, Sprite[] sprites){
-		isValidSpriteArray(sprites);
+		LivingCreatures.isValidSpriteArray(sprites,this);
 		this.setWorld(world);
 		this.setPosition(XPosition, YPosition);
 		this.setHorizontalVelocity(horizontalVelocity);
@@ -193,9 +193,13 @@ public class LivingCreatures {
 	 * 			| result ==
 	 * 			|	(spriteArray.length >= 0) &&  (spriteArray.length % 2 == 0)
 	 */
-	public static boolean isValidSpriteArray(Sprite[] spriteArray) {
-		int length = spriteArray.length;
-		return (length >= 10) && (length % 2 == 0);
+	public static boolean isValidSpriteArray(Sprite[] spriteArray,Object object) {
+		if (object instanceof Mazub)
+			return Mazub.isValidSpriteArray(spriteArray);
+		else {			
+			int length = spriteArray.length;
+			return length == 2;
+		}
 	}
 	
 	/**
@@ -211,6 +215,43 @@ public class LivingCreatures {
 	
 	public void setKey(String key) {
 		this.key = key;
+	}
+
+	public Sprite getCurrentSprite() {
+		if (getDirection() == Direction.RIGHT)
+			return getSpriteArray()[1];
+		else
+			return getSpriteArray()[0];
+	}
+	
+	/**
+	 * TODO
+	 * @return
+	 */
+	public Direction getDirection() {
+		return this.direction;
+	}
+	
+	/**
+	 * Variable indicating the direction of this Mazub. -1 indicates left, 1 indicates right.
+	 */
+	private Direction direction;
+
+	/**
+	 * Sets the direction of this Mazub to the given direction.
+	 * 
+	 * @param 	direction
+	 * 			The new direction of this Mazub.
+	 * @post	If the given direction is LEFT then the new direction of this Mazub is left.
+	 * 			| if (direction == LEFT)
+	 * 			| 	then new.getDirection() == LEFT
+	 * @post	If the given direction is RIGHT then the new direction of this Mazub is right.
+	 * 			| if (direction == RIGHT)
+	 * 			|	then new.getDirection() == RIGHT
+	 */
+	public void setDirection(Direction direction) {
+		//TODO Manier van programmeren?
+		this.direction = direction;
 	}
 }
 

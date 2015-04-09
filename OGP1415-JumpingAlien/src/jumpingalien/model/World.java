@@ -286,8 +286,9 @@ public class World {
 		assert (state != null);
 		this.state = state;
 	}
-
-
 	
+	public void advanceTime(double dt) {
+		
+	}
 	
 }

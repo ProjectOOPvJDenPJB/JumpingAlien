@@ -1,5 +1,8 @@
 package jumpingalien.model;
 
+import be.kuleuven.cs.som.annotate.Value;
+
+@Value
 public enum TileType {
 	
 	AIR {
@@ -8,14 +11,14 @@ public enum TileType {
 		 * @return	TODO
 		 * 			| result == true
 		 */
-		public boolean getPassable() {
+		public final boolean getPassable() {
 			return true;
 		}
 		
 		/**
 		 * Return the integer linked to the type.
 		 */
-		public int getInt() {
+		public final int getInt() {
 			return 0;
 		}
 	},
@@ -26,14 +29,14 @@ public enum TileType {
 		 * @return	TODO
 		 * 			| result == true
 		 */
-		public boolean getPassable() {
+		public final boolean getPassable() {
 			return true;
 		}
 		
 		/**
 		 * Return the integer linked to the type.
 		 */
-		public int getInt() {
+		public final int getInt() {
 			return 2;
 		}
 	},
@@ -44,14 +47,14 @@ public enum TileType {
 		 * @return	TODO
 		 * 			| result == true
 		 */
-		public boolean getPassable() {
+		public final boolean getPassable() {
 			return true;
 		}
 		
 		/**
 		 * Return the integer linked to the type.
 		 */
-		public int getInt() {
+		public final int getInt() {
 			return 3;
 		}
 	},
@@ -62,14 +65,14 @@ public enum TileType {
 		 * @return	TODO
 		 * 			| result == false
 		 */
-		public boolean getPassable() {
+		public final boolean getPassable() {
 			return false;
 		}
 		
 		/**
 		 * Return the integer linked to the type.
 		 */
-		public int getInt() {
+		public final int getInt() {
 			return 1;
 		}
 	};

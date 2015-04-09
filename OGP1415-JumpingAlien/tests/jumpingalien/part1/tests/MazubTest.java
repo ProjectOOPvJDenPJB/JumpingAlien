@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 
 import java.util.Arrays;
 
+import jumpingalien.model.Direction;
 import jumpingalien.model.IllegalSizeException;
 //import jumpingalien.model.IllegalXPositionException;
 //import jumpingalien.model.IllegalYPositionException;
@@ -206,16 +207,16 @@ public class MazubTest {
 	@Test
 	public void setDirectionLeft(){
 		Mazub alien = new Mazub(spriteArrayForSize(2, 2));
-		alien.setDirection("left");
-		assertTrue(alien.getDirection() == -1);
+		alien.setDirection(Direction.LEFT);
+		assertTrue(alien.getDirection() == Direction.LEFT);
 	}
 	
 	
 	@Test
 	public void setDirectionRight(){
 		Mazub alien = new Mazub(spriteArrayForSize(2, 2));
-		alien.setDirection("right");
-		assertTrue(alien.getDirection() == 1);
+		alien.setDirection(Direction.RIGHT);
+		assertTrue(alien.getDirection() == Direction.RIGHT);
 	}
 	
 	@Test
@@ -236,7 +237,7 @@ public class MazubTest {
 	@Test
 	public void changeHorizontalPosition_validPositionAtNormalSpeed(){
 		Mazub alien = new Mazub(spriteArrayForSize(2, 2));
-		alien.setDirection("right");
+		alien.setDirection(Direction.RIGHT);
 		alien.setHorizontalVelocity(1);
 		alien.setHorizontalAcceleration(1);
 		
@@ -248,7 +249,7 @@ public class MazubTest {
 	@Test
 	public void changeHorizontalPosition_validPositionAtMaxSpeed(){
 		Mazub alien = new Mazub(spriteArrayForSize(2, 2));
-		alien.setDirection("right");
+		alien.setDirection(Direction.RIGHT);
 		alien.setHorizontalVelocity(3);
 		alien.setHorizontalAcceleration(1);
 		
@@ -261,7 +262,7 @@ public class MazubTest {
 	@Test
 	public void changeHorizontalPosition_inValidPosition(){
 		Mazub alien1 = new Mazub(1024,0,spriteArrayForSize(2, 2));
-		alien1.setDirection("right");
+		alien1.setDirection(Direction.RIGHT);
 		alien1.setHorizontalVelocity(1);
 		alien1.setHorizontalAcceleration(1);
 		
@@ -270,7 +271,7 @@ public class MazubTest {
 		
 		
 		Mazub alien2 = new Mazub(0,0,spriteArrayForSize(2, 2));
-		alien2.setDirection("left");
+		alien2.setDirection(Direction.LEFT);
 		alien2.setHorizontalVelocity(1);
 		alien2.setHorizontalAcceleration(1);
 		

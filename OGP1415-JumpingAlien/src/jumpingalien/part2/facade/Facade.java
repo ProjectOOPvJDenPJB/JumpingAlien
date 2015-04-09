@@ -2,6 +2,7 @@ package jumpingalien.part2.facade;
 
 import java.util.Collection;
 
+import jumpingalien.model.Direction;
 import jumpingalien.model.IllegalSizeException;
 import jumpingalien.model.IllegalTileException;
 import jumpingalien.model.IllegalTimeIntervalException;
@@ -66,23 +67,23 @@ class Facade implements IFacadePart2  {
 	}
 
 	public void startMoveLeft(Mazub alien) {
-		alien.setDirection("left");
+		alien.setDirection(Direction.LEFT);
 		alien.startMove(0.9);
 	}
 
 	public void endMoveLeft(Mazub alien) {
-		if (alien.getDirection() == -1) {
+		if (alien.getDirection() == Direction.LEFT) {
 			alien.endMove(0);
 		}
 	}
 
 	public void startMoveRight(Mazub alien) {
-		alien.setDirection("right");
+		alien.setDirection(Direction.RIGHT);
 		alien.startMove(0.9);
 	}
 
 	public void endMoveRight(Mazub alien) {
-		if (alien.getDirection() == 1) {
+		if (alien.getDirection() == Direction.RIGHT) {
 			alien.endMove(0);
 		}
 	}

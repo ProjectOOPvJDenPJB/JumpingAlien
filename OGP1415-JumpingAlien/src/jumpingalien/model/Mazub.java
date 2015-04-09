@@ -1,4 +1,5 @@
 package jumpingalien.model;
+
 import jumpingalien.util.*;
 import be.kuleuven.cs.som.annotate.*;
 
@@ -409,39 +410,6 @@ public class Mazub extends LivingCreatures {
 	}
 	
 	/**
-	 * Return the direction of this Mazub, either -1 for left or 1 for right.
-	 */
-	public int getDirection() {
-		return this.direction;
-	}
-	
-	/**
-	 * Variable indicating the direction of this Mazub. -1 indicates left, 1 indicates right.
-	 */
-	private int direction;
-
-	/**
-	 * Sets the direction of this Mazub to the given direction.
-	 * 
-	 * @param 	direction
-	 * 			The new direction of this Mazub.
-	 * @post	If the given direction is "left" then the new direction of this Mazub is equal to -1.
-	 * 			| if (direction == "left")
-	 * 			| 	then this.direction = -1
-	 * @post	If the given direction is "right" then the new direction of this Mazub is equal to 1.
-	 * 			| if (direction == "right")
-	 * 			|	then this.direction = 1
-	 * @note	If the given direction is not equal to "left" or "right" then nothing happens to the 
-	 * 			variable direction of this Mazub.
-	 */
-	public void setDirection(String direction) {
-		if (direction == "left")
-			this.direction = -1;
-		else if (direction == "right")
-			this.direction = 1;
-	}
-	
-	/**
 	 * Return the previous Sprite of this Mazub.
 	 */
 	private int getPreviousSprite(){
@@ -503,7 +471,7 @@ public class Mazub extends LivingCreatures {
 	public void changeHorizontalPosition(double timeInterval){
 		if (Util.fuzzyGreaterThanOrEqualTo(horizontalVelocity,this.getMaximumHorizontalVelocity())) 
 			this.setHorizontalAcceleration(0);
-		double newPositionX = this.getXPosition() + this.getDirection() * (100 * this.getHorizontalVelocity()*timeInterval 
+		double newPositionX = this.getXPosition() + this.getDirection().getInt() * (100 * this.getHorizontalVelocity()*timeInterval 
 				+ 50 * this.getHorizontalAcceleration()*timeInterval*timeInterval); 
 		setXPosition(newPositionX);
 	}
@@ -546,13 +514,18 @@ public class Mazub extends LivingCreatures {
 	 * 			|	&& new.getMoving() == true && new.getRunTime() == 0
 	 */
 	public void startMove(double horizontalAcceleration){
-		assert isValidHorizontalAcceleration(horizontalAcceleration);
-		this.setHorizontalAcceleration(horizontalAcceleration);
-		this.setHorizontalVelocity(this.getInitialHorizontalVelocity());
-		this.setMoving(true);	
+		if (this.getMoving() == false) {
+			// Vraag: The horizontal velocity shall not be set to zero wordt al gedaan.
+			// Hier is de implementatie om gewoon niets aan de snelheid te veranderen.
+			// Dat moeten we vragen aan assistenten.
+			assert isValidHorizontalAcceleration(horizontalAcceleration);
+			this.setHorizontalAcceleration(horizontalAcceleration);
+			this.setHorizontalVelocity(this.getInitialHorizontalVelocity());
+			this.setMoving(true);
+		}
 		this.setRunTime(0);
 	}
-	
+		
 	/**
 	 * Ends horizontal movement in the direction Mazub is facing.
 	 * 
@@ -663,8 +636,8 @@ public class Mazub extends LivingCreatures {
 	 */
 	public static int[] getSize(Sprite sprite) throws IllegalSizeException {
 		int[] size = new int[2];
-		size[0] = sprite.getHeight();
-		size[1] = sprite.getWidth();
+		size[0] = sprite.getWidth();
+		size[1] = sprite.getHeight();
 		if (! isValidSize(size))
 			throw new IllegalSizeException(size);
 		return size;
@@ -735,8 +708,9 @@ public class Mazub extends LivingCreatures {
 	 * Selects a sprite based on the previous and current actions of mazub.
 	 * @pre		The sprite array of this Mazub has to be a valid sprite array.
 	 */
+	@Override
 	public Sprite getCurrentSprite() {
-		assert (isValidSpriteArray(this.getSpriteArray()));
+		assert (Mazub.isValidSpriteArray(this.getSpriteArray()));
 		int Sprite;
 		if (this.getMoving() == false) {
 			Sprite = this.getNotMovingSprite();
@@ -769,7 +743,7 @@ public class Mazub extends LivingCreatures {
 			else
 				return 0;
 		}
-		if (this.getDirection() == 1)
+		if (this.getDirection() == Direction.RIGHT)
 			if (this.getDucking() == true)
 				return 6;
 			else
@@ -804,27 +778,27 @@ public class Mazub extends LivingCreatures {
 	private int getMovingSprite() {
 		assert (this.getMoving() == true);
 		if (this.getMovingVertical() == true) {
-			if (this.getDirection() == 1)
+			if (this.getDirection() == Direction.RIGHT)
 				return 4;
 			else
 				return 5;
 		}
 		else if (this.getDucking() == true) {
-			if (this.getDirection() == 1)
+			if (this.getDirection() == Direction.RIGHT)
 				return 6;
 			else
 				return 7;
 		}
 		else {
 			int m = ((this.getSpriteArray().length - 8) / 2) - 1;
-			if (this.getDirection() == 1) {
+			if (this.getDirection() == Direction.RIGHT) {
 				if ((this.getPreviousSprite() < 8) || (this.getPreviousSprite() > 8 + m))
 				{
 					this.setPreviousSprite(8);
 					return 8;
 				}
 			}
-			else if (this.getDirection() == -1){
+			else if (this.getDirection() == Direction.LEFT){
 				if ((this.getPreviousSprite() < 9+m)|| (this.getPreviousSprite() > 9+ 2*m))
 				{
 					this.setPreviousSprite(9+m);
@@ -853,7 +827,7 @@ public class Mazub extends LivingCreatures {
 	private int runningSprite(int m) {
 		assert (this.getMoving() == true);
 		int Sprite;
-		if (this.getDirection() == 1) {
+		if (this.getDirection() == Direction.RIGHT) {
 			if (this.getPreviousSprite() == 8 + m)
 				Sprite = 8;
 			else{
@@ -868,5 +842,19 @@ public class Mazub extends LivingCreatures {
 		}
 		this.setRunTime(0); 
 		return Sprite;			
+	}
+	
+	/**
+	 * Checks whether the given spriteArray is a valid spriteArray.
+	 * 
+	 * @param 	spriteArray
+	 * 			The spriteArray to check against.
+	 * @return	True if the spriteArray is a valid spriteArray.
+	 * 			| result ==
+	 * 			|	(spriteArray.length >= 0) &&  (spriteArray.length % 2 == 0)
+	 */
+	public static boolean isValidSpriteArray(Sprite[] spriteArray) {
+		int length = spriteArray.length;
+		return (length >= 10) && (length % 2 == 0);
 	}
 }
