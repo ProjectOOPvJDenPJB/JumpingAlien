@@ -49,8 +49,8 @@ public class Mazub extends LivingCreatures {
 	 * 
 	 */
 	public Mazub(int positionLeftX,int positionBottomY,	Sprite[] sprites,
-			double maximumHorizontalVelocity,double initialHorizontalVelocity, World world) {
-		super(positionLeftX,positionBottomY,world,sprites);
+			double maximumHorizontalVelocity,double initialHorizontalVelocity, World world, int hitpoints) {
+		super(positionLeftX,positionBottomY,world,sprites,hitpoints);
 		assert isValidInitialVelocity(initialHorizontalVelocity, maximumHorizontalVelocity);
 		assert isValidMaximumHorizontalVelocity(maximumHorizontalVelocity, initialHorizontalVelocity);
 		this.initialHorizontalVelocity = initialHorizontalVelocity;
@@ -72,7 +72,7 @@ public class Mazub extends LivingCreatures {
 	 * 			| this(positionLeftX,positionBottomY,spriteArray, 3, 1)
 	 */
 	public Mazub(int positionLeftX, int positionBottomY, Sprite[] spriteArray) throws IllegalXPositionException, IllegalYPositionException {
-		this(positionLeftX,positionBottomY,spriteArray, 3, 1,null);	
+		this(positionLeftX,positionBottomY,spriteArray, 3, 1,null,100);	
 	}
 	
 	/**
@@ -432,34 +432,7 @@ public class Mazub extends LivingCreatures {
 	 */
 	private void setPreviousSprite(int sprite){
 		this.previousSprite = sprite;
-	}
-	
-	/**
-	 * Return the runtimer of this Mazub.
-	 */
-	private double getRunTime() {
-		return this.runTime;
-	}
-	
-	/**
-	 * Variable registering the time since Mazub stopped running when Mazub is not moving horizontally.
-	 * When Mazub moves horizontally, the variable registers the time since the last spritechange.
-	 */
-	private double runTime = 1;
-
-	/**
-	 * Sets the runTimer of this Mazub to the given time.
-	 * 
-	 * @param 	runTimer
-	 * 			The new time for the runTimer for this Mazub.
-	 * @post	The new runTimer for this Mazub is equal to the given
-	 * 			runTimer.
-	 * 			| new.getRunTime == runTime
-	 */
-	private void setRunTime(double runTime) {
-		this.runTime = runTime;
-	}
-	
+	}	
 		
 	/**
 	 * @param 	timeInterval 
@@ -609,19 +582,6 @@ public class Mazub extends LivingCreatures {
 		} catch (IllegalStateException exc) {
 			//Nothing happens if the Mazub is in an Illegal State.
 		}
-	}
-	
-	/**
-	 * Checks whether the given timeInterval is a valid timeInterval for this Mazub.
-	 * 
-	 * @param 	timeInterval
-	 * 			The timeInterval to be checked.
-	 * @return	True if and only if the time interval is between 0 ands 0.2.
-	 * 			| result ==
-	 * 			|	(timeInterval >= 0) && (timeInterval <= 0.2)
-	 */
-	public static boolean isValidTimeInterval(double timeInterval) {
-		return Util.fuzzyGreaterThanOrEqualTo(timeInterval, 0) && Util.fuzzyLessThanOrEqualTo(timeInterval, 0.2);
 	}
 	
 	/**
@@ -857,4 +817,39 @@ public class Mazub extends LivingCreatures {
 		int length = spriteArray.length;
 		return (length >= 10) && (length % 2 == 0);
 	}
+	
+	public int getMinHP() {
+		return 0;
+	}
+	
+	public int getMaxHP() {
+		return 500;
+	}
+	
+	public void eatPlant(Plant plant) {
+		assert plant.isEatablePlant();
+		this.addHP(getHealAmount());
+		plant.terminate();
+	}
+	
+	public void hitByEnemy() {
+		this.addHP(getHitAmount());
+	}
+	
+	private int getHealAmount() {
+		return healAmount;
+	}
+	
+	private int healAmount = 50;
+	
+	private int getHitAmount() {
+		return hitAmount;
+	}
+	
+	private int hitAmount = -50;
+	
+	public void terminate() {
+		
+	}
+	
 }

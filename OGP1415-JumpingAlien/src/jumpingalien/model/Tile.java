@@ -1,8 +1,6 @@
 package jumpingalien.model;
 
-import be.kuleuven.cs.som.annotate.Value;
 
-@Value
 public class Tile {
 	
 	public Tile(int leftX, int bottomY, TileType tileType) {
@@ -43,7 +41,7 @@ public class Tile {
 	/**
 	 * Return the X position of the leftmost pixel of this tile.
 	 */
-	public int getLeftX() {
+	public final int getLeftX() {
 		return this.leftX;
 	}
 	/**
@@ -53,7 +51,7 @@ public class Tile {
 	/**
 	 * Return the Y position of the bottom pixel of this tile.
 	 */
-	public int getBottomY() {
+	public final int getBottomY() {
 		return this.bottomY;
 	}
 	/**
@@ -63,7 +61,7 @@ public class Tile {
 	/**
 	 * Return the type of this tile.
 	 */
-	public TileType getType() {
+	public final TileType getType() {
 		return this.type;
 	}
 	/**
@@ -74,8 +72,23 @@ public class Tile {
 	/**
 	 * Return the position of this tile in an int array of the form [leftX, bottomY].
 	 */
-	public int[] getPosition() {
+	public final int[] getPosition() {
 		int[] position = new int[]{this.getLeftX(),this.getBottomY()};
 		return position.clone();
+	}
+	
+	public static enum State {
+		UNAFFECTED, OCCUPIED;
+	}
+	
+	public State getState() {
+		return this.state;
+	}
+	
+	private State state = State.UNAFFECTED;
+	
+	public void setState(State state) {
+		assert (state != null);
+		this.state = state;
 	}
 }

@@ -288,7 +288,16 @@ public class World {
 	}
 	
 	public void advanceTime(double dt) {
-		
+		mazub.advanceTime(dt);
+		for (String key : plants.keySet()) {
+			plants.get(key).advanceTime(dt);
+		}
+		for (String key : slimes.keySet()) {
+			slimes.get(key).advanceTime(dt);
+		}
+		for (String key : sharks.keySet()) {
+			sharks.get(key).advanceTime(dt);
+		}
 	}
 	
 }

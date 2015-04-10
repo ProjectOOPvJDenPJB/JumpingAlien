@@ -1,5 +1,6 @@
 package jumpingalien.model;
 import jumpingalien.util.Sprite;
+import jumpingalien.util.Util;
 
 public class Plant extends LivingCreatures{
 
@@ -26,8 +27,8 @@ public class Plant extends LivingCreatures{
 	 * 			| ! isValidYPosition(positionBottomY)
 	 * 
 	 */
-	public Plant(int positionX, int positionY, double horizontalVelocity, Sprite[] sprites, World world){
-		super(positionX,positionY, horizontalVelocity,0,world,sprites);
+	public Plant(int positionX, int positionY, double horizontalVelocity, Sprite[] sprites, World world, int hitpoints){
+		super(positionX,positionY, horizontalVelocity,0,world,sprites, hitpoints);
 	}
 
 	/**
@@ -45,7 +46,7 @@ public class Plant extends LivingCreatures{
 	 */
 	
 	public Plant(int positionX, int positionY, Sprite[] sprites){
-		this(positionX,positionY,0,sprites, null);	
+		this(positionX,positionY,0.5,sprites, null, 1);	
 	}
 	
 	/**
@@ -58,44 +59,54 @@ public class Plant extends LivingCreatures{
 	 * 			| this(0,0,sprites, null)
 	 */
 	public Plant(Sprite[] sprites){
-		this(0,0,0,sprites, null);	
+		this(0,0,0.5,sprites, null,1);	
 
 	}
 	
 	public void startMoveRight(){
-		this.setHorizontalVelocity(0.5);
+		this.setDirection(Direction.RIGHT);
 		this.setRunTime(0);
 	}
 	
 	public void startMoveLeft(){
-		this.setHorizontalVelocity(0.5);
+		this.setDirection(Direction.LEFT);
 		this.setRunTime(0);
 	}
-	/**
-	 * Return the runtimer of this Mazub.
-	 */
-	private double getRunTime() {
-		return this.runTime;
-	}
-	
-	/**
-	 * Variable registering the time since Mazub stopped running when Mazub is not moving horizontally.
-	 * When Mazub moves horizontally, the variable registers the time since the last spritechange.
-	 */
-	private double runTime = 1;
 
-	/**
-	 * Sets the runTimer of this Mazub to the given time.
-	 * 
-	 * @param 	runTimer
-	 * 			The new time for the runTimer for this Mazub.
-	 * @post	The new runTimer for this Mazub is equal to the given
-	 * 			runTimer.
-	 * 			| new.getRunTime == runTime
-	 */
-	private void setRunTime(double runTime) {
-		this.runTime = runTime;
+	public void terminate() {
+		setState(State.DEAD);
+		//TODO
 	}
+
+	public boolean isEatablePlant() {
+		if (getState() == State.ALIVE)
+			return true;
+		else
+			return false;
 	}
+
+	@Override
+	public int getMaxHP() {
+		return 1;
+	}
+
+	@Override
+	public int getMinHP() {
+		return 0;
+	}
+
+	@Override
+	public void advanceTime(double timeInterval) throws IllegalTimeIntervalException {
+		if (! isValidTimeInterval(timeInterval))
+			throw new IllegalTimeIntervalException(timeInterval);
+		if (Util.fuzzyGreaterThanOrEqualTo(getRunTime(), 0.2)) {
+			if (this.getDirection() == Direction.RIGHT)
+				startMoveLeft();
+			else if (this.getDirection() == Direction.LEFT)
+				startMoveRight();
+		}
+		this.setRunTime(getRunTime() + timeInterval);
+	}
+}
 	
 

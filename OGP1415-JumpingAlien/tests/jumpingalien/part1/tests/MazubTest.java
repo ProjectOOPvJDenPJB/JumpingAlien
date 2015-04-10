@@ -33,7 +33,7 @@ public class MazubTest {
 	
 	@Test
 	public void extendedConstructor$LegalCase() {		
-		Mazub alien = new Mazub(0, 0, defaultSprites, 5, 3, null);
+		Mazub alien = new Mazub(0, 0, defaultSprites, 5, 3, null, 100);
 		assertTrue(0 == alien.getXPosition());
 		assertTrue(0 == alien.getYPosition());
 		assertTrue(5 == alien.getMaximumHorizontalVelocity());
@@ -42,7 +42,7 @@ public class MazubTest {
 	}
 	
 	public void extendedConstructor$NegativePositions() {
-		Mazub alien = new Mazub(-6,-800,defaultSprites,5,3, null);
+		Mazub alien = new Mazub(-6,-800,defaultSprites,5,3, null, 100);
 		assertTrue(0 == alien.getXPosition());
 		assertTrue(0 == alien.getYPosition());
 		assertTrue(5 == alien.getMaximumHorizontalVelocity());
@@ -52,7 +52,7 @@ public class MazubTest {
 	
 	public void extendedConstructor$OutOfBoundsPositions() {
 		//Positions too big (out of bounds of gameworld)
-		Mazub alien = new Mazub(2000,6805,defaultSprites,5,3, null);
+		Mazub alien = new Mazub(2000,6805,defaultSprites,5,3, null, 100);
 		assertTrue(1024 == alien.getXPosition());
 		assertTrue(768 == alien.getYPosition());
 		assertTrue(5 == alien.getMaximumHorizontalVelocity());

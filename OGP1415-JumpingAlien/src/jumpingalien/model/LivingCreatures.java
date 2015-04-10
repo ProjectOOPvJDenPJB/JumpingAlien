@@ -1,27 +1,29 @@
 package jumpingalien.model;
 
 import jumpingalien.util.Sprite;
+import jumpingalien.util.Util;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Raw;
 
-public class LivingCreatures {
+public abstract class LivingCreatures {
 
 	protected LivingCreatures(int XPosition, int YPosition,double horizontalVelocity, 
-			double verticalVelocity, World world, Sprite[] sprites){
+			double verticalVelocity, World world, Sprite[] sprites,int hitpoints){
 		LivingCreatures.isValidSpriteArray(sprites,this);
 		this.setWorld(world);
 		this.setPosition(XPosition, YPosition);
 		this.setHorizontalVelocity(horizontalVelocity);
 		this.setVerticalVelocity(verticalVelocity);
+		this.setHP(hitpoints);
 		this.spriteArray = sprites;		
 	}
 	
-	protected LivingCreatures(int XPosition, int YPosition, World world, Sprite[] sprites){
-		this(XPosition,YPosition,0,0,world, sprites);
+	protected LivingCreatures(int XPosition, int YPosition, World world, Sprite[] sprites, int hitpoints){
+		this(XPosition,YPosition,0,0,world, sprites, hitpoints);
 	}
 	
-	protected LivingCreatures(int XPosition, int Yposition,Sprite[] sprites) {
-		this(XPosition,Yposition,null,sprites);
+	protected LivingCreatures(int XPosition, int Yposition,Sprite[] sprites, int hitpoints) {
+		this(XPosition,Yposition,null,sprites, hitpoints);
 	}
 	
 	/**
@@ -67,13 +69,17 @@ public class LivingCreatures {
 		} catch (IllegalXPositionException | IllegalYPositionException exc) {
 			if (positionLeftX < 0) {
 				positionLeftX = 0;
+				//terminate();
 			}
 			else if (positionLeftX > position.getWidth())
 				positionLeftX = position.getWidth();
+				//terminate();
 			if (positionBottomY < 0)
 				positionBottomY = 0;
+				//terminate();
 			else if (positionBottomY > position.getHeight())
 				positionBottomY = position.getHeight();
+				//terminate();
 		}
 		position =  new Position(positionLeftX, positionBottomY,getWorld());
 	}
@@ -235,7 +241,7 @@ public class LivingCreatures {
 	/**
 	 * Variable indicating the direction of this Mazub. -1 indicates left, 1 indicates right.
 	 */
-	private Direction direction;
+	private Direction direction = Direction.RIGHT;
 
 	/**
 	 * Sets the direction of this Mazub to the given direction.
@@ -252,6 +258,132 @@ public class LivingCreatures {
 	public void setDirection(Direction direction) {
 		//TODO Manier van programmeren?
 		this.direction = direction;
+	}
+	
+	public int getHP() {
+		return this.hitpoints;
+	}
+	
+	private int hitpoints;
+	
+	public void setHP(int HP) {
+		if (HP <= getMinHP()) {
+			hitpoints = getMinHP();
+			this.terminate();
+		}
+		else if (HP > getMaxHP())
+			hitpoints = getMaxHP();
+		else
+			hitpoints = HP;
+	}
+	
+	public abstract void terminate();
+
+	public abstract int getMaxHP();
+	public abstract int getMinHP();
+	
+	public static final int MIN_HP = 0;
+	
+	public void addHP(int HP) {
+		setHP(getHP() + HP);
+	}
+	
+	protected double getTerrainTimer() {
+		return this.terrainTimer;
+	}
+	
+	protected double terrainTimer;
+	
+	protected void setTerrainTimer(double time) {
+		assert isValidTimerValue(time);
+		terrainTimer = time;
+	}
+
+	protected boolean isValidTimerValue(double time) {
+		return Util.fuzzyGreaterThanOrEqualTo(time, 0);
+	}
+	
+	public void terrainDamage(Tile terrain) {
+		if (terrain.getType() == TileType.WATER) {
+			waterDamage(terrain);
+		}
+		else if (terrain.getType() == TileType.MAGMA) {
+			magmaDamage(terrain);
+		}
+	}
+
+	private void magmaDamage(Tile magma) {
+		assert (magma.getType() == TileType.MAGMA);
+		if (magma.getState() == Tile.State.UNAFFECTED) {
+			addHP(-50);
+		}
+		else if (magma.getState() == Tile.State.OCCUPIED) {
+			if (Util.fuzzyGreaterThanOrEqualTo(getTerrainTimer(), 0.2))
+				addHP(-50);
+		}
+	}
+
+	private void waterDamage(Tile water) {
+		assert (water.getType() == TileType.WATER);
+		if (Util.fuzzyGreaterThanOrEqualTo(getTerrainTimer(), 0.2))
+			addHP(-2);
+	}
+	
+	public abstract void advanceTime(double dt);
+	
+	/**
+	 * Return the runtimer of this Mazub.
+	 */
+	protected double getRunTime() {
+		return this.runTime;
+	}
+	
+	/**
+	 * Variable registering the time since Mazub stopped running when Mazub is not moving horizontally.
+	 * When Mazub moves horizontally, the variable registers the time since the last spritechange.
+	 */
+	protected double runTime = 1;
+
+	/**
+	 * Sets the runTimer of this Mazub to the given time.
+	 * 
+	 * @param 	runTimer
+	 * 			The new time for the runTimer for this Mazub.
+	 * @post	The new runTimer for this Mazub is equal to the given
+	 * 			runTimer.
+	 * 			| new.getRunTime == runTime
+	 */
+	protected void setRunTime(double runTime) {
+		assert isValidTimerValue(runTime);
+		this.runTime = runTime;
+	}
+	
+	/**
+	 * Checks whether the given timeInterval is a valid timeInterval for this Mazub.
+	 * 
+	 * @param 	timeInterval
+	 * 			The timeInterval to be checked.
+	 * @return	True if and only if the time interval is between 0 ands 0.2.
+	 * 			| result ==
+	 * 			|	(timeInterval >= 0) && (timeInterval <= 0.2)
+	 */
+	public static boolean isValidTimeInterval(double timeInterval) {
+		return Util.fuzzyGreaterThanOrEqualTo(timeInterval, 0) && Util.fuzzyLessThanOrEqualTo(timeInterval, 0.2);
+	}
+	
+	protected static enum State {
+		ALIVE,DEAD;
+	}
+	
+	protected State getState() {
+		return this.state;
+	}
+	
+	protected State state;
+	
+	protected void setState(State state) {
+		assert (state != null);
+		this.state = state;
 	}
 }
 
