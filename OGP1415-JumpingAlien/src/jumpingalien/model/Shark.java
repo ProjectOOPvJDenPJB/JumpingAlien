@@ -1,6 +1,8 @@
 package jumpingalien.model;
 
+//import jumpingalien.model.LivingCreatures.State;
 import jumpingalien.util.Sprite;
+import jumpingalien.util.Util;
 
 public class Shark extends LivingCreatures {
 	
@@ -27,8 +29,10 @@ public class Shark extends LivingCreatures {
 	 * 			| ! isValidYPosition(positionBottomY)
 	 * 
 	 */
-	public Shark(int positionX, int positionY, World world,Sprite[] sprites){
-		super(positionX,positionY,world,sprites);
+	public Shark(int positionX, int positionY, double horizontalVelocity, double verticalVelocity,
+			World world,Sprite[] sprites, int hitpoints){
+		super(positionX,positionY, horizontalVelocity, verticalVelocity,world,sprites, hitpoints);
+
 	}
 
 	/**
@@ -45,7 +49,7 @@ public class Shark extends LivingCreatures {
 	 * 			| this(positionX,positionY,sprites, null)
 	 */
 	public Shark(int positionX, int positionY, Sprite[] sprites){
-		this(positionX,positionY,null,sprites);	
+		this(positionX,positionY,0,0,null,sprites,100);	
 	}
 	
 	/**
@@ -58,37 +62,8 @@ public class Shark extends LivingCreatures {
 	 * 			| this(0,0,sprites, null)
 	 */
 	public Shark(Sprite[] sprites){
-		this(0,0, null,sprites);	
+		this(0,0,sprites);	
 
-	}
-	
-	//ik was aan het denken om een aparte class voor positie te maken aangezien we dat
-	//toch overal nodig hebben.
-	private World inWorld;
-	
-	public boolean isInWorld(){
-		return (this.getWorld() != null);
-	}
-	
-	/**
-	 * Return the World in which the Shark is Located
-	 */
-	public World getWorld(){
-		return this.inWorld;
-	}
-	
-
-	/**
-	 * Set the World in which the Shark is located to the given world.
-	 * @param	world
-	 * 			The new world in which the Shark will be located.
-	 * @post	The new world of the Shark is equal to the
-	 * 			given world if the Shark isn't already in an other world.
-	 */
-	public void setWorld(World world){
-		if (!isInWorld()){
-			this.inWorld = world;
-		}
 	}
 	
 	/**
@@ -98,15 +73,27 @@ public class Shark extends LivingCreatures {
 	 *	     | ! new.isInWorld()
 	 * @post   The former world of this Shark, no longer contains this Shark
 	 */
-	public void removeFromWorld(){
-		if (this.isInWorld()){
-			this.getWorld().removeObject(this);
-			/* 
-			 * Ik ben er voorlopig vanuit gegaan dat we in world bijhouden wat er allemaal in zit
-			 * maar we maken best een superclass aan waarin wordt bijgehouden wat er allemaal op welke
-			 * positie in een gegeven wereld is.
-			 */
-			this.setWorld(null);
-		}
+
+	@Override
+	public void terminate() {
+		setState(State.DEAD);
+		//TODO
+	}
+
+	@Override
+	public int getMaxHP() {
+		return 100;
+	}
+
+	@Override
+	public int getMinHP() {
+		return 0;
+	}
+
+	@Override
+	public void advanceTime(double timeInterval) throws IllegalTimeIntervalException {
+		if (! isValidTimeInterval(timeInterval))
+			throw new IllegalTimeIntervalException(timeInterval);		
+		//TODO
 	}
 	}

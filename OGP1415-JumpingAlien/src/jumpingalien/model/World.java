@@ -170,6 +170,11 @@ public class World {
 		return tileTypes.get(position).getInt();
 	}
 	
+	public boolean isPassable(double leftX,double bottomY){
+		double[] position = new double[]{leftX,bottomY};
+		return tileTypes.get(position).getPassable();
+	}
+	
 	/**
 	 * Variable registering the different tileTypes for each tile in the this World.
 	 */

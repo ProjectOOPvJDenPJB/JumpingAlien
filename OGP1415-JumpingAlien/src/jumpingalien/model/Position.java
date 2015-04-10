@@ -47,7 +47,7 @@ public class Position {
 	 * 			| result ==
 	 * 			|	(position <= width) && (position >= 0)
 	 */
-	private static boolean isValidXPosition(double positionX, int width) {
+	static boolean isValidXPosition(double positionX, int width) {
 		return Util.fuzzyLessThanOrEqualTo(positionX,width) && Util.fuzzyGreaterThanOrEqualTo(positionX, 0);
 	}
 	
@@ -68,6 +68,11 @@ public class Position {
 	 */
 	private static boolean isValidYPosition(double positionY, int height) {
 		return Util.fuzzyLessThanOrEqualTo(positionY,height) && Util.fuzzyGreaterThanOrEqualTo(positionY,0);
+	}
+	
+	static boolean isPassable(LivingCreatures creature,double newXposition, double d){
+		World world = creature.getWorld();
+		return world.isPassable(newXposition,d);
 	}
 	
 	private final double YPos;
@@ -97,4 +102,5 @@ public class Position {
 		else
 			return world.getPixelHeight();
 	}
+
 }

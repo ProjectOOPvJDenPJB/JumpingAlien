@@ -93,7 +93,7 @@ public class Mazub extends LivingCreatures {
 	 * 	horizontally or not.
 	 */
 	@Basic
-	private boolean getMoving(){
+	public boolean getMoving(){
 		return this.moving;
 	}
 	
@@ -111,7 +111,7 @@ public class Mazub extends LivingCreatures {
 	 * 			| new.getMoving == flag
 	 */
 	@Basic
-	private void setMoving(boolean flag) {
+	public void setMoving(boolean flag) {
 		this.moving = flag;
 	}
 	

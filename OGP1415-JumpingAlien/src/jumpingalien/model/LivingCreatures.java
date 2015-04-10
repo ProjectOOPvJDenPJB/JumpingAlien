@@ -1,5 +1,6 @@
 package jumpingalien.model;
 
+import jumpingalien.model.Position;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
 import be.kuleuven.cs.som.annotate.Basic;
@@ -8,22 +9,41 @@ import be.kuleuven.cs.som.annotate.Raw;
 public abstract class LivingCreatures {
 
 	protected LivingCreatures(int XPosition, int YPosition,double horizontalVelocity, 
-			double verticalVelocity, World world, Sprite[] sprites,int hitpoints){
+			double verticalVelocity, double horizontalAcceleration,double verticalAcceleration,
+			World world, Sprite[] sprites,int hitpoints){
 		LivingCreatures.isValidSpriteArray(sprites,this);
 		this.setWorld(world);
 		this.setPosition(XPosition, YPosition);
 		this.setHorizontalVelocity(horizontalVelocity);
 		this.setVerticalVelocity(verticalVelocity);
 		this.setHP(hitpoints);
+		this.setHorizontalAcceleration(horizontalAcceleration);
+		this.setVerticalAcceleration(verticalAcceleration);
 		this.spriteArray = sprites;		
 	}
 	
-	protected LivingCreatures(int XPosition, int YPosition, World world, Sprite[] sprites, int hitpoints){
+	protected LivingCreatures(int XPosition, int YPosition, double horizontalVelocity, 
+			double verticalVelocity, double horizontalAcceleration, 
+			World world, Sprite[] sprites, int hitpoints){
+		this(XPosition,YPosition,horizontalVelocity,verticalVelocity, horizontalAcceleration, 
+				0,world, sprites, hitpoints);
+	}
+	
+	protected LivingCreatures(int XPosition, int YPosition, double horizontalVelocity, 
+			double verticalVelocity,World world, Sprite[] sprites, int hitpoints){
+		this(XPosition,YPosition,horizontalVelocity,verticalVelocity, 0,world, sprites, hitpoints);
+	}
+	
+	protected LivingCreatures(int XPosition, int YPosition,World world, Sprite[] sprites, int hitpoints){
 		this(XPosition,YPosition,0,0,world, sprites, hitpoints);
 	}
 	
 	protected LivingCreatures(int XPosition, int Yposition,Sprite[] sprites, int hitpoints) {
-		this(XPosition,Yposition,null,sprites, hitpoints);
+		this(XPosition,Yposition,0,0,null,sprites, hitpoints);
+	}
+	
+	protected LivingCreatures(Sprite[] sprites, int hitpoints) {
+		this(0,0,sprites, hitpoints);
 	}
 	
 	/**
@@ -98,18 +118,18 @@ public abstract class LivingCreatures {
 	}
 	
 	/**
-	 * Variable registering the horizontal velocity of this Mazub.
+	 * Variable registering the horizontal velocity of this living creature.
 	 * 	The standard horizontal velocity is 0.
 	 */
 	private double horizontalVelocity = 0;
 	
 	/**
-	 * Sets the horizontal velocity of this Mazub to the given horizontal velocity.
+	 * Sets the horizontal velocity of this living creature to the given horizontal velocity.
 	 * 
 	 * @param	horizontalVelocity
-	 * 			The new horizontal velocity for this Mazub.
+	 * 			The new horizontal velocity for this living creature.
 	 * @pre 	The given horizontalVelocity is a valid velocity for this living creature.
-	 * @post	The horizontalVelocity of this Mazub is equal to
+	 * @post	The horizontalVelocity of this living creature is equal to
 	 * 			the given horizontalVelocity.
 	 * 			| new.getHorizontalVelocity() == horizontalVelocity
 
@@ -119,23 +139,23 @@ public abstract class LivingCreatures {
 	}
 
 	/**
-	 *  Return the vertical velocity of this Mazub.
+	 *  Return the vertical velocity of this living creature.
 	 */
 	public double getVerticalVelocity(){
 		return this.verticalVelocity;
 	}
 	
 	/**
-	 * Variable registering the vertical velocity of this Mazub.
+	 * Variable registering the vertical velocity of this living creature.
 	 * 	The standard vertical velocity is 0.
 	 */
 	private double verticalVelocity = 0;
 	
 	/**
-	 * Sets the vertical velocity of this Mazub to the given vertical velocity.
+	 * Sets the vertical velocity of this living creature to the given vertical velocity.
 	 * 
 	 * @param	verticalVelocity
-	 * 			The new vertical velocity for this Mazub.
+	 * 			The new vertical velocity for this living creature.
 	 * @pre		The given verticalVelocity is a valid velocity for this living creature.
 	 * @post	The new vertical velocity is equal to the
 	 * 			given vertical velocity.
@@ -145,6 +165,59 @@ public abstract class LivingCreatures {
 			this.verticalVelocity = verticalVelocity;
 	}
 	
+	/**
+	 *  Return the horizontal acceleration of this living creature.
+	 */
+	public double getHorizontalAcceleration(){
+		return this.horizontalAcceleration;
+	}
+	
+	/**
+	 * Variable registering the horizontal acceleration of this living creature.
+	 * 	The standard horizontal acceleration is 0.
+	 */
+	private double horizontalAcceleration = 0;
+	
+	/**
+	 * Sets the horizontal acceleration of this living creature to the given horizontal acceleration.
+	 * 
+	 * @param	horizontalVelocity
+	 * 			The new horizontal acceleration for this living creature.
+	 * @pre		The given horizontalAcceleration is a valid acceleration for this living creature.
+	 * @post	The new horizontal acceleration is equal to the
+	 * 			given horizontal acceleration.
+	 * 			| 	then new.horizontalAcceleration = horizontalAcceleration
+	 */
+	public void setHorizontalAcceleration(double horizontalAcceleration){
+			this.horizontalAcceleration = horizontalAcceleration;
+	}
+	
+	/**
+	 *  Return the vertical acceleration of this living creature.
+	 */
+	public double getVerticalAcceleration(){
+		return this.verticalAcceleration;
+	}
+	
+	/**
+	 * Variable registering the vertical acceleration of this living creature.
+	 * 	The standard vertical acceleration is 0.
+	 */
+	private double verticalAcceleration = 0;
+	
+	/**
+	 * Sets the vertical acceleration of this living creature to the given vertical acceleration.
+	 * 
+	 * @param	horizontalVelocity
+	 * 			The new vertical acceleration for this living creature.
+	 * @pre		The given verticalAcceleration is a valid acceleration for this living creature.
+	 * @post	The new vertical acceleration is equal to the
+	 * 			given vertical acceleration.
+	 * 			| 	then new.verticalAcceleration = verticalAcceleration
+	 */
+	public void setVerticalAcceleration(double verticalAcceleration){
+			this.verticalAcceleration = verticalAcceleration;
+	}
 	
 	protected World world;
 	
@@ -184,7 +257,7 @@ public abstract class LivingCreatures {
 	}
 
 	/**
-	 * Return a clone of the spriteArray of this Mazub.
+	 * Return a clone of the spriteArray of this living creature.
 	 */
 	public Sprite[] getSpriteArray() {
 		return this.spriteArray.clone();
@@ -209,7 +282,7 @@ public abstract class LivingCreatures {
 	}
 	
 	/**
-	 * Variable registering the spriteArray of this Mazub.
+	 * Variable registering the spriteArray of this living creature.
 	 */
 	private final Sprite[] spriteArray;
 	
@@ -239,25 +312,61 @@ public abstract class LivingCreatures {
 	}
 	
 	/**
-	 * Variable indicating the direction of this Mazub. -1 indicates left, 1 indicates right.
+	 * Variable indicating the direction of this living creature. -1 indicates left, 1 indicates right.
 	 */
 	private Direction direction = Direction.RIGHT;
 
 	/**
-	 * Sets the direction of this Mazub to the given direction.
+	 * Sets the direction of this living creature to the given direction.
 	 * 
 	 * @param 	direction
-	 * 			The new direction of this Mazub.
-	 * @post	If the given direction is LEFT then the new direction of this Mazub is left.
+	 * 			The new direction of this living creature.
+	 * @post	If the given direction is LEFT then the new direction of this living creature is left.
 	 * 			| if (direction == LEFT)
 	 * 			| 	then new.getDirection() == LEFT
-	 * @post	If the given direction is RIGHT then the new direction of this Mazub is right.
+	 * @post	If the given direction is RIGHT then the new direction of this living creature is right.
 	 * 			| if (direction == RIGHT)
 	 * 			|	then new.getDirection() == RIGHT
 	 */
 	public void setDirection(Direction direction) {
 		//TODO Manier van programmeren?
 		this.direction = direction;
+	}
+	
+	public void setDirection(int direction){
+		if (direction == 1){
+			this.direction = Direction.RIGHT;
+		}
+		if (direction == -1){
+			this.direction = Direction.LEFT;
+		}
+	}
+	
+	/**
+	 * Return the boolean indicating whether this living creature is moving
+	 * 	horizontally or not.
+	 */
+	@Basic
+	public boolean getMoving(){
+		return this.moving;
+	}
+	
+	/**
+	 * Variable registering whether this living creature is moving horizontally or not.
+	 */
+	private boolean moving = false;
+	
+	/**
+	 * Sets the boolean indicating whether this living creature is moving horizontally.
+	 * @param 	flag
+	 * 		 	The new boolean that indicates wether or not living creature is moving horiztonally.
+	 * @post	The new moving state of this living creature is equal to the 
+	 * 			given flag.
+	 * 			| new.getMoving == flag
+	 */
+	@Basic
+	public void setMoving(boolean flag) {
+		this.moving = flag;
 	}
 	
 	public int getHP() {
@@ -332,24 +441,24 @@ public abstract class LivingCreatures {
 	public abstract void advanceTime(double dt);
 	
 	/**
-	 * Return the runtimer of this Mazub.
+	 * Return the runtimer of this living creature.
 	 */
 	protected double getRunTime() {
 		return this.runTime;
 	}
 	
 	/**
-	 * Variable registering the time since Mazub stopped running when Mazub is not moving horizontally.
-	 * When Mazub moves horizontally, the variable registers the time since the last spritechange.
+	 * Variable registering the time since living creature stopped running when living creature is not moving horizontally.
+	 * When living creature moves horizontally, the variable registers the time since the last spritechange.
 	 */
 	protected double runTime = 1;
 
 	/**
-	 * Sets the runTimer of this Mazub to the given time.
+	 * Sets the runTimer of this living creature to the given time.
 	 * 
 	 * @param 	runTimer
-	 * 			The new time for the runTimer for this Mazub.
-	 * @post	The new runTimer for this Mazub is equal to the given
+	 * 			The new time for the runTimer for this living creature.
+	 * @post	The new runTimer for this living creature is equal to the given
 	 * 			runTimer.
 	 * 			| new.getRunTime == runTime
 	 */
@@ -359,7 +468,7 @@ public abstract class LivingCreatures {
 	}
 	
 	/**
-	 * Checks whether the given timeInterval is a valid timeInterval for this Mazub.
+	 * Checks whether the given timeInterval is a valid timeInterval for this living creature.
 	 * 
 	 * @param 	timeInterval
 	 * 			The timeInterval to be checked.

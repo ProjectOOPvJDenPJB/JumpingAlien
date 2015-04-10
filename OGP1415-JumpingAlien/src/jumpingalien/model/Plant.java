@@ -29,6 +29,10 @@ public class Plant extends LivingCreatures{
 	 */
 	public Plant(int positionX, int positionY, double horizontalVelocity, Sprite[] sprites, World world, int hitpoints){
 		super(positionX,positionY, horizontalVelocity,0,world,sprites, hitpoints);
+		if (horizontalVelocity > 0){
+			this.setDirection(Direction.RIGHT);
+			this.setMoving(true);
+		}
 	}
 
 	/**
@@ -63,16 +67,6 @@ public class Plant extends LivingCreatures{
 
 	}
 	
-	public void startMoveRight(){
-		this.setDirection(Direction.RIGHT);
-		this.setRunTime(0);
-	}
-	
-	public void startMoveLeft(){
-		this.setDirection(Direction.LEFT);
-		this.setRunTime(0);
-	}
-
 	public void terminate() {
 		setState(State.DEAD);
 		//TODO
@@ -99,12 +93,18 @@ public class Plant extends LivingCreatures{
 	public void advanceTime(double timeInterval) throws IllegalTimeIntervalException {
 		if (! isValidTimeInterval(timeInterval))
 			throw new IllegalTimeIntervalException(timeInterval);
-		if (Util.fuzzyGreaterThanOrEqualTo(getRunTime(), 0.2)) {
-			if (this.getDirection() == Direction.RIGHT)
-				startMoveLeft();
-			else if (this.getDirection() == Direction.LEFT)
-				startMoveRight();
+		
+		if (Util.fuzzyGreaterThanOrEqualTo(this.getRunTime(), 0.5)){
+			this.setDirection(this.getDirection().getInt() * -1);
+			this.setRunTime(0);			
 		}
+		
+		double newXposition = this.getXPosition() + this.getDirection().getInt() * this.getHorizontalVelocity();
+		World world = this.getWorld();
+		
+		if (Position.isValidXPosition(newXposition, world.getPixelWidth()) 
+				&& (Position.isPassable(this,newXposition,this.getYPosition()-1) == false));
+				this.setXPosition(newXposition);
 		this.setRunTime(getRunTime() + timeInterval);
 	}
 }
