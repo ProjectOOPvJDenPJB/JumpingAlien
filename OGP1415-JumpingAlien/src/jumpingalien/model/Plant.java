@@ -29,10 +29,6 @@ public class Plant extends LivingCreatures{
 	 */
 	public Plant(int positionX, int positionY, double horizontalVelocity, Sprite[] sprites, World world, int hitpoints){
 		super(positionX,positionY, horizontalVelocity,0,world,sprites, hitpoints);
-		if (horizontalVelocity > 0){
-			this.setDirection(Direction.RIGHT);
-			this.setMoving(true);
-		}
 	}
 
 	/**
@@ -95,16 +91,16 @@ public class Plant extends LivingCreatures{
 			throw new IllegalTimeIntervalException(timeInterval);
 		
 		if (Util.fuzzyGreaterThanOrEqualTo(this.getRunTime(), 0.5)){
-			this.setDirection(this.getDirection().getInt() * -1);
+			this.setDirection(this.getDirection().oppositeDirection());
 			this.setRunTime(0);			
 		}
 		
-		double newXposition = this.getXPosition() + this.getDirection().getInt() * this.getHorizontalVelocity();
-		World world = this.getWorld();
+		this.changeHorizontalPosition(timeInterval);
 		
-		if (Position.isValidXPosition(newXposition, world.getPixelWidth()) 
-				&& (Position.isPassable(this,newXposition,this.getYPosition()-1) == false));
-				this.setXPosition(newXposition);
+//		double newXposition = this.getXPosition() + this.getDirection().getInt() * this.getHorizontalVelocity();
+//		
+//		if (Position.isPassable(this,newXposition,this.getYPosition()-1) == false);
+//				this.setXPosition(newXposition);
 		this.setRunTime(getRunTime() + timeInterval);
 	}
 }

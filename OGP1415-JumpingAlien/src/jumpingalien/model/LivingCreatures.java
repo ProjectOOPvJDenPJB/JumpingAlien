@@ -1,5 +1,9 @@
 package jumpingalien.model;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import jumpingalien.model.Position;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
@@ -493,6 +497,136 @@ public abstract class LivingCreatures {
 	protected void setState(State state) {
 		assert (state != null);
 		this.state = state;
+	}
+	
+	/**
+	 * @param 	timeInterval 
+	 * 			The time interval in which the position of this mazub has changed.
+	 * @post	The new X position of this Mazub is equal to the current X position added to the horizontal distance
+	 * 			travelled calculated with a formula using the given time interval. 
+	 * 			new.getXPosition = this.getXPosition() + distanceCalculated
+	 */
+	public void changeHorizontalPosition(double timeInterval){
+		if (Util.fuzzyGreaterThanOrEqualTo(horizontalVelocity,this.getMaximumHorizontalVelocity())) 
+			this.setHorizontalAcceleration(0);
+		double newPositionX = this.getXPosition() + this.getDirection().getInt() * (100 * this.getHorizontalVelocity()*timeInterval 
+				+ 50 * this.getHorizontalAcceleration()*timeInterval*timeInterval); 
+		setXPosition(newPositionX);
+	}
+	
+	/**
+	 * Return the maximum horizontal velocity of this Mazub.
+	 */
+	@Basic
+	public double getMaximumHorizontalVelocity() {
+		return this.maximumHorizontalVelocity;
+	}
+	
+	/**
+	 * Check whether the given maximum horizontal velocity is a valid maximum horizontal velocity.
+	 * 
+	 * @param 	maximumHorizontalVelocity
+	 * 			The maximum horizontal velocity to check.
+	 * @param	initialHorizontalVelocity
+	 * 			The initial horizontal velocity to check the maximum horizontal velocity against.
+	 * @return 	True if the given maximum horizontal velocity is a valid maximum horizontal velocity.
+	 * 			| result == (maximumHorizontalVelocity > initialHorizontalVelocity)
+	 */
+	public static boolean isValidMaximumHorizontalVelocity(double maximumHorizontalVelocity, double initialHorizontalVelocity) {
+		return maximumHorizontalVelocity > initialHorizontalVelocity;
+	}
+	
+	/**
+	 * Variable registering the maximum horizontal velocity of this Mazub.
+	 */
+	protected double maximumHorizontalVelocity;
+	
+	
+	/**
+	 * Returns the size of a sprite of this Mazub.
+	 * @param 	sprite
+	 * 			The sprite of which the size must be determined.
+	 * @return	Returns the size of the given sprite in an array of type int.
+	 * 			this array consists of two elements, the height and width respectively.
+	 * @throws	IllegalSizeException
+	 * 			The size of this sprite is not a valid size for a sprite of this Mazub.
+	 * 			| (! isValidSize([sprite.getHeight(),sprite.getWidth()]))
+	 */
+	public int[] getSize() throws IllegalSizeException {
+		int[] size = new int[2];
+		size[0] = getCurrentSprite().getWidth();
+		size[1] = getCurrentSprite().getHeight();
+		if (! isValidSize(size))
+			throw new IllegalSizeException(size);
+		return size;
+	}
+	
+	/**
+	 * Checks whether the given size is a valid size for this Mazub.
+	 * 
+	 * @param 	size
+	 * 			The size to be checked.
+	 * @return	True if and only if the size is greater or equal to 0.
+	 * 			| result ==
+	 * 			|	(size[0] > 0) && (size[1] > 0)
+	 */
+	public static boolean isValidSize(int[] size) {
+		return Util.fuzzyGreaterThanOrEqualTo(size[0], 0) && Util.fuzzyGreaterThanOrEqualTo(size[1], 0);
+	}
+	
+	public boolean collidesWithTerrain() {
+		for (int[] tile : getOccupiedTiles()) {
+			if (! world.isPassable(tile[0], tile[1]))
+				return false;
+		}
+		return true;
+	}
+	
+	public boolean isInLava() {
+		for (int[] tile : getOccupiedTiles()) {
+			if (world.getTileType(tile[0], tile[1]) == TileType.MAGMA.getInt())
+				return true;
+		}
+		return false;
+	}
+	
+	public boolean isInWater() {
+		for (int[] tile : getOccupiedTiles()) {
+			if (world.getTileType(tile[0], tile[1]) == TileType.WATER.getInt())
+				return true;
+		}
+		return false;
+	}
+	
+	public List<int[]> getOccupiedTiles() {
+		List<int[]> tiles = new ArrayList<int[]>();
+		int amountXTiles = getAmountOfOccupiedTiles((int) getXPosition(), getWorld().getTileSize(), getSize()[0]);
+		int amountYTiles = getAmountOfOccupiedTiles((int) getYPosition(), getWorld().getTileSize(), getSize()[1]);
+		for (int i = 0; i < amountYTiles; i++) {
+			for (int j = 0; j < amountXTiles; j++) {
+				int[] position = world.getTile((int) getXPosition() + j,(int) getYPosition() + i);
+				tiles.add(position);
+			}
+		}
+		return tiles;
+	}
+	
+	public static int getAmountOfOccupiedTiles(int position, int tileLength, int objectLength) {
+		if (position % tileLength == 0) {
+			return (objectLength / tileLength) + 1;
+		}
+		else
+			return objectLength / tileLength;
+	}
+	
+	public boolean collidesWithCreature(LivingCreatures creature) {
+		if ((getXPosition() + (getSize()[0] - 1) < creature.getXPosition()) || 
+				(creature.getXPosition() + (creature.getSize()[0] - 1) < getXPosition()) ||
+				(getYPosition() + (getSize()[1] - 1) <creature.getYPosition()) ||
+				(creature.getYPosition() + (creature.getSize()[1] - 1) < getYPosition())) {
+			return false;
+		}
+		return true;
 	}
 }
 

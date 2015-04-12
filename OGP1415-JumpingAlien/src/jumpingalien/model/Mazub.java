@@ -294,32 +294,6 @@ public class Mazub extends LivingCreatures {
 	 */
 	private final double initialHorizontalVelocity;
 	
-	/**
-	 * Return the maximum horizontal velocity of this Mazub.
-	 */
-	@Basic
-	public double getMaximumHorizontalVelocity() {
-		return this.maximumHorizontalVelocity;
-	}
-	
-	/**
-	 * Check whether the given maximum horizontal velocity is a valid maximum horizontal velocity.
-	 * 
-	 * @param 	maximumHorizontalVelocity
-	 * 			The maximum horizontal velocity to check.
-	 * @param	initialHorizontalVelocity
-	 * 			The initial horizontal velocity to check the maximum horizontal velocity against.
-	 * @return 	True if the given maximum horizontal velocity is a valid maximum horizontal velocity.
-	 * 			| result == (maximumHorizontalVelocity > initialHorizontalVelocity)
-	 */
-	public static boolean isValidMaximumHorizontalVelocity(double maximumHorizontalVelocity, double initialHorizontalVelocity) {
-		return maximumHorizontalVelocity > initialHorizontalVelocity;
-	}
-	
-	/**
-	 * Variable registering the maximum horizontal velocity of this Mazub.
-	 */
-	private double maximumHorizontalVelocity;
 	
 	/**
 	 * Sets the maximum horizontal velocity of this Mazub to the given maximum horizontal velocity.
@@ -433,21 +407,7 @@ public class Mazub extends LivingCreatures {
 	private void setPreviousSprite(int sprite){
 		this.previousSprite = sprite;
 	}	
-		
-	/**
-	 * @param 	timeInterval 
-	 * 			The time interval in which the position of this mazub has changed.
-	 * @post	The new X position of this Mazub is equal to the current X position added to the horizontal distance
-	 * 			travelled calculated with a formula using the given time interval. 
-	 * 			new.getXPosition = this.getXPosition() + distanceCalculated
-	 */
-	public void changeHorizontalPosition(double timeInterval){
-		if (Util.fuzzyGreaterThanOrEqualTo(horizontalVelocity,this.getMaximumHorizontalVelocity())) 
-			this.setHorizontalAcceleration(0);
-		double newPositionX = this.getXPosition() + this.getDirection().getInt() * (100 * this.getHorizontalVelocity()*timeInterval 
-				+ 50 * this.getHorizontalAcceleration()*timeInterval*timeInterval); 
-		setXPosition(newPositionX);
-	}
+	
 	 /**
 	  * @param 	timeInterval
 	  * 		The time interval in which the position of this mazub has changed.

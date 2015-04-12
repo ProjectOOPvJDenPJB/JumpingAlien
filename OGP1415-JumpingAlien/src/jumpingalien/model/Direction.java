@@ -25,5 +25,13 @@ public enum Direction {
 	};
 	
 	public abstract int getInt();
+	
+	public Direction oppositeDirection() {
+		assert (this != null);
+		if (this == Direction.LEFT)
+			return Direction.RIGHT;
+		else
+			return Direction.LEFT;
+	}
 
 }

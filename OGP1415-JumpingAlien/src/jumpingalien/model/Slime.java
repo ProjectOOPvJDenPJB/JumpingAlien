@@ -1,6 +1,7 @@
 package jumpingalien.model;
 
-import jumpingalien.model.LivingCreatures.State;
+import java.util.Random;
+
 import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
 
@@ -112,7 +113,7 @@ public class Slime extends LivingCreatures {
 	}
 	
 	public void startMoveRight(){
-		this.setDirection(1);
+		this.setDirection(Direction.RIGHT);
 		this.setMoving(true);
 		this.setHorizontalVelocity(0);
 		this.setHorizontalAcceleration(0.7);
@@ -120,7 +121,7 @@ public class Slime extends LivingCreatures {
 		}
 	
 	public void startMoveLeft(){
-		this.setDirection(-1);
+		this.setDirection(Direction.LEFT);
 		this.setMoving(true);
 		this.setHorizontalVelocity(0);
 		this.setHorizontalAcceleration(0.7);
@@ -183,6 +184,10 @@ public class Slime extends LivingCreatures {
 			}
 		}
 		
+	}
+	
+	public double getRandomTime() {
+		return (2 + (6-2) * new Random().nextDouble());
 	}
 	
 }
