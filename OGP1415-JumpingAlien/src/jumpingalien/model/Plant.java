@@ -64,12 +64,26 @@ public class Plant extends LivingCreatures{
 	}
 	
 	public void terminate() {
-		setState(State.DEAD);
-		//TODO
+		if (!isDead()) {
+			if ((isAlive() && (getHP() > 0) && (! getOutOfBounds())))
+				throw new IllegalStateException("Plant is alive within the boundaries of the world!");
+			else if (((isDying()) && (Util.fuzzyGreaterThanOrEqualTo(getDeathTimer(), 0.6))) ||
+					(getOutOfBounds())){
+				setState(State.DEAD);
+				World oldWorld = getWorld();
+				setWorld(null);
+				oldWorld.removePlant(this);
+				setHP(0);
+			}
+			else if (isAlive()) {
+				setState(State.DYING);
+				setDeathTimer(0);
+			}
+		}
 	}
 
 	public boolean isEatablePlant() {
-		if (getState() == State.ALIVE)
+		if (isAlive())
 			return true;
 		else
 			return false;
@@ -90,18 +104,25 @@ public class Plant extends LivingCreatures{
 		if (! isValidTimeInterval(timeInterval))
 			throw new IllegalTimeIntervalException(timeInterval);
 		
-		if (Util.fuzzyGreaterThanOrEqualTo(this.getRunTime(), 0.5)){
-			this.setDirection(this.getDirection().oppositeDirection());
-			this.setRunTime(0);			
+		if (isDying()) {
+			terminate();
+			this.setDeathTimer(getDeathTimer() + timeInterval);
 		}
 		
-		this.changeHorizontalPosition(timeInterval);
-		
-//		double newXposition = this.getXPosition() + this.getDirection().getInt() * this.getHorizontalVelocity();
-//		
-//		if (Position.isPassable(this,newXposition,this.getYPosition()-1) == false);
-//				this.setXPosition(newXposition);
-		this.setRunTime(getRunTime() + timeInterval);
+		if (isAlive()) {
+			if (Util.fuzzyGreaterThanOrEqualTo(this.getRunTime(), 0.5)){
+				this.setDirection(this.getDirection().oppositeDirection());
+				this.setRunTime(0);			
+			}
+			
+			this.changeHorizontalPosition(timeInterval);
+			
+	//		double newXposition = this.getXPosition() + this.getDirection().getInt() * this.getHorizontalVelocity();
+	//		
+	//		if (Position.isPassable(this,newXposition,this.getYPosition()-1) == false);
+	//				this.setXPosition(newXposition);
+			this.setRunTime(getRunTime() + timeInterval);
+		}
 	}
 }
 	

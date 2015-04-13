@@ -116,11 +116,15 @@ public class World {
 	 * @param 	pixelY
 	 * 			The Y coordinate of the given position.
 	 */
-	public int[] getTile(int pixelX,int pixelY) {
+	public int[] getTilePosition(int pixelX,int pixelY) {
 		int[] position = new int[2];
-		position[0] = (pixelX - (pixelX % tileSize));
-		position[1] = (pixelY - (pixelY % tileSize));
+		position[0] = (pixelX - (pixelX % getTileSize()));
+		position[1] = (pixelY - (pixelY % getTileSize()));
 		return position;
+	}
+	
+	public Tile getTile() {
+		return null;
 	}
 	
 	/**
@@ -138,6 +142,11 @@ public class World {
 	 */
 	public static boolean isValidTilePosition(int tileX, int tileY, int tileSize) {
 		return (tileX % tileSize == 0) && (tileY % tileSize == 0);
+	}
+	
+	public static boolean isValidPosition(int leftX, int bottomY, World world) {
+		return ((leftX < 0) || (leftX > world.getPixelWidth()) || (bottomY < 0) || 
+				(bottomY > world.getPixelHeight()));
 	}
 	
 	/**
@@ -163,16 +172,26 @@ public class World {
 	 * 			| ! isValidTilePosition(leftX,bottomY)
 	 * 			
 	 */
-	public int getTileType(int leftX, int bottomY) throws IllegalTileException {
-		if (!isValidTilePosition(leftX, bottomY, getTileSize()))
-			throw new IllegalTileException(leftX, bottomY);
-		int[] position = new int[]{leftX,bottomY};
+	public int getTileType(int leftX, int bottomY) throws IllegalXPositionException, IllegalYPositionException {
+		if (!Position.isValidXPosition(leftX, this.getPixelWidth()))
+			throw new IllegalXPositionException(leftX);
+		if (!Position.isValidYPosition(bottomY, this.getPixelHeight()))
+			throw new IllegalYPositionException(bottomY);
+		int[] position = getTilePosition(leftX, bottomY);
 		return tileTypes.get(position).getInt();
 	}
 	
-	public boolean isPassable(double leftX,double bottomY){
-		double[] position = new double[]{leftX,bottomY};
-		return tileTypes.get(position).getPassable();
+	public boolean isPassable(int leftX,int bottomY){
+		int[] position = getTilePosition(leftX, bottomY);
+		if (!tileTypes.get(position).getPassable()) {
+			if ((bottomY % getTileSize() == getTileSize()-1) &&
+					(isPassable(leftX, bottomY+1)))
+				return true;
+			else
+				return false;
+		}
+		else
+			return true;
 	}
 	
 	/**
@@ -191,6 +210,18 @@ public class World {
 		return new ArrayList<Plant>(elements);
 	}
 	
+    public boolean hasAsPlant(Plant plant) {
+        try {
+            return plants.get(plant.getKey()) == plant;
+        }
+        catch (NullPointerException exc) {
+        	// The plant either does not exist or is not a yet assigned
+        	// to a world thus does not have a key.
+            assert (plant == null) || (plant.getKey() == null);
+            return false;
+        }
+    }
+	
 	private final Map<String,Plant> plants = new HashMap<String,Plant>();
 	
 	public void addPlant(Plant plant) {
@@ -200,10 +231,27 @@ public class World {
 		plant.setWorld(this);
 	}
 	
+	public void removePlant(Plant plant) {
+		assert this.hasAsPlant(plant) && (plant.hasAsWorld(this));
+		plants.remove(plant.getKey());
+	}
+	
 	public Collection<Slime> getSlimes(){
 		Collection<Slime> elements = slimes.values();
 		return new ArrayList<Slime>(elements);
 	}
+	
+	public boolean hasAsSlime(Slime slime) {
+        try {
+            return slimes.get(slime.getKey()) == slime;
+        }
+        catch (NullPointerException exc) {
+        	// The slime either does not exist or is not yet assigned
+        	// to a world thus does not have a key.
+            assert (slime == null) || (slime.getKey() == null);
+            return false;
+        }
+    }
 	
 	private final Map<String,Slime> slimes = new HashMap<String,Slime>();
 	
@@ -214,10 +262,27 @@ public class World {
 		slime.setWorld(this);
 	}
 	
+	public void removeSlime(Slime slime) {
+		assert this.hasAsSlime(slime) && (slime.hasAsWorld(this));
+		plants.remove(slime.getKey());
+	}
+	
 	public Collection<Shark> getSharks(){
 		Collection<Shark> elements = sharks.values();
 		return new ArrayList<Shark>(elements);
 	}
+	
+	public boolean hasAsShark(Shark shark) {
+        try {
+            return sharks.get(shark.getKey()) == shark;
+        }
+        catch (NullPointerException exc) {
+        	// The shark either does not exist or is not yet assigned
+        	// to a world thus does not have a key.
+            assert (shark == null) || (shark.getKey() == null);
+            return false;
+        }
+    }
 	
 	private final Map<String,Shark> sharks = new HashMap<String,Shark>();
 	
@@ -228,6 +293,11 @@ public class World {
 		shark.setWorld(this);
 	}
 	
+	public void removeShark(Shark shark) {
+		assert this.hasAsShark(shark) && (shark.hasAsWorld(this));
+		plants.remove(shark.getKey());
+	}
+	
 	public boolean canHaveAsObject(Object object) {
 		assert hasValidAmountOfObjects(this);
 		assert (object instanceof LivingCreatures);
@@ -235,9 +305,12 @@ public class World {
 			return object == null;
 		return (object != null) && (((LivingCreatures) object).canHaveAsWorld(this));
 	}
-
 	
-	private Mazub mazub;
+	private Mazub getMazub() {
+		return this.mazub;
+	}
+	
+	private Mazub mazub = null;
 		
 	public void setMazub(Mazub alien) {
 		assert canHaveAsMazub(alien);
@@ -247,7 +320,7 @@ public class World {
 	public boolean canHaveAsMazub(Mazub alien) {
 		if (isTerminated())
 			return alien == null;
-		return (alien != null) && (alien.canHaveAsWorld(this));
+		return (alien != null) && (alien.canHaveAsWorld(this) && (getMazub() == null));
 	}
 	
 	/**
@@ -302,6 +375,23 @@ public class World {
 		}
 		for (String key : sharks.keySet()) {
 			sharks.get(key).advanceTime(dt);
+		}
+	}
+
+	public void terminate() {
+		if (! isTerminated()) {
+			for (Plant plant : getPlants()) {
+				plant.terminate();
+			}
+			for (Slime slime : getSlimes()) {
+				slime.terminate();
+			}
+			for (Shark shark : getSharks()) {
+				shark.terminate();
+			}
+			
+			this.setState(State.TERMINATED);
+				
 		}
 	}
 	

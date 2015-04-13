@@ -2,6 +2,7 @@ package jumpingalien.model;
 
 import java.util.Random;
 
+import jumpingalien.model.LivingCreatures.State;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
 
@@ -60,7 +61,7 @@ public class Slime extends LivingCreatures {
 	 */
 	public Slime(int positionX, int positionY,double horizontalVelocity,double verticalVelocity, 
 			World world,Sprite[] sprites){
-		this(positionX,positionY,horizontalVelocity,verticalVelocity,0,sprites, world,100);	
+		this(positionX,positionY,horizontalVelocity,verticalVelocity,0.7,sprites, world,100);	
 	}
 
 	/**
@@ -112,39 +113,31 @@ public class Slime extends LivingCreatures {
 
 	}
 	
-	public void startMoveRight(){
-		this.setDirection(Direction.RIGHT);
+	public void startMoveOpposite(){
+		this.setDirection(getDirection().oppositeDirection());
 		this.setMoving(true);
 		this.setHorizontalVelocity(0);
 		this.setHorizontalAcceleration(0.7);
-
 		}
 	
-	public void startMoveLeft(){
-		this.setDirection(Direction.LEFT);
-		this.setMoving(true);
-		this.setHorizontalVelocity(0);
-		this.setHorizontalAcceleration(0.7);
-	}
-	
-	public void endMoveRight(){
-		this.setMoving(false);
-		this.setHorizontalVelocity(0);
-		this.setHorizontalAcceleration(0);
-	}
-	
-	public void endMoveLeft(){
-		this.setMoving(false);
-		this.setHorizontalVelocity(0);
-		this.setHorizontalAcceleration(0);
-	}
-
-
 	@Override
 	public void terminate() {
-		setState(State.DEAD);
-		// TODO Auto-generated method stub
-		
+		if (!isDead()) {
+			if ((isAlive() && (getHP() > 0) && (! getOutOfBounds())))
+				throw new IllegalStateException("Slime is alive within the boundaries of the world!");
+			else if (((isDying()) && (Util.fuzzyGreaterThanOrEqualTo(getDeathTimer(), 0.6))) ||
+					(getOutOfBounds())){
+				setState(State.DEAD);
+				World oldWorld = getWorld();
+				setWorld(null);
+				oldWorld.removeSlime(this);
+				setHP(0);
+			}
+			else if (isAlive()) {
+				setState(State.DYING);
+				setDeathTimer(0);
+			}
+		}
 	}
 
 	@Override
@@ -177,17 +170,35 @@ public class Slime extends LivingCreatures {
 	public void advanceTime(double timeInterval) throws IllegalTimeIntervalException {
 		if (! isValidTimeInterval(timeInterval))
 			throw new IllegalTimeIntervalException(timeInterval);
-		if (this.getMoving() == true){
-			this.changeHorizontalPosition(timeInterval);
-			if (Util.fuzzyLessThanOrEqualTo(this.getHorizontalVelocity(),2.5)){
-				this.setHorizontalVelocity(this.getHorizontalVelocity() + this.getHorizontalAcceleration()*timeInterval);
+		
+		if (isDying()) {
+			terminate();
+			this.setDeathTimer(getDeathTimer() + timeInterval);
+		}
+		
+		if (isAlive()) {
+			
+			if (Util.fuzzyGreaterThanOrEqualTo(getRunTime(), getRandomTime())) {
+				startMoveOpposite();
+				setRandomTime();
+				setRunTime(0);
 			}
+			else
+				this.setRunTime(getRunTime() + timeInterval);
+			
+			this.changeHorizontalPosition(timeInterval);
+			this.setHorizontalVelocity(this.getHorizontalVelocity() + this.getHorizontalAcceleration()*timeInterval);
 		}
 		
 	}
 	
-	public double getRandomTime() {
-		return (2 + (6-2) * new Random().nextDouble());
+	private double getRandomTime() {
+		return this.randomTime;
 	}
 	
+	private double randomTime = (2 + (6-2) * new Random().nextDouble());
+	
+	private void setRandomTime() {
+		this.randomTime = (2 + (6-2) * new Random().nextDouble());
+	}
 }

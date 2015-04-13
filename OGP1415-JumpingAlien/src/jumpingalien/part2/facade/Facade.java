@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import jumpingalien.model.Direction;
 import jumpingalien.model.IllegalSizeException;
-import jumpingalien.model.IllegalTileException;
 import jumpingalien.model.IllegalTimeIntervalException;
 import jumpingalien.model.IllegalXPositionException;
 import jumpingalien.model.IllegalYPositionException;
@@ -29,7 +28,7 @@ public class Facade implements IFacadePart2  {
 	}
 
 	public int[] getLocation(Mazub alien) {
-		return alien.getPosition();	
+		return alien.getPosition().getPosition();	
 	}
 
 	public double[] getVelocity(Mazub alien) {
@@ -48,7 +47,7 @@ public class Facade implements IFacadePart2  {
 
 	public int[] getSize(Mazub alien) throws jumpingalien.util.ModelException {
 		try {
-			return Mazub.getSize(alien.getCurrentSprite());
+			return alien.getSize();
 		} catch (IllegalSizeException exc) {
 			throw new jumpingalien.util.ModelException("Illegal size", exc);
 		}
@@ -147,8 +146,11 @@ public class Facade implements IFacadePart2  {
 
 	@Override
 	public void advanceTime(World world, double dt) {
-		// TODO Auto-generated method stub
-		
+		try {
+			world.advanceTime(dt);
+		} catch (IllegalTimeIntervalException exc) {
+			throw new jumpingalien.util.ModelException("Illegal time interval", exc);
+		}
 	}
 
 	@Override
@@ -159,7 +161,7 @@ public class Facade implements IFacadePart2  {
 
 	@Override
 	public int[] getBottomLeftPixelOfTile(World world, int tileX, int tileY) {
-		return world.getTile(tileX, tileY);
+		return world.getTilePosition(tileX, tileY);
 	}
 
 	@Override
@@ -174,8 +176,8 @@ public class Facade implements IFacadePart2  {
 			throws ModelException {
 		try {
 			return world.getTileType(pixelX, pixelY);
-		} catch (IllegalTileException e) {
-			throw new ModelException("There exists no tile with these coördinates", e);
+		} catch (IllegalXPositionException | IllegalYPositionException e) {
+			throw new ModelException("Coordinates out of bounds.", e);
 		}
 	}
 
@@ -209,7 +211,7 @@ public class Facade implements IFacadePart2  {
 
 	@Override
 	public int[] getLocation(Plant plant) {
-		return plant.getPosition();
+		return plant.getPosition().getPosition();
 	}
 
 	@Override
@@ -230,7 +232,7 @@ public class Facade implements IFacadePart2  {
 
 	@Override
 	public int[] getLocation(Shark shark) {
-		return shark.getPosition();
+		return shark.getPosition().getPosition();
 	}
 
 	@Override
@@ -251,7 +253,7 @@ public class Facade implements IFacadePart2  {
 
 	@Override
 	public int[] getLocation(Slime slime) {
-		return slime.getPosition();
+		return slime.getPosition().getPosition();
 	}
 
 	@Override

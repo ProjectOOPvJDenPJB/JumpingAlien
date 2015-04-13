@@ -145,52 +145,6 @@ public class Mazub extends LivingCreatures {
 		this.movingVertical = flag;
 	}
 		
-	/**
-	 *  Return the horizontal velocity of this Mazub.
-	 */
-	@Basic
-	public double getHorizontalVelocity() {
-		return this.horizontalVelocity;
-	}
-	
-	/**
-	 * Variable registering the horizontal velocity of this Mazub.
-	 * 	The standard horizontal velocity is 0.
-	 */
-	private double horizontalVelocity = 0;
-	
-	/**
-	 * Sets the horizontal velocity of this Mazub to the given horizontal velocity.
-	 * 
-	 * @param	horizontalVelocity
-	 * 			The new horizontal velocity for this Mazub.
-	 * @post	If the given horizontalVelocity is greater than or equal to zero and smaller or equal to
-	 * 			the maximumHorizontalVelocity then the horizontalVelocity of this Mazub is equal to
-	 * 			the given horizontalVelocity.
-	 * 			| if (horizontalVelocity >= 0) 
-	 * 			|	&& (horizontalVelocity <= this.getMaximumHorizontalVelocity())
-	 * 			|	then new.getHorizontalVelocity() == horizontalVelocity
-	 * @post	If the given horizontalVelocity is smaller than zero then the horizontalVelocity of this Mazub
-	 * 			is equal to zero.
-	 * 			| if (horizontalVelocity  < 0)
-	 * 			|	then new.getHorizontalVelocity() == 0
-	 * @post	If the given horizontalVelocity is greater than the maximumHorizontalVelocity then the
-	 * 			horizontalVelocity of this Mazub is equal to the maximumHorizontalVelocity.
-	 * 			| if (horizontalVelocity > this.getMaximumHorizontalVelocity())
-	 * 			|	then new.getHorizontalVelocity() == this.getMaximumHorizontalVelocity()
-	 */
-	public void setHorizontalVelocity(double horizontalVelocity) {
-		if (horizontalVelocity  < 0) {
-			this.horizontalVelocity = 0;
-		}
-		else if (Util.fuzzyGreaterThanOrEqualTo(horizontalVelocity,this.getMaximumHorizontalVelocity())) {
-			this.horizontalVelocity = this.getMaximumHorizontalVelocity();
-		}
-		else {
-			this.setHorizontalAcceleration(0.9);
-			this.horizontalVelocity = horizontalVelocity;
-		}
-	}
 
 	/**
 	 *  Return the vertical velocity of this Mazub.
@@ -574,23 +528,32 @@ public class Mazub extends LivingCreatures {
 	public void advanceTime(double timeInterval) throws IllegalTimeIntervalException {
 		if (! isValidTimeInterval(timeInterval))
 			throw new IllegalTimeIntervalException(timeInterval);
-		double vHmax = this.getMaximumHorizontalVelocity();
-		if (this.getDucking() == true) {
-			this.setMaximumHorizontalVelocity(1);
+		if (isDying()) {
+			terminate();
+			this.setDeathTimer(getDeathTimer() + timeInterval);
 		}
-		if (this.getMoving() == true){
-			this.changeHorizontalPosition(timeInterval);
-			this.setHorizontalVelocity(this.getHorizontalVelocity() + this.getHorizontalAcceleration()*timeInterval);
-		}
-		
-		if (this.getMovingVertical() == true) {
-			changeVerticalPosition(timeInterval);
-			if (this.getMovingVertical() == true){
-				this.setVerticalVelocity(this.getVerticalVelocity() + this.getVerticalAcceleration()*timeInterval);
+		else if (isDead())
+			throw new IllegalStateException("Mazub is already dead.");
+		else {
+			double vHmax = this.getMaximumHorizontalVelocity();
+			if (this.getDucking() == true) {
+				this.setMaximumHorizontalVelocity(1);
 			}
+			if (this.getMoving() == true){
+				this.setHorizontalAcceleration(0.9);
+				this.changeHorizontalPosition(timeInterval);
+				this.setHorizontalVelocity(this.getHorizontalVelocity() + this.getHorizontalAcceleration()*timeInterval);
+			}
+			
+			if (this.getMovingVertical() == true) {
+				changeVerticalPosition(timeInterval);
+				if (this.getMovingVertical() == true){
+					this.setVerticalVelocity(this.getVerticalVelocity() + this.getVerticalAcceleration()*timeInterval);
+				}
+			}
+			this.setMaximumHorizontalVelocity(vHmax);
+			this.setRunTime(this.getRunTime() + timeInterval);
 		}
-		this.setMaximumHorizontalVelocity(vHmax);
-		this.setRunTime(this.getRunTime() + timeInterval);
 	}
 			
 	/**
@@ -778,7 +741,22 @@ public class Mazub extends LivingCreatures {
 	private int hitAmount = -50;
 	
 	public void terminate() {
-		
+		if (!isDead()) {
+			if ((isAlive() && (getHP() > 0) && (! getOutOfBounds())))
+				throw new IllegalStateException("Mazub is alive within the boundaries of the world!");
+			else if (((isDying()) && (Util.fuzzyGreaterThanOrEqualTo(getDeathTimer(), 0.6))) ||
+					(getOutOfBounds())) {
+				setState(State.DEAD);
+				World oldWorld = getWorld();
+				setWorld(null);
+				oldWorld.terminate();
+				setHP(0);
+			}
+			else if (isAlive()) {
+				setState(State.DYING);
+				setDeathTimer(0);
+			}
+		}
 	}
 	
 }

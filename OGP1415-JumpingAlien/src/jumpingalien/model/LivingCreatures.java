@@ -56,7 +56,7 @@ public abstract class LivingCreatures {
 	 */
 	@Basic
 	public double getXPosition() {
-		return position.getXPosition();
+		return getPosition().getXPosition();
 	}
 	
 	/**
@@ -66,14 +66,15 @@ public abstract class LivingCreatures {
 	 */
 	@Basic
 	public double getYPosition () {
-		return position.getYPosition();
+		return getPosition().getYPosition();
 	}
 	
-	public int[] getPosition() {
-		return position.getPosition();
+	public Position getPosition() {
+		return position;
 	}
+	
 
-	private Position position = new Position();
+	protected Position position = new Position();
 
 	/**
 	 * Set the X position of this living creature to the given X position.
@@ -94,15 +95,17 @@ public abstract class LivingCreatures {
 				positionLeftX = 0;
 				//terminate();
 			}
-			else if (positionLeftX > position.getWidth())
-				positionLeftX = position.getWidth();
+			else if (positionLeftX > getPosition().getWidth())
+				positionLeftX = getPosition().getWidth();
 				//terminate();
 			if (positionBottomY < 0)
 				positionBottomY = 0;
 				//terminate();
-			else if (positionBottomY > position.getHeight())
-				positionBottomY = position.getHeight();
+			else if (positionBottomY > getPosition().getHeight())
+				positionBottomY = getPosition().getHeight();
 				//terminate();
+//			setOutOfBounds(true);
+//			terminate();
 		}
 		position =  new Position(positionLeftX, positionBottomY,getWorld());
 	}
@@ -115,30 +118,60 @@ public abstract class LivingCreatures {
 		setPosition(getXPosition(), positionBottomY);
 	}
 	
+	public boolean getOutOfBounds() {
+		return this.outOfBounds;
+	}
+	
+	public boolean outOfBounds;
+	
+	public void setOutOfBounds(boolean flag) {
+		this.outOfBounds = true;
+	}
+	
+	/**
+	 *  Return the horizontal velocity of this Mazub.
+	 */
 	@Basic
 	public double getHorizontalVelocity() {
 		return this.horizontalVelocity;
 	}
 	
 	/**
-	 * Variable registering the horizontal velocity of this living creature.
+	 * Variable registering the horizontal velocity of this Mazub.
 	 * 	The standard horizontal velocity is 0.
 	 */
 	private double horizontalVelocity = 0;
 	
 	/**
-	 * Sets the horizontal velocity of this living creature to the given horizontal velocity.
+	 * Sets the horizontal velocity of this Mazub to the given horizontal velocity.
 	 * 
 	 * @param	horizontalVelocity
-	 * 			The new horizontal velocity for this living creature.
-	 * @pre 	The given horizontalVelocity is a valid velocity for this living creature.
-	 * @post	The horizontalVelocity of this living creature is equal to
+	 * 			The new horizontal velocity for this Mazub.
+	 * @post	If the given horizontalVelocity is greater than or equal to zero and smaller or equal to
+	 * 			the maximumHorizontalVelocity then the horizontalVelocity of this Mazub is equal to
 	 * 			the given horizontalVelocity.
-	 * 			| new.getHorizontalVelocity() == horizontalVelocity
-
+	 * 			| if (horizontalVelocity >= 0) 
+	 * 			|	&& (horizontalVelocity <= this.getMaximumHorizontalVelocity())
+	 * 			|	then new.getHorizontalVelocity() == horizontalVelocity
+	 * @post	If the given horizontalVelocity is smaller than zero then the horizontalVelocity of this Mazub
+	 * 			is equal to zero.
+	 * 			| if (horizontalVelocity  < 0)
+	 * 			|	then new.getHorizontalVelocity() == 0
+	 * @post	If the given horizontalVelocity is greater than the maximumHorizontalVelocity then the
+	 * 			horizontalVelocity of this Mazub is equal to the maximumHorizontalVelocity.
+	 * 			| if (horizontalVelocity > this.getMaximumHorizontalVelocity())
+	 * 			|	then new.getHorizontalVelocity() == this.getMaximumHorizontalVelocity()
 	 */
 	public void setHorizontalVelocity(double horizontalVelocity) {
+		if (horizontalVelocity  < 0) {
+			this.horizontalVelocity = 0;
+		}
+		else if (Util.fuzzyGreaterThanOrEqualTo(horizontalVelocity,this.getMaximumHorizontalVelocity())) {
+			this.horizontalVelocity = this.getMaximumHorizontalVelocity();
+		}
+		else {
 			this.horizontalVelocity = horizontalVelocity;
+		}
 	}
 
 	/**
@@ -243,16 +276,23 @@ public abstract class LivingCreatures {
 	public World getWorld(){
 		return this.world;
 	}
-	
-	public void removeFromWorld(){
-		this.setWorld(null);
-	}
-	
+		
 	public boolean isInWorld(){
 		if (world != null)
 			return true;
 		else
 			return false;
+	}
+	
+	public boolean hasAsWorld(World world) {
+		try {
+			return this.getWorld() == world;
+		}
+		catch (NullPointerException exc) {
+        	// This creature doesn't inhabit a world.
+            assert (world == null);
+            return false;
+        }
 	}
 	
 	public boolean canHaveAsWorld(World world) {
@@ -293,7 +333,7 @@ public abstract class LivingCreatures {
 		return this.key;
 	}
 	
-	private String key;
+	private String key = null;
 	
 	public void setKey(String key) {
 		this.key = key;
@@ -484,7 +524,7 @@ public abstract class LivingCreatures {
 	}
 	
 	protected static enum State {
-		ALIVE,DEAD;
+		ALIVE,DYING,DEAD;
 	}
 	
 	protected State getState() {
@@ -496,6 +536,18 @@ public abstract class LivingCreatures {
 	protected void setState(State state) {
 		assert (state != null);
 		this.state = state;
+	}
+	
+	protected boolean isDead() {
+		return (this.getState() == State.DEAD);
+	}
+	
+	protected boolean isDying() {
+		return (this.getState() == State.DYING);
+	}
+	
+	protected boolean isAlive() {
+		return (this.getState() == State.ALIVE);
 	}
 	
 	/**
@@ -575,7 +627,7 @@ public abstract class LivingCreatures {
 	
 	public boolean collidesWithTerrain() {
 		for (int[] tile : getOccupiedTiles()) {
-			if (! world.isPassable(tile[0], tile[1]))
+			if (! getWorld().isPassable(tile[0], tile[1]))
 				return false;
 		}
 		return true;
@@ -603,7 +655,7 @@ public abstract class LivingCreatures {
 		int amountYTiles = getAmountOfOccupiedTiles((int) getYPosition(), getWorld().getTileSize(), getSize()[1]);
 		for (int i = 0; i < amountYTiles; i++) {
 			for (int j = 0; j < amountXTiles; j++) {
-				int[] position = world.getTile((int) getXPosition() + j,(int) getYPosition() + i);
+				int[] position = new int[]{(int) getXPosition() + j,(int) getYPosition() + i};
 				tiles.add(position);
 			}
 		}
@@ -627,5 +679,16 @@ public abstract class LivingCreatures {
 		}
 		return true;
 	}
+	
+	protected double getDeathTimer() {
+		return this.deathTimer;
+	}
+	protected double deathTimer;
+	
+	protected void setDeathTimer(double time) {
+		assert isValidTimerValue(time);
+		this.deathTimer = time;
+	}
+	
 }
 
