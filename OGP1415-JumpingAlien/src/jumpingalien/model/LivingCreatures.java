@@ -565,6 +565,7 @@ public abstract class LivingCreatures {
 		setXPosition(newPositionX);
 	}
 	
+	
 	/**
 	 * Return the maximum horizontal velocity of this Mazub.
 	 */

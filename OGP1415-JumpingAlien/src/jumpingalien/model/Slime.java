@@ -191,7 +191,6 @@ public class Slime extends LivingCreatures {
 		}
 		
 	}
-	
 	private double getRandomTime() {
 		return this.randomTime;
 	}

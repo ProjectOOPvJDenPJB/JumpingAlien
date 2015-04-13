@@ -264,7 +264,7 @@ public class World {
 	
 	public void removeSlime(Slime slime) {
 		assert this.hasAsSlime(slime) && (slime.hasAsWorld(this));
-		plants.remove(slime.getKey());
+		slimes.remove(slime.getKey());
 	}
 	
 	public Collection<Shark> getSharks(){
@@ -295,7 +295,7 @@ public class World {
 	
 	public void removeShark(Shark shark) {
 		assert this.hasAsShark(shark) && (shark.hasAsWorld(this));
-		plants.remove(shark.getKey());
+		sharks.remove(shark.getKey());
 	}
 	
 	public boolean canHaveAsObject(Object object) {

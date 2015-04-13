@@ -1,11 +1,15 @@
 package jumpingalien.model;
 
 //import jumpingalien.model.LivingCreatures.State;
+import java.util.Random;
+
+import jumpingalien.model.LivingCreatures.State;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
 
 public class Shark extends LivingCreatures {
 	
+
 	/**
 	 * Initialize this new Shark with given position en sprites
 	 * 
@@ -73,11 +77,24 @@ public class Shark extends LivingCreatures {
 	 *	     | ! new.isInWorld()
 	 * @post   The former world of this Shark, no longer contains this Shark
 	 */
-
 	@Override
 	public void terminate() {
-		setState(State.DEAD);
-		//TODO
+		if (!isDead()) {
+			if ((isAlive() && (getHP() > 0) && (! getOutOfBounds())))
+				throw new IllegalStateException("Shark is alive within the boundaries of the world!");
+			else if (((isDying()) && (Util.fuzzyGreaterThanOrEqualTo(getDeathTimer(), 0.6))) ||
+					(getOutOfBounds())){
+				setState(State.DEAD);
+				World oldWorld = getWorld();
+				setWorld(null);
+				oldWorld.removeShark(this);
+				setHP(0);
+			}
+			else if (isAlive()) {
+				setState(State.DYING);
+				setDeathTimer(0);
+			}
+		}
 	}
 
 	@Override
@@ -89,11 +106,84 @@ public class Shark extends LivingCreatures {
 	public int getMinHP() {
 		return 0;
 	}
+	
+	public void startJump(){
+		this.setVerticalVelocity(2);
+		this.setVerticalAcceleration(-10);
+	}
+	
+	public void endJump(){
+		this.setVerticalVelocity(0);
+		this.setVerticalAcceleration(0);
+	}
+	
+	public void startMove(){
+			this.setDirection(1);
+			this.setHorizontalVelocity(0);
+			this.setHorizontalAcceleration(1.5);
+	}
+	
+	public void endMove(){
+		this.setHorizontalVelocity(0);
+		this.setHorizontalAcceleration(0);
+	}
 
+	 /**
+	  * @param 	timeInterval
+	  * 		The time interval in which the position of this mazub has changed.
+	  * @post	The new Y position of this Mazub is equal to the current Y position added to the vertical distance
+	  * 		travelled calculated with a formula using the given time interval. 
+	  * 		new.getYPosition = this.getYPosition() + distanceCalculated
+	  */
+	public void changeVerticalPosition(double timeInterval) {
+			double newPositionY = this.getYPosition() 
+					+ 100 * this.getVerticalVelocity() * timeInterval
+					+ 50 * this.getVerticalAcceleration() * timeInterval * timeInterval;
+			setYPosition(newPositionY);
+
+			if (Util.fuzzyEquals(0, getYPosition())) {
+				this.endJump();
+			}
+		}
+	
 	@Override
 	public void advanceTime(double timeInterval) throws IllegalTimeIntervalException {
 		if (! isValidTimeInterval(timeInterval))
-			throw new IllegalTimeIntervalException(timeInterval);		
-		//TODO
+			throw new IllegalTimeIntervalException(timeInterval);	
+		if (isDying()) {
+			terminate();
+			this.setDeathTimer(getDeathTimer() + timeInterval);
+		}
+		if (isAlive()) {
+			
+			if (Util.fuzzyGreaterThanOrEqualTo(getRunTime(),getRandomTime())) {
+				generateRandomTime();
+				this.setRunTime(0);
+				this.endJump();
+				this.endMove();
+				this.startJump();
+				this.startMove();
+				this.setDirection(this.getDirection().oppositeDirection());
+				this.generateRandomTime();
+			}
+			else
+				this.setRunTime(getRunTime() + timeInterval);
+			
+			this.changeHorizontalPosition(timeInterval);
+			this.changeVerticalPosition(timeInterval);
+			this.setHorizontalVelocity(this.getHorizontalVelocity() + this.getHorizontalAcceleration()*timeInterval);
+			this.setVerticalVelocity(this.getVerticalVelocity() + this.getVerticalAcceleration()*timeInterval);
+			
+		}
 	}
+	
+	private double getRandomTime() {
+		return this.randomTime;
+	}	
+	private double randomTime = (1 + (4-1) * new Random().nextDouble());
+	
+	private void generateRandomTime() {
+		this.randomTime = (1 + (4-1) * new Random().nextDouble());
+	}
+
 	}
