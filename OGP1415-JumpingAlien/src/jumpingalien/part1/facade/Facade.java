@@ -45,7 +45,7 @@ public class Facade implements IFacade {
 
 	public int[] getSize(Mazub alien) throws jumpingalien.util.ModelException {
 		try {
-			return Mazub.getSize(alien.getCurrentSprite());
+			return alien.getSize();
 		} catch (IllegalSizeException exc) {
 			throw new jumpingalien.util.ModelException("Illegal size", exc);
 		}

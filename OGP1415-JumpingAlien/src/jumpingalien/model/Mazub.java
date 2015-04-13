@@ -543,38 +543,7 @@ public class Mazub extends LivingCreatures {
 			//Nothing happens if the Mazub is in an Illegal State.
 		}
 	}
-	
-	/**
-	 * Returns the size of a sprite of this Mazub.
-	 * @param 	sprite
-	 * 			The sprite of which the size must be determined.
-	 * @return	Returns the size of the given sprite in an array of type int.
-	 * 			this array consists of two elements, the height and width respectively.
-	 * @throws	IllegalSizeException
-	 * 			The size of this sprite is not a valid size for a sprite of this Mazub.
-	 * 			| (! isValidSize([sprite.getHeight(),sprite.getWidth()]))
-	 */
-	public static int[] getSize(Sprite sprite) throws IllegalSizeException {
-		int[] size = new int[2];
-		size[0] = sprite.getWidth();
-		size[1] = sprite.getHeight();
-		if (! isValidSize(size))
-			throw new IllegalSizeException(size);
-		return size;
-	}
-	
-	/**
-	 * Checks whether the given size is a valid size for this Mazub.
-	 * 
-	 * @param 	size
-	 * 			The size to be checked.
-	 * @return	True if and only if the size is greater or equal to 0.
-	 * 			| result ==
-	 * 			|	(size[0] > 0) && (size[1] > 0)
-	 */
-	public static boolean isValidSize(int[] size) {
-		return Util.fuzzyGreaterThanOrEqualTo(size[0], 0) && Util.fuzzyGreaterThanOrEqualTo(size[1], 0);
-	}
+
 	
 	/**
 	 * Advances the time with a given timeInterval and changes every time-related attribute of this Mazub

@@ -1,7 +1,6 @@
 package jumpingalien.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import jumpingalien.model.Position;
@@ -608,7 +607,7 @@ public abstract class LivingCreatures {
 				tiles.add(position);
 			}
 		}
-		return tiles;
+		return tiles;	
 	}
 	
 	public static int getAmountOfOccupiedTiles(int position, int tileLength, int objectLength) {
