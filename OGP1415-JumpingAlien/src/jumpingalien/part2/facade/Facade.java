@@ -58,7 +58,7 @@ public class Facade implements IFacadePart2  {
 	}
 
 	public void startJump(Mazub alien) {
-		alien.startJump();
+		alien.startJump(alien.getInitialVerticalVelocity(),-10);
 	}
 
 	public void endJump(Mazub alien) {

@@ -107,16 +107,6 @@ public class Shark extends LivingCreatures {
 		return 0;
 	}
 	
-	public void startJump(){
-		this.setVerticalVelocity(2);
-		this.setVerticalAcceleration(-10);
-	}
-	
-	public void endJump(){
-		this.setVerticalVelocity(0);
-		this.setVerticalAcceleration(0);
-	}
-	
 	public void startMove(){
 			this.setDirection(1);
 			this.setHorizontalVelocity(0);
@@ -127,24 +117,6 @@ public class Shark extends LivingCreatures {
 		this.setHorizontalVelocity(0);
 		this.setHorizontalAcceleration(0);
 	}
-
-	 /**
-	  * @param 	timeInterval
-	  * 		The time interval in which the position of this mazub has changed.
-	  * @post	The new Y position of this Mazub is equal to the current Y position added to the vertical distance
-	  * 		travelled calculated with a formula using the given time interval. 
-	  * 		new.getYPosition = this.getYPosition() + distanceCalculated
-	  */
-	public void changeVerticalPosition(double timeInterval) {
-			double newPositionY = this.getYPosition() 
-					+ 100 * this.getVerticalVelocity() * timeInterval
-					+ 50 * this.getVerticalAcceleration() * timeInterval * timeInterval;
-			setYPosition(newPositionY);
-
-			if (Util.fuzzyEquals(0, getYPosition())) {
-				this.endJump();
-			}
-		}
 	
 	@Override
 	public void advanceTime(double timeInterval) throws IllegalTimeIntervalException {
@@ -161,7 +133,7 @@ public class Shark extends LivingCreatures {
 				this.setRunTime(0);
 				this.endJump();
 				this.endMove();
-				this.startJump();
+				this.startJump(2.0,-10.0);
 				this.startMove();
 				this.setDirection(this.getDirection().oppositeDirection());
 				this.generateRandomTime();

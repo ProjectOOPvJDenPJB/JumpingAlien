@@ -116,37 +116,6 @@ public class Mazub extends LivingCreatures {
 	}
 	
 	/**
-	 * Return the boolean indicating whether this Mazub is moving
-	 * 	vertically or not.
-	 */
-	@Basic
-	public boolean getMovingVertical() {
-		return this.movingVertical;
-	}
-	
-	/**
-	 * Variable registering whether this Mazub is moving vertically or not.
-	 */
-	private boolean movingVertical = false;
-
-	/**
-	 * Sets the boolean indicating whether this Mazub is moving vertically.
-	 * 
-	 * @param 	flag
-	 * 		 	The new boolean that indicates wether or not Mazub is moving vertically.
-	 * @post	The new movingVertical state of this Mazub is equal to the 
-	 * 			given flag.
-	 * 			| new.getMovingVertical == flag
-	 */
-	@Basic
-	public void setMovingVertical(boolean flag) throws IllegalStateException {
-		if (this.getMovingVertical() == flag)
-			throw new IllegalStateException();
-		this.movingVertical = flag;
-	}
-		
-
-	/**
 	 *  Return the vertical velocity of this Mazub.
 	 */
 	public double getVerticalVelocity(){
@@ -362,29 +331,6 @@ public class Mazub extends LivingCreatures {
 		this.previousSprite = sprite;
 	}	
 	
-	 /**
-	  * @param 	timeInterval
-	  * 		The time interval in which the position of this mazub has changed.
-	  * @post	The new Y position of this Mazub is equal to the current Y position added to the vertical distance
-	  * 		travelled calculated with a formula using the given time interval. 
-	  * 		new.getYPosition = this.getYPosition() + distanceCalculated
-	  */
-	public void changeVerticalPosition(double timeInterval) {
-		if (this.getMovingVertical() == true){
-			double newPositionY = this.getYPosition() 
-					+ 100 * this.getVerticalVelocity() * timeInterval
-					+ 50 * this.getVerticalAcceleration() * timeInterval * timeInterval;
-			setYPosition(newPositionY);
-
-			if (Util.fuzzyEquals(0, getYPosition())) {
-				this.endJump();
-				this.setMovingVertical(false);
-				this.setVerticalVelocity(0);
-				this.setVerticalAcceleration(0);
-			}
-		}
-	}
-	
 	/**
 	 * Initializes horizontal movement to the direction Mazub is facing.
 	 * 
@@ -433,43 +379,7 @@ public class Mazub extends LivingCreatures {
 		this.setMoving(false);
 		this.setRunTime(0);
 	}
-	
-	/**
-	 * Initializes vertical movment.
-	 * 
-	 * @post	If the current Y position of this Mazub is equal to zero then
-	 * 			the new vertical velocity is set to the initial vertical velocity, 
-	 * 			the new vertical acceleration is set to its default value
-	 * 			and the boolean movingVertical is set to true.
-	 * 			| if (this.getYPosition() == 0) 
-	 *			|	then new.getVerticalVelocity() == this.getInitialVerticalVelocity()
-	 *			|	&& new.getMovingVertical() == true
-	 */
-	public void startJump() {
-		try{
-			this.setMovingVertical(true);
-			this.setVerticalVelocity(this.getInitialVerticalVelocity());
-			this.setVerticalAcceleration(-10);
-		} catch (IllegalStateException exc) {
-			//Nothing happens if the Mazub is in an Illegal State.
-		}
-			
-	}
-	
-	/**
-	 * Ends vertical movement.
-	 * 
-	 * @post	If the vertical velocity is greater than zero then
-	 * 			the new vertical velocity is set to zero.
-	 * 			| if (this.getVerticalVelocity() > 0)
-	 * 			|	then new.getVerticalVelocity() == 0
-	 */
-	public void endJump(){
-		if (this.getVerticalVelocity() > 0){
-			this.setVerticalVelocity(0);
-		}
-	}
-	
+		
 	/**
 	 * Initializes ducking.
 	 * 
