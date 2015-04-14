@@ -628,17 +628,11 @@ public class Mazub extends LivingCreatures {
 		return 500;
 	}
 	
-	public void eatPlant(Plant plant) {
-		assert plant.isEatablePlant();
-		this.addHP(getHealAmount());
-		plant.terminate();
-	}
-	
 	public void hitByEnemy() {
 		this.addHP(getHitAmount());
 	}
 	
-	private int getHealAmount() {
+	public int getHealAmount() {
 		return healAmount;
 	}
 	

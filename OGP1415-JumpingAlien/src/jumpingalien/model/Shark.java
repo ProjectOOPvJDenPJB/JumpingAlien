@@ -3,7 +3,7 @@ package jumpingalien.model;
 //import jumpingalien.model.LivingCreatures.State;
 import java.util.Random;
 
-import jumpingalien.model.LivingCreatures.State;
+//import jumpingalien.model.LivingCreatures.State;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
 
