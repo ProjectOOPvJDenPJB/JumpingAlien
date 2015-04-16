@@ -464,9 +464,6 @@ public class Mazub extends LivingCreatures {
 			this.setMaximumHorizontalVelocity(vHmax);
 			this.setRunTime(this.getRunTime() + timeInterval);
 			this.setHitTimer(this.getHitTimer() + timeInterval);
-			if (Util.fuzzyGreaterThanOrEqualTo(this.getHitTimer(),0.6)){
-				Interaction.interactWithOtherCreatures(this);
-			}
 		}
 	}
 			

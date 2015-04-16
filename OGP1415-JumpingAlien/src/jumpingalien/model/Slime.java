@@ -190,9 +190,6 @@ public class Slime extends LivingCreatures {
 			this.changeHorizontalPosition(timeInterval);
 			this.setHorizontalVelocity(this.getHorizontalVelocity() + this.getHorizontalAcceleration()*timeInterval);
 			this.setHitTimer(this.getHitTimer() + timeInterval);
-			if (Util.fuzzyGreaterThanOrEqualTo(this.getHitTimer(),0.6)){
-				Interaction.interactWithOtherCreatures(this);
-			}
 			
 		}
 		

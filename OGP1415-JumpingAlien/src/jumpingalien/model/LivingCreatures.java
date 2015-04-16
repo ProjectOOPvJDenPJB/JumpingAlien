@@ -573,8 +573,29 @@ public abstract class LivingCreatures {
 			this.setHorizontalAcceleration(0);
 		double newPositionX = this.getXPosition() + this.getDirection().getInt() * (100 * this.getHorizontalVelocity()*timeInterval 
 				+ 50 * this.getHorizontalAcceleration()*timeInterval*timeInterval); 
-		setXPosition(newPositionX);
-	}
+		
+		if (Util.fuzzyGreaterThanOrEqualTo(newPositionX, this.getXPosition())){
+			for(double i = this.getXPosition(); Util.fuzzyLessThanOrEqualTo(i, newPositionX); i += 0.01){
+				setXPosition(i);
+				Interaction.interactWithOtherCreatures(this);
+				if (this.getMovementBlocked() || this.collidesWithTerrain()){
+					this.setMovementBlocked(false);
+					//movement blocked wordt kort op true gezet als de beweging wordt geblokeerd, maar wordt elke keer gerefreshed.
+					break;
+				}
+			}
+		}else{
+				for(double i = this.getXPosition(); Util.fuzzyGreaterThanOrEqualTo(i, newPositionX); i -= 0.01){
+					setXPosition(i);
+					Interaction.interactWithOtherCreatures(this);
+					if (this.getMovementBlocked() || this.collidesWithTerrain()){
+						this.setMovementBlocked(false);
+							break;
+					}
+				}
+			}
+}
+	
 	
 	 /**
 	  * @param 	timeInterval
@@ -587,15 +608,33 @@ public abstract class LivingCreatures {
 			double newPositionY = this.getYPosition() 
 					+ 100 * this.getVerticalVelocity() * timeInterval
 					+ 50 * this.getVerticalAcceleration() * timeInterval * timeInterval;
-			setYPosition(newPositionY);
-
-			if (Util.fuzzyEquals(0, getYPosition())) {
-				this.setVerticalVelocity(0);
-				this.setVerticalAcceleration(0);
-				this.setMovingVertical(false);
-				this.endJump();
+			
+			if (Util.fuzzyGreaterThanOrEqualTo(newPositionY, this.getXPosition())){
+				for(double i = this.getXPosition(); Util.fuzzyLessThanOrEqualTo(i, newPositionY); i += 0.01){
+					this.setYPosition(i);
+					Interaction.interactWithOtherCreatures(this);
+					if (this.getMovementBlocked() || this.collidesWithTerrain()){
+						this.endJump();
+						this.setMovementBlocked(false);
+						break;
+					}
+				}
+			}else{
+					for(double i = this.getXPosition(); Util.fuzzyGreaterThanOrEqualTo(i, newPositionY); i -= 0.01){
+						this.setYPosition(i);
+						Interaction.interactWithOtherCreatures(this);
+						if (this.getMovementBlocked() || this.collidesWithTerrain()){
+							this.setVerticalVelocity(0);
+							this.setVerticalAcceleration(0);
+							this.setMovingVertical(false);
+							this.endJump();
+							this.setMovementBlocked(false);
+							break;
+						}								
+					}
 			}
-		}
+}
+			
 	
 	/**
 	 * Return the boolean indicating whether this Mazub is moving
@@ -732,6 +771,16 @@ public abstract class LivingCreatures {
 		return true;
 	}
 	
+	public boolean getMovementBlocked(){
+		return this.movementBlocked;
+	}
+	
+	private boolean movementBlocked = false;
+		
+	public void setMovementBlocked(boolean flag){
+		this.movementBlocked = flag;
+	}
+	
 	public boolean isInLava() {
 		for (int[] tile : getOccupiedTiles()) {
 			if (world.getTileType(tile[0], tile[1]) == TileType.MAGMA.getInt())
@@ -767,16 +816,6 @@ public abstract class LivingCreatures {
 		}
 		else
 			return objectLength / tileLength;
-	}
-	
-	public boolean collidesWithCreature(LivingCreatures creature) {
-		if ((getXPosition() + (getSize()[0] - 1) < creature.getXPosition()) || 
-				(creature.getXPosition() + (creature.getSize()[0] - 1) < getXPosition()) ||
-				(getYPosition() + (getSize()[1] - 1) <creature.getYPosition()) ||
-				(creature.getYPosition() + (creature.getSize()[1] - 1) < getYPosition())) {
-			return false;
-		}
-		return true;
 	}
 	
 	protected double getDeathTimer() {

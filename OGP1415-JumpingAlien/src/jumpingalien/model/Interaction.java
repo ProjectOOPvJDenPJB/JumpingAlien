@@ -3,6 +3,8 @@ package jumpingalien.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import jumpingalien.util.Util;
+
 public class Interaction{
 
 	public Interaction(){
@@ -15,21 +17,30 @@ public class Interaction{
 	private final static Map<String,Shark> sharks = new HashMap<String,Shark>();
 
 
+	public static boolean collidesWithCreature(LivingCreatures creature1, LivingCreatures creature2) {
+		if ((creature1.getXPosition() + (creature1.getSize()[0] - 1) < creature2.getXPosition()) || 
+				(creature2.getXPosition() + (creature2.getSize()[0] - 1) < creature1.getXPosition()) ||
+				(creature1.getYPosition() + (creature1.getSize()[1] - 1) <creature2.getYPosition()) ||
+				(creature2.getYPosition() + (creature2.getSize()[1] - 1) < creature1.getYPosition())) {
+			return false;
+		}
+		return true;
+	}
 	
 	public static void interactWithOtherCreatures(LivingCreatures creature){
 		for (String key : plants.keySet()) {
-			if (plants.get(key).getPosition()== creature.getPosition()){
+			if (collidesWithCreature(creature,plants.get(key))){
 				interactWithPlant(creature,plants.get(key));
 			}
 			
 		}
 		for (String key : slimes.keySet()) {
-			if (slimes.get(key).getPosition() == creature.getPosition()){
+			if (collidesWithCreature(creature,slimes.get(key))){
 				interactWithSlime(creature, slimes.get(key));
 			}
 		}
 		for (String key : sharks.keySet()) {
-			if (sharks.get(key).getPosition() == creature.getPosition()){
+			if (collidesWithCreature(creature,sharks.get(key))){
 				interactWithShark(creature, sharks.get(key));
 			}
 		}
@@ -50,28 +61,36 @@ public class Interaction{
 	}
 	
 	public static void interactWithSlime(LivingCreatures creature, Slime slime){
+		if (!(creature instanceof Plant)){
+			creature.setMovementBlocked(true);
+		}
 		if (!(creature instanceof Slime)){
-			creature.addHP(-50);
-			creature.setHitTimer(0);
-			if (creature.getHP() <= 0){
-				//gameOver()
+			if (Util.fuzzyLessThanOrEqualTo(creature.getHitTimer(),0.6)){
+				creature.addHP(-50);
+				creature.setHitTimer(0);
 			}
-			slime.addHP(-50);
-			slime.setHitTimer(0);
-			//terminate zit in setHP
+			if (Util.fuzzyLessThanOrEqualTo(slime.getHitTimer(),0.6)){
+				slime.addHP(-50);
+				slime.setHitTimer(0);
+				//terminate zit in setHP die in addHPzit
+			}
 		}
 	}
 	
 	public static void interactWithShark(LivingCreatures creature, Shark shark){
+		if (!(creature instanceof Plant)){
+			creature.setMovementBlocked(true);
+		}		
 		if (!(creature instanceof Shark)){
-			creature.addHP(-50);
-			creature.setHitTimer(0);
-			if (creature.getHP() <= 0){
-				//gameOver()
+			if (Util.fuzzyLessThanOrEqualTo(creature.getHitTimer(),0.6)){
+				creature.addHP(-50);
+				creature.setHitTimer(0);
 			}
-			shark.addHP(-50);
-			shark.setHitTimer(0);
+			if (Util.fuzzyLessThanOrEqualTo(shark.getHitTimer(),0.6)){
+				shark.addHP(-50);
+				shark.setHitTimer(0);
 			//Terminate zit in setHp
+			}
 		}
 	}
 }
