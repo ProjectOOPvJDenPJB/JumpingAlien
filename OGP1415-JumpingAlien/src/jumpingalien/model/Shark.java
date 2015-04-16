@@ -3,6 +3,7 @@ package jumpingalien.model;
 //import jumpingalien.model.LivingCreatures.State;
 import java.util.Random;
 
+
 //import jumpingalien.model.LivingCreatures.State;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
@@ -145,6 +146,11 @@ public class Shark extends LivingCreatures {
 			this.changeVerticalPosition(timeInterval);
 			this.setHorizontalVelocity(this.getHorizontalVelocity() + this.getHorizontalAcceleration()*timeInterval);
 			this.setVerticalVelocity(this.getVerticalVelocity() + this.getVerticalAcceleration()*timeInterval);
+			
+			this.setHitTimer(this.getHitTimer() + timeInterval);
+			if (Util.fuzzyGreaterThanOrEqualTo(this.getHitTimer(),0.6)){
+				Interaction.interactWithOtherCreatures(this);
+			}
 			
 		}
 	}

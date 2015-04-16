@@ -23,6 +23,7 @@ public abstract class LivingCreatures {
 		this.setHorizontalAcceleration(horizontalAcceleration);
 		this.setVerticalAcceleration(verticalAcceleration);
 		this.spriteArray = sprites;		
+		this.setHitTimer(0.6);
 	}
 	
 	protected LivingCreatures(int XPosition, int YPosition, double horizontalVelocity, 
@@ -438,6 +439,16 @@ public abstract class LivingCreatures {
 	
 	public void addHP(int HP) {
 		setHP(getHP() + HP);
+	}
+	
+	public double getHitTimer(){
+		return this.hitTimer;
+	}
+	
+	private double hitTimer;
+	
+	public void setHitTimer(double time){
+		this.hitTimer = time;
 	}
 	
 	protected double getTerrainTimer() {

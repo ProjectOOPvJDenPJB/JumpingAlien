@@ -2,6 +2,7 @@ package jumpingalien.model;
 
 import java.util.Random;
 
+
 //import jumpingalien.model.LivingCreatures.State;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
@@ -185,9 +186,14 @@ public class Slime extends LivingCreatures {
 			}
 			else
 				this.setRunTime(getRunTime() + timeInterval);
-			
+
 			this.changeHorizontalPosition(timeInterval);
 			this.setHorizontalVelocity(this.getHorizontalVelocity() + this.getHorizontalAcceleration()*timeInterval);
+			this.setHitTimer(this.getHitTimer() + timeInterval);
+			if (Util.fuzzyGreaterThanOrEqualTo(this.getHitTimer(),0.6)){
+				Interaction.interactWithOtherCreatures(this);
+			}
+			
 		}
 		
 	}
