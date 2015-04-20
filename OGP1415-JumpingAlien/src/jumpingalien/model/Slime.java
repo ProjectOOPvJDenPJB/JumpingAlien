@@ -1,6 +1,9 @@
 package jumpingalien.model;
 
+
 import java.util.Random;
+
+
 
 
 //import jumpingalien.model.LivingCreatures.State;
@@ -32,9 +35,11 @@ public class Slime extends LivingCreatures {
 	 * 
 	 */
 	public Slime(int positionX, int positionY, double horizontalVelocity,double verticalVelocity,
-			double horizontalAcceleration,Sprite[] sprites, World world, int hitpoints){
+			double horizontalAcceleration,Sprite[] sprites, World world, School school, int hitpoints){
 		super(positionX,positionY,horizontalVelocity,verticalVelocity,horizontalAcceleration,
 				world,sprites,hitpoints);
+		this.setSchool(school);
+
 	}
 	
 	/**
@@ -62,7 +67,7 @@ public class Slime extends LivingCreatures {
 	 */
 	public Slime(int positionX, int positionY,double horizontalVelocity,double verticalVelocity, 
 			World world,Sprite[] sprites){
-		this(positionX,positionY,horizontalVelocity,verticalVelocity,0.7,sprites, world,100);	
+		this(positionX,positionY,horizontalVelocity,verticalVelocity,0.7,sprites, world,null,100);	
 	}
 
 	/**
@@ -114,6 +119,16 @@ public class Slime extends LivingCreatures {
 
 	}
 	
+	/**
+	 * start a move the the opposite direction as the current movement of this slime
+	 * 
+	 * @post  The new direction is opposite to the current direction, the boolean moving is set to true,
+	 * 		  the horizontal velocity is reset to zero and the horizontal acceleration is set to 0.7.
+	 * 		 | new.getDirection() == old.getDirection().oppositeDirection()
+	 * 		 | new.getMoving() == true
+	 * 		 | new.getHorizontalVelocity == 0
+	 * 		 | new.getHorizontalAcceleration == 0.7
+	 */
 	public void startMoveOpposite(){
 		this.setDirection(getDirection().oppositeDirection());
 		this.setMoving(true);
@@ -128,6 +143,7 @@ public class Slime extends LivingCreatures {
 				throw new IllegalStateException("Slime is alive within the boundaries of the world!");
 			else if (((isDying()) && (Util.fuzzyGreaterThanOrEqualTo(getDeathTimer(), 0.6))) ||
 					(getOutOfBounds())){
+				this.getSchool().removeSlime(this);
 				setState(State.DEAD);
 				World oldWorld = getWorld();
 				setWorld(null);
@@ -150,21 +166,6 @@ public class Slime extends LivingCreatures {
 	public int getMinHP() {
 		// TODO Auto-generated method stub
 		return 0;
-	}
-
-	
-	/**
-	 * @param 	timeInterval 
-	 * 			The time interval in which the position of this mazub has changed.
-	 * @post	The new X position of this Mazub is equal to the current X position added to the horizontal distance
-	 * 			travelled calculated with a formula using the given time interval. 
-	 * 			new.getXPosition = this.getXPosition() + distanceCalculated
-	 */
-	public void changeHorizontalPosition(double timeInterval){
-		double newPositionX = this.getXPosition() + this.getDirection().getInt() * 
-				(100 * this.getHorizontalVelocity()*timeInterval 
-				+ 50 * this.getHorizontalAcceleration()*timeInterval*timeInterval); 
-		this.setXPosition(newPositionX);
 	}
 	
 	@Override
@@ -194,13 +195,45 @@ public class Slime extends LivingCreatures {
 		}
 		
 	}
+	/**
+	 * returns the random time for the length of the movement of this slime
+	 */
 	private double getRandomTime() {
 		return this.randomTime;
 	}
 	
 	private double randomTime = (2 + (6-2) * new Random().nextDouble());
 	
+	/**
+	 * Sets the random time for this slime to the generated time.
+	 * @post	The new random time for this slime is equal to
+	 * 			the generated time
+	 * 			| new.getRandomTime() == (2 + (6-2) * new Random().nextDouble());
+
+	 */
 	private void setRandomTime() {
 		this.randomTime = (2 + (6-2) * new Random().nextDouble());
 	}
+	/**
+	 * return the school of this slime
+	 */
+	public School getSchool(){
+		return this.school;
+	}
+	
+	private School school;
+	
+	/**
+	 * Sets the school for this slime to the given school.
+	 * 
+	 * @param	school
+	 * 			The new school for this slime
+	 * @post	The new school for this slime is equal to
+	 * 			the given school.	
+	 * 			| new.getSchool() == school
+	 */
+	public void setSchool(School school){
+		this.school = school;
+	}
+	
 }

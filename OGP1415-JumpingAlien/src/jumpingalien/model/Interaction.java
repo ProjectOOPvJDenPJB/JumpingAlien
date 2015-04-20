@@ -8,6 +8,7 @@ import jumpingalien.util.Util;
 public class Interaction{
 
 	public Interaction(){
+		
 	}
 	
 	private final static Map<String,Plant> plants = new HashMap<String,Plant>();
@@ -44,10 +45,7 @@ public class Interaction{
 				interactWithShark(creature, sharks.get(key));
 			}
 		}
-	}
-	
-	//COMMENT Zowel bij slime als shark moet er nog een timer bij, dat er maar 1 keer per 0.6 seconden hp wordt afgetrokken;
-	
+	}	
 	
 	public static void interactWithPlant(LivingCreatures creature, Plant plant){
 		if (creature instanceof Mazub){
@@ -74,6 +72,39 @@ public class Interaction{
 				slime.setHitTimer(0);
 				//terminate zit in setHP die in addHPzit
 			}
+		}
+		if(creature instanceof Slime){
+			changeSchool((Slime)creature,slime);
+		}
+	}
+
+	/**
+	 * Changes the school of the slime with the lowest amount 
+	 * of slime to the school of the other slime.
+	 * @param slime1
+	 * 		  the first slime to change school or not.
+	 * @param slime2
+	 * 		  the second slime to change school or not
+	 * @post  The current school of slime1 contains less slimes
+	 * 		  then the school of slime2 so slime 1 changes to the
+	 * 		  school of slime2
+	 * 		  | if (school1.getAmountSlimes() < school2.getAmountSlimes())
+			  | new.slime1.getSchool() == slime2.getSchool()
+	 * @post  The current school of slime2 contains less slimes
+	 * 		  then the school of slime1 so slime 2 changes to the
+	 * 		  school of slime1
+	 * 		  | if (school1.getAmountSlimes() > school2.getAmountSlimes())
+			  | new.slime2.getSchool() == slime1.getSchool()	
+	 */
+	public static void changeSchool(Slime slime1,Slime slime2){
+		School school1 = slime1.getSchool();
+		School school2 = slime2.getSchool();
+		if (school1.getAmountSlimes() < school2.getAmountSlimes()){
+			school2.addSlime(slime1);
+		}
+		
+		else if (slime1.getSchool().getAmountSlimes() > slime2.getSchool().getAmountSlimes()){
+			school1.addSlime(slime2);
 		}
 	}
 	

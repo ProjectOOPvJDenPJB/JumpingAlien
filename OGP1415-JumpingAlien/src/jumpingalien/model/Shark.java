@@ -108,8 +108,8 @@ public class Shark extends LivingCreatures {
 		return 0;
 	}
 	
-	public void startMove(){
-			this.setDirection(1);
+	public void startMove(Direction direction){
+			this.setDirection(direction);
 			this.setHorizontalVelocity(0);
 			this.setHorizontalAcceleration(1.5);
 	}
@@ -135,7 +135,7 @@ public class Shark extends LivingCreatures {
 				this.endJump();
 				this.endMove();
 				this.startJump(2.0,-10.0);
-				this.startMove();
+				this.startMove(this.getDirection().oppositeDirection());
 				this.setDirection(this.getDirection().oppositeDirection());
 				this.generateRandomTime();
 			}

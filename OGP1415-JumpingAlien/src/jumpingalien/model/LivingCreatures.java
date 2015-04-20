@@ -1,7 +1,9 @@
 package jumpingalien.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import jumpingalien.model.Position;
 import jumpingalien.util.Sprite;
@@ -437,7 +439,20 @@ public abstract class LivingCreatures {
 	
 	public static final int MIN_HP = 0;
 	
+	private final static Map<String,Slime> slimes = new HashMap<String,Slime>();
+
+	
 	public void addHP(int HP) {
+		if(this instanceof Slime){
+			if (HP < 0){
+				Slime slime = (Slime) this;
+				for (String key : slimes.keySet()) {
+					if (slimes.get(key).getSchool() == slime.getSchool()){
+						slimes.get(key).addHP(-1);
+					}
+				}
+			}
+		}
 		setHP(getHP() + HP);
 	}
 	
