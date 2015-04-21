@@ -28,6 +28,30 @@ public class Interaction{
 		return true;
 	}
 	
+	public static int collidesWithTerrain(LivingCreatures creature){
+			for (int x = (int) creature.getXPosition(); x<= creature.getXPosition() + creature.getSize()[0]; x = x + 1){
+				for (int y = (int) creature.getYPosition(); y<= creature.getYPosition() + creature.getSize()[1]; y = y + 1){
+					World world = creature.getWorld();
+					int tileType = world.getTileType(x, y);
+				    if (tileType == 3){
+						return 3;
+					}
+				    else if ((tileType == 2) && (!(creature instanceof Shark))){
+						return 2;
+					}
+				    else if ((tileType == 0) && (creature instanceof Shark)){
+				    	return 0;
+				    }
+				}		
+			}
+			if (creature instanceof Shark){
+				return 2;
+			}else{
+			return 0;
+			}
+	}
+	
+	
 	public static void interactWithOtherCreatures(LivingCreatures creature){
 		for (String key : plants.keySet()) {
 			if (collidesWithCreature(creature,plants.get(key))){
@@ -63,11 +87,11 @@ public class Interaction{
 			creature.setMovementBlocked(true);
 		}
 		if (!(creature instanceof Slime)){
-			if (Util.fuzzyLessThanOrEqualTo(creature.getHitTimer(),0.6)){
+			if (Util.fuzzyGreaterThanOrEqualTo(creature.getHitTimer(),0.6)){
 				creature.addHP(-50);
 				creature.setHitTimer(0);
 			}
-			if (Util.fuzzyLessThanOrEqualTo(slime.getHitTimer(),0.6)){
+			if (Util.fuzzyGreaterThanOrEqualTo(slime.getHitTimer(),0.6)){
 				slime.addHP(-50);
 				slime.setHitTimer(0);
 				//terminate zit in setHP die in addHPzit

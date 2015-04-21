@@ -467,6 +467,7 @@ public class Mazub extends LivingCreatures {
 			this.setMaximumHorizontalVelocity(vHmax);
 			this.setRunTime(this.getRunTime() + timeInterval);
 			this.setHitTimer(this.getHitTimer() + timeInterval);
+			this.applyTerrainDmg(timeInterval);
 		}
 	}
 			
@@ -624,10 +625,16 @@ public class Mazub extends LivingCreatures {
 		return (length >= 10) && (length % 2 == 0);
 	}
 	
+	/**
+	 * returns the minimum hit points for this Slime
+	 */
 	public int getMinHP() {
 		return 0;
 	}
 	
+	/**
+	 * returns the maximum hit points for this slime
+	 */
 	public int getMaxHP() {
 		return 500;
 	}

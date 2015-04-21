@@ -480,31 +480,38 @@ public abstract class LivingCreatures {
 		return Util.fuzzyGreaterThanOrEqualTo(time, 0);
 	}
 	
-	public void terrainDamage(Tile terrain) {
-		if (terrain.getType() == TileType.WATER) {
-			waterDamage(terrain);
-		}
-		else if (terrain.getType() == TileType.MAGMA) {
-			magmaDamage(terrain);
-		}
-	}
-
-	private void magmaDamage(Tile magma) {
-		assert (magma.getType() == TileType.MAGMA);
-		if (magma.getState() == Tile.State.UNAFFECTED) {
+	private void applyMagmaDamage(double timeInterval) {
+		if (this.getTerrainTimer() < 0) {
 			addHP(-50);
+			this.setTerrainTimer(0);
 		}
-		else if (magma.getState() == Tile.State.OCCUPIED) {
-			if (Util.fuzzyGreaterThanOrEqualTo(getTerrainTimer(), 0.2))
+		else if (Util.fuzzyGreaterThanOrEqualTo(getTerrainTimer(), 0.2)){
 				addHP(-50);
+				this.setTerrainTimer(0);
+		}else{
+			this.setTerrainTimer(this.getTerrainTimer() + timeInterval);
 		}
 	}
 
-	private void waterDamage(Tile water) {
-		assert (water.getType() == TileType.WATER);
-		if (Util.fuzzyGreaterThanOrEqualTo(getTerrainTimer(), 0.2))
+	private void applyWaterDamage(double timeInterval) {
+		if (this.getTerrainTimer() < 0){
 			addHP(-2);
+			this.setTerrainTimer(0);
+		}else if (Util.fuzzyGreaterThanOrEqualTo(getTerrainTimer(), 0.2)){
+			addHP(-2);
+			this.setTerrainTimer(0);
+		}else{
+			this.setTerrainTimer(this.getTerrainTimer() + timeInterval);
+		}
 	}
+	
+	private void applyAirDamage(double timeInterval){
+		if (Util.fuzzyGreaterThanOrEqualTo(this.getTerrainTimer(), 0.2)){
+			this.addHP(-6);
+			this.setTerrainTimer(0);
+		}
+	}
+
 	
 	public abstract void advanceTime(double dt);
 	
@@ -796,24 +803,6 @@ public abstract class LivingCreatures {
 		this.movementBlocked = flag;
 	}
 	
-	public boolean isInLava() {
-		for (int[] tile :getWorld().getOccupiedTiles((int)getXPosition(),(int)getYPosition(),
-				(int)getXPosition()+getCurrentSprite().getWidth(),(int)getYPosition()+getCurrentSprite().getHeight())) {
-			if (world.getTileType(tile[0], tile[1]) == TileType.MAGMA.getInt())
-				return true;
-		}
-		return false;
-	}
-	
-	public boolean isInWater() {
-		for (int[] tile : getWorld().getOccupiedTiles((int)getXPosition(),(int)getYPosition(),
-				(int)getXPosition()+getCurrentSprite().getWidth(),(int)getYPosition()+getCurrentSprite().getHeight())) {
-			if (world.getTileType(tile[0], tile[1]) == TileType.WATER.getInt())
-				return true;
-		}
-		return false;
-	}
-	
 	protected double getDeathTimer() {
 		return this.deathTimer;
 	}
@@ -822,6 +811,25 @@ public abstract class LivingCreatures {
 	protected void setDeathTimer(double time) {
 		assert isValidTimerValue(time);
 		this.deathTimer = time;
+	}
+	
+	public void applyTerrainDmg(double timeInterval){
+		int tileType = Interaction.collidesWithTerrain(this);
+		if (tileType == 3){
+			this.applyMagmaDamage(timeInterval);
+		}else if (tileType == 2){
+			if (!(this instanceof Shark)){
+			this.applyWaterDamage(timeInterval);
+			}else{
+				this.setTerrainTimer(0);
+			}
+		}else{
+			if (!(this instanceof Shark)){
+				this.setTerrainTimer(-1);
+			}else{
+				this.applyAirDamage(timeInterval);
+			}
+		}
 	}
 	
 }

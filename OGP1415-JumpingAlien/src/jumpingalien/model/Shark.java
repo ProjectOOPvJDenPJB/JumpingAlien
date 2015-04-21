@@ -98,22 +98,44 @@ public class Shark extends LivingCreatures {
 		}
 	}
 
+	/**
+	 * returns the maximum hit points for this slime
+	 */
 	@Override
 	public int getMaxHP() {
 		return 100;
 	}
 
+	/**
+	 * returns the minimum hit points for this Slime
+	 */
 	@Override
 	public int getMinHP() {
 		return 0;
 	}
 	
+	/**
+	 * start a move to the given direction as the current movement of this shark
+	 * 
+	 * @post  The new direction is opposite to the current direction, 
+	 * 		  the horizontal velocity is reset to zero and the horizontal acceleration is set to 1.5.
+	 * 		 | new.getDirection() == direction
+	 * 		 | new.getHorizontalVelocity == 0
+	 * 		 | new.getHorizontalAcceleration == 1.5
+	 */
 	public void startMove(Direction direction){
 			this.setDirection(direction);
 			this.setHorizontalVelocity(0);
 			this.setHorizontalAcceleration(1.5);
 	}
 	
+	/**
+	 * End the movement of this shark
+	 * 
+	 * @post  The horizontal velocity is reset to zero and the horizontal acceleration is set to 0.
+	 * 		 | new.getHorizontalVelocity == 0
+	 * 		 | new.getHorizontalAcceleration == 0
+	 */
 	public void endMove(){
 		this.setHorizontalVelocity(0);
 		this.setHorizontalAcceleration(0);
@@ -147,16 +169,24 @@ public class Shark extends LivingCreatures {
 			this.setHorizontalVelocity(this.getHorizontalVelocity() + this.getHorizontalAcceleration()*timeInterval);
 			this.setVerticalVelocity(this.getVerticalVelocity() + this.getVerticalAcceleration()*timeInterval);	
 			this.setHitTimer(this.getHitTimer() + timeInterval);
-
-			
+			this.applyTerrainDmg(timeInterval);
 		}
 	}
 	
+	/**
+	 * returns the random time for the length of the movement of this shark
+	 */
 	private double getRandomTime() {
 		return this.randomTime;
 	}	
 	private double randomTime = (1 + (4-1) * new Random().nextDouble());
 	
+	/**
+	 * Sets the random time for this shark to the generated time.
+	 * @post	The new random time for this shark is equal to
+	 * 			the generated time
+	 * 			| new.getRandomTime() == (1 + (4-1) * new Random().nextDouble());
+	 */
 	private void generateRandomTime() {
 		this.randomTime = (1 + (4-1) * new Random().nextDouble());
 	}

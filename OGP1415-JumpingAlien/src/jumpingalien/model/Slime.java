@@ -135,17 +135,27 @@ public class Slime extends LivingCreatures {
 		this.setHorizontalVelocity(0);
 		this.setHorizontalAcceleration(0.7);
 		}
-	
+	/**
+	 * terminates this slime if it's still alive.
+	 * @post If the slime isn't dying yet but meets the requirements to die
+	 * 		 |if isAlive() && (getHP() > 0) && (! getOutOfBounds())
+	 * 		 | new.getState == state.DYING
+	 * @post If the slime is dying for longer then 0.6 seconds or out of the game boundaries he is terminated
+	 * 		 |if isDying() && Util.fuzzyGreaterThanOrEqualTo(getDeathTimer(), 0.6) || getOutOfBounds()
+	 * 		 | new.getWorld() == null
+	 * 		 | new.getState() == state.DEAD
+	 * 		 | new !in (old.getWorld().getSlimes())
+	 */
 	@Override
 	public void terminate() {
 		if (!isDead()) {
-			if ((isAlive() && (getHP() > 0) && (! getOutOfBounds())))
+			if ((isAlive() && (getHP() >= 0) && (! getOutOfBounds())))
 				throw new IllegalStateException("Slime is alive within the boundaries of the world!");
 			else if (((isDying()) && (Util.fuzzyGreaterThanOrEqualTo(getDeathTimer(), 0.6))) ||
 					(getOutOfBounds())){
 				this.getSchool().removeSlime(this);
 				setState(State.DEAD);
-				World oldWorld = getWorld();
+				World oldWorld = this.getWorld();
 				setWorld(null);
 				oldWorld.removeSlime(this);
 				setHP(0);
@@ -156,15 +166,20 @@ public class Slime extends LivingCreatures {
 			}
 		}
 	}
-
+	
+	/**
+	 * returns the maximum hit points for this slime
+	 */
 	@Override
 	public int getMaxHP() {
 		return 100;
 	}
 
+	/**
+	 * returns the minimum hit points for this Slime
+	 */
 	@Override
 	public int getMinHP() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 	
@@ -191,7 +206,7 @@ public class Slime extends LivingCreatures {
 			this.changeHorizontalPosition(timeInterval);
 			this.setHorizontalVelocity(this.getHorizontalVelocity() + this.getHorizontalAcceleration()*timeInterval);
 			this.setHitTimer(this.getHitTimer() + timeInterval);
-			
+			this.applyTerrainDmg(timeInterval);
 		}
 		
 	}
