@@ -39,12 +39,11 @@ public class JumpingAlienGamePart2 extends JumpingAlienGame {
 	private final ObjectInfoProvider objectInfoProvider;
 	private String currentMap;
 
-
-  	public JumpingAlienGamePart2(Part2Options options, IFacadePart2 facade) {
+	public JumpingAlienGamePart2(Part2Options options, IFacadePart2 facade) {
 		super(options, facade);
 		this.objectInfoProvider = createObjectInfoProvider();
 	}
- 
+
 	@Override
 	public void restart() {
 		this.world = null;
@@ -57,7 +56,6 @@ public class JumpingAlienGamePart2 extends JumpingAlienGame {
 	public IFacadePart2 getFacade() {
 		return (IFacadePart2) super.getFacade();
 	}
-
 
 	@Override
 	public Part2Options getOptions() {
@@ -139,7 +137,7 @@ public class JumpingAlienGamePart2 extends JumpingAlienGame {
 	}
 
 	private void addObject(MapObject obj) {
-		switch (obj.getTile().getFilename()) {
+		switch (obj.getTile().getOSIndependentFilename()) {
 		case Resources.PLANT_LEFT_FILENAME:
 			getFacade().addPlant(
 					getWorld(),

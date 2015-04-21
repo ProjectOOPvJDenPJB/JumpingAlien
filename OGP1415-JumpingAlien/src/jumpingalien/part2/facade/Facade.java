@@ -212,7 +212,7 @@ public class Facade implements IFacadePart2  {
 
 	@Override
 	public Sprite getCurrentSprite(Plant plant) {
-		return getCurrentSprite(plant);
+		return plant.getCurrentSprite();
 	}
 
 	@Override
@@ -232,7 +232,7 @@ public class Facade implements IFacadePart2  {
 
 	@Override
 	public Sprite getCurrentSprite(Shark shark) {
-		return getCurrentSprite(shark);
+		return shark.getCurrentSprite();
 	}
 
 	@Override
@@ -252,7 +252,7 @@ public class Facade implements IFacadePart2  {
 
 	@Override
 	public Sprite getCurrentSprite(Slime slime) {
-		return getCurrentSprite(slime);
+		return slime.getCurrentSprite();
 	}
 
 	@Override

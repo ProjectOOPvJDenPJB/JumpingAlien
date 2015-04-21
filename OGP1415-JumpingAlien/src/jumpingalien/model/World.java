@@ -293,7 +293,8 @@ public class World {
 	
 	public boolean isPassable(int leftX,int bottomY){
 		int[] position = getTilePosition(leftX, bottomY);
-		if (!tileTypes.get(position).getPassable()) {
+		String posString = ("("+position[0]+","+position[1]+")");
+		if (!tileTypes.get(posString).getPassable()) {
 			if ((bottomY % getTileSize() == getTileSize()-1) &&
 					(isPassable(leftX, bottomY+1)))
 				return true;
