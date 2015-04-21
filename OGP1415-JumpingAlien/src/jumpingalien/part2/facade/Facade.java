@@ -272,8 +272,7 @@ public class Facade implements IFacadePart2  {
 
 	@Override
 	public School createSchool() {
-		// TODO Auto-generated method stub
-		return null;
+		return new School();
 	}
 
 
