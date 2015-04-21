@@ -66,8 +66,8 @@ public class Slime extends LivingCreatures {
 	 //TODO Commentaar klopt niet meer
 	 */
 	public Slime(int positionX, int positionY,double horizontalVelocity,double verticalVelocity, 
-			World world,Sprite[] sprites){
-		this(positionX,positionY,horizontalVelocity,verticalVelocity,0.7,sprites, world,null,100);	
+			World world,Sprite[] sprites, School school){
+		this(positionX,positionY,horizontalVelocity,verticalVelocity,0.7,sprites, world,school,100);	
 	}
 
 	/**
@@ -84,8 +84,8 @@ public class Slime extends LivingCreatures {
 	 * 			| this(positionX,positionY,sprites, null)
 	 //TODO Commentaar klopt niet meer	 */
 	public Slime(int positionX, int positionY, double horizontalVelocity,double verticalVelocity,
-			Sprite[] sprites){
-		this(positionX,positionY,horizontalVelocity,verticalVelocity, null,sprites);	
+			Sprite[] sprites, School school){
+		this(positionX,positionY,horizontalVelocity,verticalVelocity, null,sprites, school);	
 	}
 	
 	/**
@@ -101,8 +101,8 @@ public class Slime extends LivingCreatures {
 	 * 			the given sprites as its sprites and world as null
 	 * 			| this(positionX,positionY,sprites, null)
 	 //TODO Commentaar klopt niet meer	 */
-	public Slime(int positionX, int positionY, Sprite[] sprites){
-		this(positionX,positionY,0,0,sprites);	
+	public Slime(int positionX, int positionY, Sprite[] sprites, School school){
+		this(positionX,positionY,0,0,sprites, school);	
 	}
 	
 	/**
@@ -114,8 +114,8 @@ public class Slime extends LivingCreatures {
 	 * and as for positionX and positionY the value zero as its position, and world as null.
 	 * 			| this(0,0,sprites, null)
 	 */
-	public Slime(Sprite[] sprites){
-		this(0,0,sprites);	
+	public Slime(Sprite[] sprites, School school){
+		this(0,0,sprites,school);	
 
 	}
 	

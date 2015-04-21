@@ -1,5 +1,8 @@
 package jumpingalien.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class Tile {
 	
@@ -72,9 +75,8 @@ public class Tile {
 	/**
 	 * Return the position of this tile in an int array of the form [leftX, bottomY].
 	 */
-	public final int[] getPosition() {
-		int[] position = new int[]{this.getLeftX(),this.getBottomY()};
-		return position.clone();
+	public final String getPositionString() {
+		return ("("+getLeftX()+","+getBottomY()+")");
 	}
 	
 	public static enum State {

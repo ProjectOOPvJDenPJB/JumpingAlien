@@ -1,8 +1,7 @@
 package jumpingalien.model;
 
-import java.util.ArrayList;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import jumpingalien.model.Position;
@@ -779,7 +778,8 @@ public abstract class LivingCreatures {
 	}
 	
 	public boolean collidesWithTerrain() {
-		for (int[] tile : getOccupiedTiles()) {
+		for (int[] tile : getWorld().getOccupiedTiles((int)getXPosition(),(int)getYPosition(),
+				(int)getXPosition()+getCurrentSprite().getWidth(),(int)getYPosition()+getCurrentSprite().getHeight())) {
 			if (! getWorld().isPassable(tile[0], tile[1]))
 				return false;
 		}
@@ -797,7 +797,8 @@ public abstract class LivingCreatures {
 	}
 	
 	public boolean isInLava() {
-		for (int[] tile : getOccupiedTiles()) {
+		for (int[] tile :getWorld().getOccupiedTiles((int)getXPosition(),(int)getYPosition(),
+				(int)getXPosition()+getCurrentSprite().getWidth(),(int)getYPosition()+getCurrentSprite().getHeight())) {
 			if (world.getTileType(tile[0], tile[1]) == TileType.MAGMA.getInt())
 				return true;
 		}
@@ -805,32 +806,12 @@ public abstract class LivingCreatures {
 	}
 	
 	public boolean isInWater() {
-		for (int[] tile : getOccupiedTiles()) {
+		for (int[] tile : getWorld().getOccupiedTiles((int)getXPosition(),(int)getYPosition(),
+				(int)getXPosition()+getCurrentSprite().getWidth(),(int)getYPosition()+getCurrentSprite().getHeight())) {
 			if (world.getTileType(tile[0], tile[1]) == TileType.WATER.getInt())
 				return true;
 		}
 		return false;
-	}
-	
-	public List<int[]> getOccupiedTiles() {
-		List<int[]> tiles = new ArrayList<int[]>();
-		int amountXTiles = getAmountOfOccupiedTiles((int) getXPosition(), getWorld().getTileSize(), getSize()[0]);
-		int amountYTiles = getAmountOfOccupiedTiles((int) getYPosition(), getWorld().getTileSize(), getSize()[1]);
-		for (int i = 0; i < amountYTiles; i++) {
-			for (int j = 0; j < amountXTiles; j++) {
-				int[] position = new int[]{(int) getXPosition() + j,(int) getYPosition() + i};
-				tiles.add(position);
-			}
-		}
-		return tiles;	
-	}
-	
-	public static int getAmountOfOccupiedTiles(int position, int tileLength, int objectLength) {
-		if (position % tileLength == 0) {
-			return (objectLength / tileLength) + 1;
-		}
-		else
-			return objectLength / tileLength;
 	}
 	
 	protected double getDeathTimer() {

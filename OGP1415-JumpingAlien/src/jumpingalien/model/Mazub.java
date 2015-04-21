@@ -442,6 +442,9 @@ public class Mazub extends LivingCreatures {
 			terminate();
 			this.setDeathTimer(getDeathTimer() + timeInterval);
 		}
+		if (hasWonGame()) {
+			getWorld().terminate();
+		}
 		else if (isDead())
 			throw new IllegalStateException("Mazub is already dead.");
 		else {
@@ -645,10 +648,19 @@ public class Mazub extends LivingCreatures {
 	
 	private int hitAmount = -50;
 	
+	public boolean hasWonGame() {
+		return this.getWorld().hasWonGame();
+	}
+	
+	@Override
+	public boolean canHaveAsWorld(World world) {
+		return (world != null) && (world.canHaveAsMazub(this));
+	}
+	
 	public void terminate() {
 		if (!isDead()) {
-			if ((isAlive() && (getHP() > 0) && (! getOutOfBounds())))
-				throw new IllegalStateException("Mazub is alive within the boundaries of the world!");
+			if ((isAlive() && (getHP() > 0) && (! getOutOfBounds()) && (! hasWonGame())))
+				throw new IllegalStateException("Mazub is alive within the boundaries of the world and didn't win!");
 			else if (((isDying()) && (Util.fuzzyGreaterThanOrEqualTo(getDeathTimer(), 0.6))) ||
 					(getOutOfBounds())) {
 				setState(State.DEAD);

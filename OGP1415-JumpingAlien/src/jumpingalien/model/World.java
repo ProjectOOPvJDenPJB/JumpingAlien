@@ -3,8 +3,10 @@ package jumpingalien.model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import jumpingalien.util.Util;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
@@ -14,12 +16,19 @@ import be.kuleuven.cs.som.annotate.*;
  */
 public class World {
 	
-	public World(int tileSize, int nbTilesX, int nbTilesY) {
+	public World(int tileSize, int nbTilesX, int nbTilesY, int visibleWindowWidth, int visibleWindowHeight,
+			int targetTileX, int targetTileY) {
 		assert isValidTileSize(tileSize, nbTilesX * tileSize, nbTilesY * tileSize);
+		assert isValidTilePosition(targetTileX, targetTileY, tileSize);
 		// Aangezien we me nbTiles werken, is dit eigenlijk ni nodig.
 		this.tileSize = tileSize;
 		setNbTilesX(nbTilesX);
 		setNbTilesY(nbTilesY);
+		assert isValidVisibleWindow(visibleWindowWidth, visibleWindowHeight);
+		this.visibleWindowWidth = visibleWindowWidth;
+		this.visibleWindowHeight = visibleWindowHeight;
+		this.targetTileX = targetTileX;
+		this.targetTileY = targetTileY;
 	}
 
 	/**
@@ -110,6 +119,106 @@ public class World {
 	}
 	
 	/**
+	 * Return the X position of the target tile in this World.
+	 */
+	public int getTargetTileX() {
+		return this.targetTileX;
+	}
+	
+	/**
+	 * Variable registering the X position of the target tile of this World.
+	 */
+	private final int targetTileX;
+	
+	/**
+	 * Return the Y position of the target tile in this World.
+	 */
+	public int getTargetTileY() {
+		return this.targetTileY;
+	}
+	
+	/**
+	 * Variable registering the Y position of the target tile of this World.
+	 */
+	private final int targetTileY;
+
+	public boolean isValidVisibleWindow(int windowWidth, int windowHeight) {
+		return ((Util.fuzzyLessThanOrEqualTo(windowWidth, getPixelWidth())) && (Util.fuzzyLessThanOrEqualTo(windowHeight, getPixelHeight()))
+				&& (Util.fuzzyGreaterThanOrEqualTo(windowWidth, 0)) && (Util.fuzzyGreaterThanOrEqualTo(windowHeight, 0)));
+	}
+	
+	/**
+	 * Return the width of the visible window of this World.
+	 */
+	public int getVisibleWindowWidth() {
+		return this.visibleWindowWidth;
+	}
+	
+	/**
+	 * Variable registering the width of the visible window of this World.
+	 */
+	private final int visibleWindowWidth;
+	
+	/**
+	 * Return the height of the visible window of this World.
+	 */
+	public int getVisibleWindowHeight() {
+		return this.visibleWindowHeight;
+	}
+	
+	/**
+	 * Variable registering the height of the visible window of this World.
+	 */
+	private final int visibleWindowHeight;
+	
+	/**
+	 * Return the position of the visible window of this World.
+	 */
+	public Position getVisibleWindowPosition() {
+		return this.visibleWindowPosition;
+	}
+	
+	/**
+	 * Variable registering the position of the visible window of this World.
+	 */
+	private Position visibleWindowPosition = new Position(0,0,this);
+	
+
+	public void setWindowPosition(double leftX, double bottomY) throws IllegalXPositionException, IllegalYPositionException {
+		if (leftX < 0)
+			leftX = 0;
+		else if (leftX > (getPixelWidth() - getVisibleWindowWidth()))
+			leftX = (getPixelWidth() - getVisibleWindowWidth());
+		if (bottomY < 0)
+			bottomY = 0;
+		else if (bottomY > (getPixelHeight() - getVisibleWindowHeight()))
+			bottomY = (getPixelHeight() - getVisibleWindowHeight());
+		visibleWindowPosition = new Position(leftX, bottomY, this);
+	}
+	
+	public void updateWindowPosition() {
+		Position mazubPos = getMazub().getPosition();
+		Position windowPos = getVisibleWindowPosition();
+		if (mazubPos.getXPosition() < windowPos.getXPosition() + 200)
+			setWindowPosition(mazubPos.getXPosition() - 200, windowPos.getYPosition());
+		else if (mazubPos.getXPosition() > (windowPos.getXPosition() + getVisibleWindowWidth()) - 200)
+			setWindowPosition(mazubPos.getXPosition() + 200, windowPos.getYPosition());
+		if (mazubPos.getYPosition() < windowPos.getYPosition() +200)
+			setWindowPosition(windowPos.getXPosition(), mazubPos.getYPosition() - 200);
+		else if (mazubPos.getYPosition() > (windowPos.getYPosition() + getVisibleWindowHeight() -200))
+			setWindowPosition(windowPos.getXPosition(), mazubPos.getYPosition() + 200);
+	}
+	
+	public int[] getVisibleWindowPositionArray() {
+		int[] pos = new int[] {(int) getVisibleWindowPosition().getXPosition(),
+			(int) getVisibleWindowPosition().getYPosition(),
+			(int) getVisibleWindowPosition().getXPosition()+getVisibleWindowWidth(),
+			(int) getVisibleWindowPosition().getYPosition()+getVisibleWindowHeight()
+		};
+		return pos;
+	}
+	
+	/**
 	 *  Returns the position of the tile in which the given position is situated.
 	 * @param 	pixelX
 	 * 			The X coordinate of the given position.
@@ -158,7 +267,7 @@ public class World {
 	 */
 	@Raw
 	public void addTileType(Tile tile) {
-		tileTypes.put(tile.getPosition(), tile.getType());
+		tileTypes.put(tile.getPositionString(), tile.getType());
 	}
 	
 	/**
@@ -178,7 +287,8 @@ public class World {
 		if (!Position.isValidYPosition(bottomY, this.getPixelHeight()))
 			throw new IllegalYPositionException(bottomY);
 		int[] position = getTilePosition(leftX, bottomY);
-		return tileTypes.get(position).getInt();
+		String posString = ("("+position[0]+","+position[1]+")");
+		return tileTypes.get(posString).getInt();
 	}
 	
 	public boolean isPassable(int leftX,int bottomY){
@@ -197,7 +307,7 @@ public class World {
 	/**
 	 * Variable registering the different tileTypes for each tile in the this World.
 	 */
-	private final Map<int[], TileType> tileTypes = new HashMap<int[], TileType>();
+	private final Map<String, TileType> tileTypes = new HashMap<String, TileType>();
 	
 	
 	public static boolean hasValidAmountOfObjects(World world) {
@@ -315,6 +425,7 @@ public class World {
 	public void setMazub(Mazub alien) {
 		assert canHaveAsMazub(alien);
 		mazub = alien;
+		mazub.setWorld(this);
 	}
 	
 	public boolean canHaveAsMazub(Mazub alien) {
@@ -367,6 +478,7 @@ public class World {
 	
 	public void advanceTime(double dt) {
 		mazub.advanceTime(dt);
+		updateWindowPosition();
 		for (String key : plants.keySet()) {
 			plants.get(key).advanceTime(dt);
 		}
@@ -393,6 +505,41 @@ public class World {
 			this.setState(State.TERMINATED);
 				
 		}
+	}
+	
+	public boolean hasWonGame() {
+		int[] mazubPos = getMazub().getPosition().getPosition();
+		int[] mazubTile = getTilePosition(mazubPos[0], mazubPos[1]);
+		if ((getTargetTileX() == mazubTile[0]) && (getTargetTileY() == mazubTile[1]))
+			return true;
+		else
+			return false;
+	}
+	
+	public int[][] getOccupiedTiles(int leftX, int bottomY, int rightX, int topY) {
+		List<int[]> tiles = new ArrayList<int[]>();
+		int amountXTiles = getAmountOfOccupiedTiles(leftX, getTileSize(), rightX-leftX );
+		int amountYTiles = getAmountOfOccupiedTiles(bottomY, getTileSize(), topY - bottomY);
+		for (int i = 0; i < amountYTiles; i++) {
+			for (int j = 0; j < amountXTiles; j++) {
+				int[] position = new int[]{leftX + (j* getTileSize()),bottomY + (i*getTileSize())};
+				tiles.add(position);
+			}
+		}
+		int[][] tilesInt = new int[tiles.size()][];
+		for (int i = 0; i < tiles.size(); i++) {
+		    int[] row = tiles.get(i);
+		    tilesInt[i] = row;
+		}
+		return tilesInt;
+	}
+	
+	public static int getAmountOfOccupiedTiles(int position, int tileLength, int length) {
+		if (position % tileLength == 0) {
+			return (length / tileLength) + 1;
+		}
+		else
+			return length / tileLength;
 	}
 	
 }

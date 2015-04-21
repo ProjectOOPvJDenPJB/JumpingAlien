@@ -112,8 +112,8 @@ public class Facade implements IFacadePart2  {
 	public World createWorld(int tileSize, int nbTilesX, int nbTilesY,
 			int visibleWindowWidth, int visibleWindowHeight, int targetTileX,
 			int targetTileY) {
-		// TODO Auto-generated method stub
-		return null;
+		return new World(tileSize,nbTilesX,nbTilesY,visibleWindowWidth,visibleWindowHeight,
+				targetTileX,targetTileY);
 	}
 
 	@Override
@@ -134,14 +134,12 @@ public class Facade implements IFacadePart2  {
 
 	@Override
 	public boolean isGameOver(World world) {
-		// TODO Auto-generated method stub
-		return false;
+		return world.isTerminated();
 	}
 
 	@Override
 	public boolean didPlayerWin(World world) {
-		// TODO Auto-generated method stub
-		return false;
+		return world.hasWonGame();
 	}
 
 	@Override
@@ -155,8 +153,7 @@ public class Facade implements IFacadePart2  {
 
 	@Override
 	public int[] getVisibleWindow(World world) {
-		// TODO Auto-generated method stub
-		return null;
+		return world.getVisibleWindowPositionArray();
 	}
 
 	@Override
@@ -167,8 +164,7 @@ public class Facade implements IFacadePart2  {
 	@Override
 	public int[][] getTilePositionsIn(World world, int pixelLeft,
 			int pixelBottom, int pixelRight, int pixelTop) {
-		// TODO Auto-generated method stub
-		return null;
+		return world.getOccupiedTiles(pixelLeft, pixelBottom, pixelRight, pixelTop);
 	}
 
 	@Override
@@ -184,7 +180,7 @@ public class Facade implements IFacadePart2  {
 	@Override
 	public void setGeologicalFeature(World world, int tileX, int tileY,
 			int tileType) {
-		Tile tile = new Tile(tileX,tileY,tileType);
+		Tile tile = new Tile(tileX * world.getTileSize(),tileY * world.getTileSize(),tileType);
 		world.addTileType(tile);
 	}
 
@@ -216,8 +212,7 @@ public class Facade implements IFacadePart2  {
 
 	@Override
 	public Sprite getCurrentSprite(Plant plant) {
-		// TODO Auto-generated method stub
-		return null;
+		return getCurrentSprite(plant);
 	}
 
 	@Override
@@ -237,8 +232,7 @@ public class Facade implements IFacadePart2  {
 
 	@Override
 	public Sprite getCurrentSprite(Shark shark) {
-		// TODO Auto-generated method stub
-		return null;
+		return getCurrentSprite(shark);
 	}
 
 	@Override
@@ -258,26 +252,22 @@ public class Facade implements IFacadePart2  {
 
 	@Override
 	public Sprite getCurrentSprite(Slime slime) {
-		// TODO Auto-generated method stub
-		return null;
+		return getCurrentSprite(slime);
 	}
 
 	@Override
 	public Plant createPlant(int x, int y, Sprite[] sprites) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Plant(x, y, sprites);
 	}
 
 	@Override
 	public Shark createShark(int x, int y, Sprite[] sprites) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Shark(x, y, sprites);
 	}
 
 	@Override
 	public Slime createSlime(int x, int y, Sprite[] sprites, School school) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Slime(x, y, sprites, school);
 	}
 
 	@Override
@@ -289,8 +279,7 @@ public class Facade implements IFacadePart2  {
 
 	@Override
 	public School getSchool(Slime slime) {
-		// TODO Auto-generated method stub
-		return null;
+		return slime.getSchool();
 	}
 
 }
