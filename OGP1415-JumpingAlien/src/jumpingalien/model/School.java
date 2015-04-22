@@ -2,9 +2,18 @@ package jumpingalien.model;
 
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * A class of School.
+ * Link to repository: https://github.com/ProjectOOPvJDenPJB/JumpingAlien
+ * 
+ * @author Joren Dhont (Ingenieurswetenschappen: Computerwetenschappen - Elektrotechniek) 
+ * 	& Pieterjan Beerden (Ingenieurswetenschappen: Elektrotechniek - Computerwetenschappen)
+ * @version 0.1
+ */
 public class School {
-
+	/**
+	 * Initializes a new school of slimes.
+	 */
 	public School(){
 		
 	}

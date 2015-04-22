@@ -440,7 +440,16 @@ public abstract class LivingCreatures {
 	
 	private final static Map<String,Slime> slimes = new HashMap<String,Slime>();
 
-	
+	/**
+	 * Adds the given hit points to the current hit points of this living creature
+	 * @param HP
+	 * 		  The given hit points to add
+	 * @post  The hit points for this living creature are added with the given hit points
+	 * 		  |new.setHP(getHP() + HP);
+	 * @post  If the given hit point are smaller then zero and the living creature
+	 * 		  is a slime. Then one hit point is subtracted from every other slime in the
+	 * 		  same school as the living creature.
+	 */
 	public void addHP(int HP) {
 		if(this instanceof Slime){
 			if (HP < 0){
@@ -452,40 +461,83 @@ public abstract class LivingCreatures {
 				}
 			}
 		}
-		setHP(getHP() + HP);
+		this.setHP(getHP() + HP);
 	}
 	
+	/**
+	 * @return the time since this living creature was hit by an enemy
+	 */
 	public double getHitTimer(){
 		return this.hitTimer;
 	}
 	
+	/**
+	 * the time since the living creature was hit by an enemy
+	 */
 	private double hitTimer;
 	
+	/**
+	 * sets the time since last hit by an enemy to the given time
+	 * @param time
+	 * 		  The given time
+	 * @post  Sets the hit timer to the given time
+	 * 		  |new.getHitTimer() = time;
+	 */
 	public void setHitTimer(double time){
 		this.hitTimer = time;
 	}
 	
+	/**
+	 * @return the time since the last terrain damage
+	 */
 	protected double getTerrainTimer() {
 		return this.terrainTimer;
 	}
 	
+	/**
+	 * The time since the last terrain damage
+	 */
 	protected double terrainTimer;
 	
+	/**
+	 * Sets the time since the last terrain damage to the given time
+	 * @param time
+	 * 		  The given time
+	 * @post  Sets the terrain timer to the given time
+	 * 		  |new.getTerrainTimer() = time;
+	 */
 	protected void setTerrainTimer(double time) {
 		assert isValidTimerValue(time);
 		terrainTimer = time;
 	}
-
+	
+	/**
+	 * Checks whether the given time is a valid time
+	 * @param time
+	 * 		  The time to check
+	 * @return	True if the time is valid otherwise returns false
+	 */
 	protected boolean isValidTimerValue(double time) {
 		return Util.fuzzyGreaterThanOrEqualTo(time, 0);
 	}
 	
+	/**
+	 * applies magma damage to the living creature
+	 * @param timeInterval
+	 * 		  The given time interval 
+	 * @Post  Fifty hit point are subtracted from the
+	 * 		  current hit point of the living creature if it hasn't received any terrain damage
+	 * 		  in the last 0.2 seconds.
+	 * 		  |if (Util.fuzzyGreaterThanOrEqualTo(getTerrainTimer(), 0.2)))
+	 * 		  |new.getHP() = old.getHP() - 50
+	 * 		  |new.getTerrainTimer = 0;
+	 * @Post  The living creature has received any terrain damage the last 0.2 seconds
+	 * 		  so no damage is applied and the terrainTimer goes up
+	 * 	      |if (getTerrainTimer() < 0.2)
+	 * 		  |this.setTerrainTimer(this.getTerrainTimer() + timeInterval);
+	 */
 	private void applyMagmaDamage(double timeInterval) {
-		if (this.getTerrainTimer() < 0) {
-			addHP(-50);
-			this.setTerrainTimer(0);
-		}
-		else if (Util.fuzzyGreaterThanOrEqualTo(getTerrainTimer(), 0.2)){
+		if (Util.fuzzyGreaterThanOrEqualTo(getTerrainTimer(), 0.2)){
 				addHP(-50);
 				this.setTerrainTimer(0);
 		}else{
@@ -493,11 +545,23 @@ public abstract class LivingCreatures {
 		}
 	}
 
+	/**
+	 * applies water damage to the living creature
+	 * @param timeInterval
+	 * 		  The given time interval 
+	 * @Post  Two hit point are subtracted from the current hit point 
+	 * 		  of the living creature if it hasn't received any terrain damage
+	 * 		  in the last 0.2 seconds.
+	 * 		  |if (Util.fuzzyGreaterThanOrEqualTo(getTerrainTimer(), 0.2)))
+	 * 		  |new.getHP() = old.getHP() - 2
+	 * 		  |new.getTerrainTimer() = 0
+	 * @Post  The living creature has received any terrain damage the last 0.2 seconds
+	 * 		  so no damage is applied and the terrainTimer goes up
+	 * 	      |if (getTerrainTimer() < 0.2)
+	 * 		  |this.setTerrainTimer(this.getTerrainTimer() + timeInterval);
+	 */
 	private void applyWaterDamage(double timeInterval) {
-		if (this.getTerrainTimer() < 0){
-			addHP(-2);
-			this.setTerrainTimer(0);
-		}else if (Util.fuzzyGreaterThanOrEqualTo(getTerrainTimer(), 0.2)){
+		if ((Util.fuzzyGreaterThanOrEqualTo(getTerrainTimer(), 0.2))){
 			addHP(-2);
 			this.setTerrainTimer(0);
 		}else{
@@ -505,10 +569,27 @@ public abstract class LivingCreatures {
 		}
 	}
 	
+	/**
+	 * applies air damage to the living creature
+	 * @param timeInterval
+	 * 		  The given time interval 
+	 * @Post  Six hit point are subtracted from the
+	 * 		  current hit point of the living creature if it hasn't received any terrain damage
+	 * 		  in the last 0.2 seconds.
+	 * 		  |if (Util.fuzzyGreaterThanOrEqualTo(getTerrainTimer(), 0.2)))
+	 * 		  |new.getHP() = old.getHP() - 6
+	 * 		  |new.getTerrainTimer = 0;
+	 * @Post  The living creature has received any terrain damage the last 0.2 seconds
+	 * 		  so no damage is applied and the terrainTimer goes up
+	 * 	      |if (getTerrainTimer() < 0.2)
+	 * 		  |this.setTerrainTimer(this.getTerrainTimer() + timeInterval);
+	 */
 	private void applyAirDamage(double timeInterval){
-		if (Util.fuzzyGreaterThanOrEqualTo(this.getTerrainTimer(), 0.2)){
-			this.addHP(-6);
+		if ((Util.fuzzyGreaterThanOrEqualTo(getTerrainTimer(), 0.2))){
+			addHP(-6);
 			this.setTerrainTimer(0);
+		}else{
+			this.setTerrainTimer(this.getTerrainTimer() + timeInterval);
 		}
 	}
 
@@ -559,25 +640,44 @@ public abstract class LivingCreatures {
 		ALIVE,DYING,DEAD;
 	}
 	
+	/**
+	 * @return the current state of this living creature
+	 */
 	protected State getState() {
 		return this.state;
 	}
 	
 	protected State state;
 	
+	/**
+	 * Sets the current state for the living creature the given state
+	 * @param state
+	 * 		  The given state
+	 * @post  Sets the current state for the living creature the given state
+	 * 		  | new.state = state;
+	 */
 	protected void setState(State state) {
 		assert (state != null);
 		this.state = state;
 	}
 	
+	/**
+	 * @return whether the living creature is dead or not
+ 	 */
 	protected boolean isDead() {
 		return (this.getState() == State.DEAD);
 	}
 	
+	/**
+	 * @return whether the living creatures is dying or not
+	 */
 	protected boolean isDying() {
 		return (this.getState() == State.DYING);
 	}
 	
+	/**
+	 * @return whether the living creature is alive or not
+	 */
 	protected boolean isAlive() {
 		return (this.getState() == State.ALIVE);
 	}
@@ -784,6 +884,9 @@ public abstract class LivingCreatures {
 		return Util.fuzzyGreaterThanOrEqualTo(size[0], 0) && Util.fuzzyGreaterThanOrEqualTo(size[1], 0);
 	}
 	
+	/**
+	 * @return wether or not the living creature collides with the terrain
+	 */
 	public boolean collidesWithTerrain() {
 		for (int[] tile : getWorld().getOccupiedTiles((int)getXPosition(),(int)getYPosition(),
 				(int)getXPosition()+getCurrentSprite().getWidth(),(int)getYPosition()+getCurrentSprite().getHeight())) {
@@ -793,26 +896,51 @@ public abstract class LivingCreatures {
 		return true;
 	}
 	
+	/**
+	 * @return whether the movement for the living creature is blocked or not
+	 */
 	public boolean getMovementBlocked(){
 		return this.movementBlocked;
 	}
 	
 	private boolean movementBlocked = false;
 		
+	/**
+	 * sets a boolean determing if the movement of this living creature is blocked
+	 * @param flag
+	 * 		  The given flag for the blocked movement
+	 * @post  The boolean movementBlocked is set to the given flag
+	 * 		  | new.movementBlocked = flag
+	 */
 	public void setMovementBlocked(boolean flag){
 		this.movementBlocked = flag;
 	}
 	
+	/**
+	 * @return the current death timer of this living creature
+	 */
 	protected double getDeathTimer() {
 		return this.deathTimer;
 	}
 	protected double deathTimer;
 	
+	/**
+	 * Sets the death timer to the given time.
+	 * @param time
+	 * 		  The given time for the death timer
+	 * @post  The death timer is set to the given time
+	 * 		  | new.getDeathTimer() = time;
+	 */
 	protected void setDeathTimer(double time) {
 		assert isValidTimerValue(time);
 		this.deathTimer = time;
 	}
 	
+	/**
+	 * Applies terrain damage to the living creature if needed
+	 * @param timeInterval
+	 * 		  The current timeInterval since the last change of position
+	 */
 	public void applyTerrainDmg(double timeInterval){
 		int tileType = Interaction.collidesWithTerrain(this);
 		if (tileType == 3){
@@ -825,7 +953,7 @@ public abstract class LivingCreatures {
 			}
 		}else{
 			if (!(this instanceof Shark)){
-				this.setTerrainTimer(-1);
+				this.setTerrainTimer(this.getTerrainTimer() + timeInterval);
 			}else{
 				this.applyAirDamage(timeInterval);
 			}

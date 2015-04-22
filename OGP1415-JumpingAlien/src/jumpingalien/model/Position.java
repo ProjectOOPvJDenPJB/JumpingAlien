@@ -7,12 +7,29 @@ import jumpingalien.util.Util;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
- * @author Joren
- *
+ * A class of Position.
+ * Link to repository: https://github.com/ProjectOOPvJDenPJB/JumpingAlien
+ * 
+ * @author Joren Dhont (Ingenieurswetenschappen: Computerwetenschappen - Elektrotechniek) 
+ * 	& Pieterjan Beerden (Ingenieurswetenschappen: Elektrotechniek - Computerwetenschappen)
+ * @version 0.1
  */
 @Value
 public class Position {
 		
+	/**
+	 * Initializes this position with the given positions and a given world
+	 * @param XPosition
+	 * 		  The position on the X-axis
+	 * @param YPosition
+	 * 		  The position on the y-axis
+	 * @param World
+	 * 		  The world for which the position is given
+	 * @post	The position is the same as the given position.
+	 * 			| (new.getXPosition() == XPosition) && (new.getYPosition() == YPosition)
+	 * @Post	The world for which the position is given is the same as the given world
+	 * 			| (new.getWorld() == world) && (new.isworld == True)
+	 */
 	public Position(double XPosition, double YPosition, World World) {
 		this.world = World;
 		if (! isValidXPosition(XPosition, getWidth())) {
@@ -26,14 +43,34 @@ public class Position {
 		
 	}
 	
+	/**
+	 * Initializes a new position with the given positions 
+	 * @param XPosition
+	 * 		  The position on the X-axis
+	 * @param YPosition
+	 * 		  The position on the y-axis
+	 * @effect	The new position is initialized with the given XPosition and YPosition
+	 * 			and null as world.
+	 * 				this(XPosition,YPosition,null);
+
+	 */
 	public Position(double XPosition, double YPosition) {
 		this(XPosition,YPosition,null);
 	}
 	
+	/**
+	 * Initializes a new position 
+	 * @effect	The new position is initialized with the zero for the XPosition and YPosition
+	 * 				this(XPosition,YPosition);
+
+	 */
 	public Position() {
-		this(0,0,null);
+		this(0,0);
 	}
 	
+	/**
+	 * Return the X position of this position.
+	 */
 	public double getXPosition() {
 		return this.XPos;
 	}
@@ -53,6 +90,9 @@ public class Position {
 	
 	private final double XPos;
 	
+	/**
+	 * Return the Y position of this position.
+	 */
 	public double getYPosition() {
 		return this.YPos;
 	}
@@ -73,19 +113,29 @@ public class Position {
 	
 	private final double YPos;
 
-	
+	/**
+	 * Returns the X and Y position of this position in an integer array.
+	 */
 	public int[] getPosition() {
 		int[] Position = new int[2];
 		Position[0] = (int) getXPosition();
 		Position[1] = (int) getYPosition();
 		return Position;
 	}
-	
+
+	/**
+	 * 
+	 * @return the world of this position
+	 */
 	private World getWorld() {
 		return this.world;
 	}
+
 	private final World world;
 	
+	/**
+	 * @return the width of the world from this position
+	 */
 	public int getWidth() {
 		if (this.getWorld() == null) 
 			return 1024;
@@ -93,6 +143,9 @@ public class Position {
 			return world.getPixelWidth();
 	}
 	
+	/**
+	 * @return the height of the world from this position
+	 */
 	public int getHeight() {
 		if (this.getWorld() == null) 
 			return 768;

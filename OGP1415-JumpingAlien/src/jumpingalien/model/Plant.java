@@ -63,6 +63,17 @@ public class Plant extends LivingCreatures{
 
 	}
 	
+	/**
+	 * terminates this plant if it's still alive.
+	 * @post If the plant isn't dying yet but meets the requirements to die
+	 * 		 |if isAlive() && (getHP() > 0) && (! getOutOfBounds())
+	 * 		 | new.getState == state.DYING
+	 * @post If the plant is dying for longer then 0.6 seconds or out of the game boundaries he is terminated
+	 * 		 |if isDying() && Util.fuzzyGreaterThanOrEqualTo(getDeathTimer(), 0.6) || getOutOfBounds()
+	 * 		 | new.getWorld() == null
+	 * 		 | new.getState() == state.DEAD
+	 * 		 | new !in (old.getWorld().getSlimes())
+	 */
 	public void terminate() {
 		if (!isDead()) {
 			if ((isAlive() && (getHP() > 0) && (! getOutOfBounds())))
@@ -82,18 +93,27 @@ public class Plant extends LivingCreatures{
 		}
 	}
 
+	/**
+	 * @return true if the plant is eatable, else returns false
+	 */
 	public boolean isEatablePlant() {
 		if (isAlive())
 			return true;
 		else
 			return false;
 	}
-
+	
+	/**
+	 * returns the maximum hit points for this slime
+	 */
 	@Override
 	public int getMaxHP() {
 		return 1;
 	}
 
+	/**
+	 * returns the minimum hit points for this slime
+	 */
 	@Override
 	public int getMinHP() {
 		return 0;
