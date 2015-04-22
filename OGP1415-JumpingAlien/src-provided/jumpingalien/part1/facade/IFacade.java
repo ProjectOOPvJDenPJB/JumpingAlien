@@ -1,6 +1,7 @@
 package jumpingalien.part1.facade;
 
 import jumpingalien.model.Mazub;
+import jumpingalien.model.World;
 import jumpingalien.util.Sprite;
 
 /**
@@ -215,4 +216,5 @@ public interface IFacade {
 	 *            alien's time.
 	 */
 	void advanceTime(Mazub alien, double dt);
+
 }

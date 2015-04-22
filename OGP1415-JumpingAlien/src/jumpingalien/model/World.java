@@ -543,4 +543,14 @@ public class World {
 			return length / tileLength;
 	}
 	
+	public void setGameStarted(boolean flag){
+		this.gameStarted = flag;
+	}
+	
+	private boolean gameStarted = false;
+	
+	public boolean gameStarted(){
+		return this.gameStarted;
+	}
+	
 }

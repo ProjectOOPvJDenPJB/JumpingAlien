@@ -13,32 +13,25 @@ public class Tile {
 	}
 	
 	public Tile(int leftX, int bottomY, int tileType) {
+		this.leftX = leftX;
+		this.bottomY = bottomY;
 		if (tileType == 1) {
-			this.leftX = leftX;
-			this.bottomY = bottomY;
 			this.type = TileType.GROUND;
 		}
 		else if (tileType == 2) {
-			this.leftX = leftX;
-			this.bottomY = bottomY;
 			this.type = TileType.WATER;
 		}
 		else if (tileType == 3) {
-			this.leftX = leftX;
-			this.bottomY = bottomY;
 			this.type = TileType.MAGMA;
 		}
 		else {
-			this.leftX = leftX;
-			this.bottomY = bottomY;
+
 			this.type = TileType.AIR;
 		}
 	}
 	
 	public Tile(int leftX, int bottomY) {
-		this.leftX = leftX;
-		this.bottomY = bottomY;
-		this.type = TileType.AIR;
+		this(leftX,bottomY,0);
 	}
 	
 	/**

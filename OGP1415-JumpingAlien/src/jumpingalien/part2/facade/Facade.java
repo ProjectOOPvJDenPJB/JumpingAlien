@@ -95,7 +95,7 @@ public class Facade implements IFacadePart2  {
 		alien.endDuck();
 	}
 
-	public void advanceTime(Mazub alien, double dt) throws jumpingalien.util.ModelException {
+ public void advanceTime(Mazub alien, double dt) throws jumpingalien.util.ModelException {
 		try {
 			alien.advanceTime(dt);
 		} catch (IllegalTimeIntervalException exc) {
@@ -128,8 +128,7 @@ public class Facade implements IFacadePart2  {
 
 	@Override
 	public void startGame(World world) {
-		// TODO Auto-generated method stub
-		
+		world.setGameStarted(true);
 	}
 
 	@Override
@@ -180,8 +179,10 @@ public class Facade implements IFacadePart2  {
 	@Override
 	public void setGeologicalFeature(World world, int tileX, int tileY,
 			int tileType) {
-		Tile tile = new Tile(tileX * world.getTileSize(),tileY * world.getTileSize(),tileType);
-		world.addTileType(tile);
+		if (!world.gameStarted()){
+			Tile tile = new Tile(tileX * world.getTileSize(),tileY * world.getTileSize(),tileType);
+			world.addTileType(tile);
+		}
 	}
 
 	@Override
@@ -191,13 +192,18 @@ public class Facade implements IFacadePart2  {
 
 	@Override
 	public boolean isImmune(Mazub alien) {
-		// TODO Auto-generated method stub
+		if (alien.getHitTimer() < 0.6){
+			return true;
+		}else{
 		return false;
+		}
 	}
 
 	@Override
 	public void addPlant(World world, Plant plant) {
-		world.addPlant(plant);
+		if (!world.gameStarted()){
+			world.addPlant(plant);
+		}
 	}
 
 	@Override
@@ -217,7 +223,9 @@ public class Facade implements IFacadePart2  {
 
 	@Override
 	public void addShark(World world, Shark shark) {
-		world.addShark(shark);
+		if (!world.gameStarted()){
+			world.addShark(shark);
+		}
 	}
 
 	@Override
@@ -237,7 +245,9 @@ public class Facade implements IFacadePart2  {
 
 	@Override
 	public void addSlime(World world, Slime slime) {
-		world.addSlime(slime);
+		if (!world.gameStarted()){
+			world.addSlime(slime);
+		}
 	}
 
 	@Override
@@ -257,7 +267,7 @@ public class Facade implements IFacadePart2  {
 
 	@Override
 	public Plant createPlant(int x, int y, Sprite[] sprites) {
-		return new Plant(x, y, sprites);
+			return new Plant(x, y, sprites);
 	}
 
 	@Override
