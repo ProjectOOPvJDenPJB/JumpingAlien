@@ -157,7 +157,7 @@ public class Facade implements IFacadePart2  {
 
 	@Override
 	public int[] getBottomLeftPixelOfTile(World world, int tileX, int tileY) {
-		return world.getTilePosition(tileX, tileY);
+		return world.getBottomLeftPixelOfTile(tileX, tileY);
 	}
 
 	@Override
@@ -180,8 +180,7 @@ public class Facade implements IFacadePart2  {
 	public void setGeologicalFeature(World world, int tileX, int tileY,
 			int tileType) {
 		if (!world.gameStarted()){
-			Tile tile = new Tile((tileX * world.getTileSize()),tileY * world.getTileSize(),tileType);
-			world.addTileType(tile);
+			world.addTileType(tileX,tileY,tileType);
 		}
 	}
 
@@ -224,6 +223,7 @@ public class Facade implements IFacadePart2  {
 	@Override
 	public void addShark(World world, Shark shark) {
 		if (!world.gameStarted()){
+			System.out.println("WTF");
 			world.addShark(shark);
 		}
 	}
