@@ -17,12 +17,12 @@ public abstract class LivingCreatures {
 			double verticalVelocity, double horizontalAcceleration,double verticalAcceleration,
 			double initialHorizontalVelocity,
 			double maximumHorizontalVelocity, World world, Sprite[] sprites,int hitpoints){
+		this.setWorld(world);
 		LivingCreatures.isValidSpriteArray(sprites,this);
 		assert isValidMaximumHorizontalVelocity(maximumHorizontalVelocity, initialHorizontalVelocity);
 		assert isValidInitialVelocity(initialHorizontalVelocity, maximumHorizontalVelocity);
 		this.initialHorizontalVelocity = initialHorizontalVelocity;
 		this.setMaximumHorizontalVelocity(maximumHorizontalVelocity);
-		this.setWorld(world);
 		this.setHorizontalVelocity(horizontalVelocity);
 		this.setVerticalVelocity(verticalVelocity);
 		this.setHP(hitpoints);
@@ -100,6 +100,7 @@ public abstract class LivingCreatures {
 	 */
 	@Basic @Raw
 	public void setPosition(double positionLeftX, double positionBottomY) throws IllegalXPositionException, IllegalYPositionException {
+		if (this instanceof Shark)
 		try {
 			position =  new Position(positionLeftX,positionBottomY,getWorld());
 		} catch (IllegalXPositionException | IllegalYPositionException exc) {
@@ -374,16 +375,6 @@ public abstract class LivingCreatures {
 	 * Variable registering the spriteArray of this living creature.
 	 */
 	private final Sprite[] spriteArray;
-	
-	public String getKey() {
-		return this.key;
-	}
-	
-	private String key = null;
-	
-	public void setKey(String key) {
-		this.key = key;
-	}
 
 	public Sprite getCurrentSprite() {
 		if (getDirection() == Direction.RIGHT)
@@ -734,7 +725,6 @@ public abstract class LivingCreatures {
 	 * 			new.getXPosition = this.getXPosition() + distanceCalculated
 	 */
 	public void changeHorizontalPosition(double timeInterval){
-//		System.out.println("Dafak");
 		if (Util.fuzzyGreaterThanOrEqualTo(horizontalVelocity,this.getMaximumHorizontalVelocity())) 
 			this.setHorizontalAcceleration(0);
 		double newPositionX = this.getXPosition() + this.getDirection().getInt() * (100 * this.getHorizontalVelocity()*timeInterval 
@@ -742,7 +732,6 @@ public abstract class LivingCreatures {
 		
 		if (Util.fuzzyGreaterThanOrEqualTo(newPositionX, this.getXPosition())){
 			for(double i = this.getXPosition(); Util.fuzzyLessThanOrEqualTo(i, newPositionX); i += 0.01){
-//				System.out.println(i + ".." + getXPosition());
 				setXPosition(i);
 				Interaction.interactWithOtherCreatures(this);
 				if (this.getMovementBlocked() || this.collidesWithTerrain()){
@@ -774,14 +763,13 @@ public abstract class LivingCreatures {
 					+ 100 * this.getVerticalVelocity() * timeInterval
 					+ 50 * this.getVerticalAcceleration() * timeInterval * timeInterval;
 			
-			if (Util.fuzzyGreaterThanOrEqualTo(newPositionY, this.getXPosition())){
+			if (Util.fuzzyGreaterThanOrEqualTo(newPositionY, this.getYPosition())){
 				for(double i = this.getXPosition(); Util.fuzzyLessThanOrEqualTo(i, newPositionY); i += 0.01){
 					this.setYPosition(i);
 					Interaction.interactWithOtherCreatures(this);
 					if (this.getMovementBlocked() || this.collidesWithTerrain()){
 						this.endJump();
 						this.setMovementBlocked(false);
-						break;
 					}
 				}
 			}else{
@@ -794,7 +782,6 @@ public abstract class LivingCreatures {
 							this.setMovingVertical(false);
 							this.endJump();
 							this.setMovementBlocked(false);
-							break;
 						}								
 					}
 			}

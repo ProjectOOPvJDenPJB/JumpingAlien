@@ -3,8 +3,10 @@ package jumpingalien.model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import jumpingalien.util.Util;
 import be.kuleuven.cs.som.annotate.*;
@@ -22,13 +24,14 @@ public class World {
 		assert isValidTilePosition(targetTileX, targetTileY, tileSize);
 		// Aangezien we me nbTiles werken, is dit eigenlijk ni nodig.
 		this.tileSize = tileSize;
-		setNbTilesX(nbTilesX);
-		setNbTilesY(nbTilesY);
+		this.nbTilesX = nbTilesX;
+		this.nbTilesY = nbTilesY;
 		assert isValidVisibleWindow(visibleWindowWidth, visibleWindowHeight);
 		this.visibleWindowWidth = visibleWindowWidth;
 		this.visibleWindowHeight = visibleWindowHeight;
 		this.targetTileX = targetTileX;
 		this.targetTileY = targetTileY;
+		this.tileTypes = new int[getNbTilesX()][getNbTilesY()];
 	}
 
 	/**
@@ -40,17 +43,8 @@ public class World {
 	/**
 	 * Variable registering the amount of tiles on the X axis of this world.
 	 */
-	public int nbTilesX;
-	/**
-	 * Set the amount of tiles on the X axis of this world to a given amount.
-	 * @param 	nbTilesX
-	 * 			The new amount of tiles on the X axis of this world.
-	 * @post	The new amount of tiles on the X axis of this world is equal to the
-	 * 			given amount of tiles.
-	 */
-	public void setNbTilesX(int nbTilesX) {
-		this.nbTilesX = nbTilesX;
-	}
+	public final int nbTilesX;
+
 	/**
 	 * Return the amount of tiles on the Y axis of this world.
 	 */
@@ -60,17 +54,8 @@ public class World {
 	/**
 	 * Variable registering the amount of tiles on the Y axis of this world.
 	 */
-	public int nbTilesY;
-	/**
-	 * Set the amount of tiles on the Y axis of this world to a given amount.
-	 * @param 	nbTilesY
-	 *  		The new amount of tiles on the Y axis of this world.
-	 * @post	The new amount of tiles on the Y axis of this world is equal to the
-	 * 			given amount of tiles.
-	 */
-	public void setNbTilesY(int nbTilesY) {
-		this.nbTilesY = nbTilesY;
-	}
+	public final int nbTilesY;
+
 	/**
 	 * Return the length of the tiles in this World.
 	 * 	The length is expressed in pixels.
@@ -99,25 +84,6 @@ public class World {
 	 */
 	public final int tileSize;
 
-		
-	/**
-	 * Return the width of this world expressed in pixels.
-	 * @return	...
-	 * 			| result == this.getNbTilesX() * this.tileSize
-	 */
-	public int getPixelWidth() {
-		return getNbTilesX() * tileSize;
-	}
-	
-	/**
-	 * Return the height of this world expressed in pixels.
-	 * @return	...
-	 * 			| result == this.getNbTilesY() * this.tileSize
-	 */
-	public int getPixelHeight() {
-		return getNbTilesY() * tileSize;
-	}
-	
 	/**
 	 * Return the X position of the target tile in this World.
 	 */
@@ -141,7 +107,152 @@ public class World {
 	 * Variable registering the Y position of the target tile of this World.
 	 */
 	private final int targetTileY;
-
+		
+	/**
+	 * Return the width of this world expressed in pixels.
+	 * @return	...
+	 * 			| result == this.getNbTilesX() * this.tileSize
+	 */
+	public int getPixelWidth() {
+		return getNbTilesX() * tileSize;
+	}
+	
+	/**
+	 * Return the height of this world expressed in pixels.
+	 * @return	...
+	 * 			| result == this.getNbTilesY() * this.tileSize
+	 */
+	public int getPixelHeight() {
+		return getNbTilesY() * tileSize;
+	}
+	
+	/**
+	 * Return the position of the bottom left pixel of the given tile.
+	 * @param tileX
+	 * @param tileY
+	 * @return [tileX * getTileSize(), tileY * getTileSize()]
+	 */
+	public int[] getBottomLeftPixelOfTile(int tileX, int tileY) {
+		return new int[]{tileX*getTileSize(), tileY*getTileSize()};
+	}
+	
+	/**
+	 *  Returns the position of the tile in which the given position is situated.
+	 * @param 	pixelX
+	 * 			The X coordinate of the given position.
+	 * @param 	pixelY
+	 * 			The Y coordinate of the given position.
+	 */
+	public int[] getTilePosition(int pixelX,int pixelY) {
+		if (Util.fuzzyGreaterThanOrEqualTo(pixelX, this.getPixelWidth()))
+			pixelX = this.getPixelWidth() - 1;
+		if (Util.fuzzyGreaterThanOrEqualTo(pixelY, this.getPixelHeight()))
+			pixelY = this.getPixelHeight() -1;
+		int[] position = new int[2];
+		position[0] = (pixelX / getTileSize());
+		position[1] = (pixelY / getTileSize());
+		return position;
+	}
+	
+	/**
+	 * Check whether the given position of a tile is a valid position of a tile.
+	 * 
+	 * @param 	tileX
+	 * 			The X coordinate of the tile to check, expressed in pixels.
+	 * @param	tileY
+	 * 			The Y coordinate of the tile to check, expressed in pixels.
+	 * @param 	tileSize
+	 * 			The size of the tile to check against.
+	 * @return	...
+	 * 			| result ==
+	 * 			|	(tileX % tileSize == 0) && (tileY % tileSize == 0)
+	 */
+	public static boolean isValidTilePosition(int tileX, int tileY, int tileSize) {
+		return (tileX % tileSize == 0) && (tileY % tileSize == 0);
+	}
+	
+	public static boolean isValidPosition(int leftX, int bottomY, World world) {
+		return ((leftX < 0) || (leftX > world.getPixelWidth()) || (bottomY < 0) || 
+				(bottomY > world.getPixelHeight()));
+	}
+	
+	/**
+	 * Adds a tile type to the map of tile types.
+	 * @param 	tile
+	 * 			The tile of which the tile type has to be added.
+	 * @post	...
+	 * 			| new.getTileType(tile.getLeftX(),tile.getBottomY()) == tile.getType
+	 */
+	@Raw
+	public void addTileType(int tileX, int tileY,int tileType) {
+		tileTypes[tileX][tileY] =  tileType;
+	}
+	
+	/**
+	 * Return the tile type of the tile with given position.
+	 * @param 	leftX
+	 * 			The X position of the tile to get the type from.
+	 * @param 	bottomY
+	 * 			The Y position of the tile to get the type from.
+	 * @throws	IllegalTileException
+	 * 			The given position is not a valid position for a tile in this World.
+	 * 			| ! isValidTilePosition(leftX,bottomY)
+	 * 			
+	 */
+	public int getTileType(int leftX, int bottomY) throws IllegalXPositionException, IllegalYPositionException {
+		if (!Position.isValidXPosition(leftX, this.getPixelWidth()))
+			throw new IllegalXPositionException(leftX);
+		if (!Position.isValidYPosition(bottomY, this.getPixelHeight()))
+			throw new IllegalYPositionException(bottomY);
+		int[] position = getTilePosition(leftX, bottomY);
+		return this.tileTypes[position[0]][position[1]];
+	}
+	
+	public boolean isPassable(int leftX,int bottomY){
+		int[] position = getTilePosition(leftX, bottomY);
+			if (this.tileTypes[position[0]][position[1]] == 1) {
+			if ((bottomY % getTileSize() == getTileSize()-1) &&
+					(isPassable(leftX, bottomY+1)))
+				return true;
+			else
+				return false;
+		}
+		else
+			return true;
+	}
+	
+	/**
+	 * Variable registering the different tileTypes for each tile in the this World.
+	 */
+	private int[][] tileTypes;
+	
+	public int[][] getOccupiedTiles(int leftX, int bottomY, int rightX, int topY) {
+		List<int[]> tiles = new ArrayList<int[]>();
+		int amountXTiles = getAmountOfOccupiedTiles(leftX, getTileSize(), rightX-leftX );
+		int amountYTiles = getAmountOfOccupiedTiles(bottomY, getTileSize(), topY - bottomY);
+		int[] botLeftTile = getTilePosition(leftX, bottomY);
+		for (int i = botLeftTile[1]; i < amountYTiles; i++) {
+			for (int j = botLeftTile[0]; j < amountXTiles; j++) {
+				int[] position = new int[]{ j, i};
+				tiles.add(position);
+			}
+		}
+		int[][] tilesInt = new int[tiles.size()][];
+		for (int i = 0; i < tiles.size(); i++) {
+		    int[] row = tiles.get(i);
+		    tilesInt[i] = row;
+		}
+		return tilesInt;
+	}
+	
+	public static int getAmountOfOccupiedTiles(int position, int tileLength, int length) {
+		if (position % tileLength == 0) {
+			return (length / tileLength) + 1;
+		}
+		else
+			return length / tileLength;
+	}
+	
 	public boolean isValidVisibleWindow(int windowWidth, int windowHeight) {
 		return ((Util.fuzzyLessThanOrEqualTo(windowWidth, getPixelWidth())) && (Util.fuzzyLessThanOrEqualTo(windowHeight, getPixelHeight()))
 				&& (Util.fuzzyGreaterThanOrEqualTo(windowWidth, 0)) && (Util.fuzzyGreaterThanOrEqualTo(windowHeight, 0)));
@@ -223,104 +334,7 @@ public class World {
 			(int) getVisibleWindowPosition().getYPosition()+getVisibleWindowHeight()
 		};
 		return pos;
-	}
-	
-	/**
-	 *  Returns the position of the tile in which the given position is situated.
-	 * @param 	pixelX
-	 * 			The X coordinate of the given position.
-	 * @param 	pixelY
-	 * 			The Y coordinate of the given position.
-	 */
-	public int[] getTilePosition(int pixelX,int pixelY) {
-		if (Util.fuzzyGreaterThanOrEqualTo(pixelX, this.getPixelWidth()))
-			pixelX = this.getPixelWidth() - 1;
-		if (Util.fuzzyGreaterThanOrEqualTo(pixelY, this.getPixelHeight()))
-			pixelY = this.getPixelHeight() -1;
-		int[] position = new int[2];
-		position[0] = (pixelX - (pixelX % getTileSize()));
-		position[1] = (pixelY - (pixelY % getTileSize()));
-		return position;
-	}
-	
-	public Tile getTile() {
-		return null;
-	}
-	
-	/**
-	 * Check whether the given position of a tile is a valid position of a tile.
-	 * 
-	 * @param 	tileX
-	 * 			The X coordinate of the tile to check, expressed in pixels.
-	 * @param	tileY
-	 * 			The Y coordinate of the tile to check, expressed in pixels.
-	 * @param 	tileSize
-	 * 			The size of the tile to check against.
-	 * @return	...
-	 * 			| result ==
-	 * 			|	(tileX % tileSize == 0) && (tileY % tileSize == 0)
-	 */
-	public static boolean isValidTilePosition(int tileX, int tileY, int tileSize) {
-		return (tileX % tileSize == 0) && (tileY % tileSize == 0);
-	}
-	
-	public static boolean isValidPosition(int leftX, int bottomY, World world) {
-		return ((leftX < 0) || (leftX > world.getPixelWidth()) || (bottomY < 0) || 
-				(bottomY > world.getPixelHeight()));
-	}
-	
-	/**
-	 * Adds a tile type to the map of tile types.
-	 * @param 	tile
-	 * 			The tile of which the tile type has to be added.
-	 * @post	...
-	 * 			| new.getTileType(tile.getLeftX(),tile.getBottomY()) == tile.getType
-	 */
-	@Raw
-	public void addTileType(Tile tile) {
-		tileTypes.put(tile.getPositionString(), tile.getType());
-	}
-	
-	/**
-	 * Return the tile type of the tile with given position.
-	 * @param 	leftX
-	 * 			The X position of the tile to get the type from.
-	 * @param 	bottomY
-	 * 			The Y position of the tile to get the type from.
-	 * @throws	IllegalTileException
-	 * 			The given position is not a valid position for a tile in this World.
-	 * 			| ! isValidTilePosition(leftX,bottomY)
-	 * 			
-	 */
-	public int getTileType(int leftX, int bottomY) throws IllegalXPositionException, IllegalYPositionException {
-		if (!Position.isValidXPosition(leftX, this.getPixelWidth()))
-			throw new IllegalXPositionException(leftX);
-		if (!Position.isValidYPosition(bottomY, this.getPixelHeight()))
-			throw new IllegalYPositionException(bottomY);
-		int[] position = getTilePosition(leftX, bottomY);
-		String posString = ("("+position[0]+","+position[1]+")");
-		return tileTypes.get(posString).getInt();
-	}
-	
-	public boolean isPassable(int leftX,int bottomY){
-		int[] position = getTilePosition(leftX, bottomY);
-		String posString = ("("+position[0]+","+position[1]+")");
-			if (!tileTypes.get(posString).getPassable()) {
-			if ((bottomY % getTileSize() == getTileSize()-1) &&
-					(isPassable(leftX, bottomY+1)))
-				return true;
-			else
-				return false;
-		}
-		else
-			return true;
-	}
-	
-	/**
-	 * Variable registering the different tileTypes for each tile in the this World.
-	 */
-	private final Map<String, TileType> tileTypes = new HashMap<String, TileType>();
-	
+	}	
 	
 	public static boolean hasValidAmountOfObjects(World world) {
 		int size = world.slimes.size() + world.plants.size() + world.sharks.size();
@@ -328,96 +342,70 @@ public class World {
 	}
 	
 	public Collection<Plant> getPlants(){
-		Collection<Plant> elements = plants.values();
+		Collection<Plant> elements = plants;
 		return new ArrayList<Plant>(elements);
 	}
 	
     public boolean hasAsPlant(Plant plant) {
-        try {
-            return plants.get(plant.getKey()) == plant;
-        }
-        catch (NullPointerException exc) {
-        	// The plant either does not exist or is not a yet assigned
-        	// to a world thus does not have a key.
-            assert (plant == null) || (plant.getKey() == null);
-            return false;
-        }
+       return plants.contains(plant);
     }
 	
-	private final Map<String,Plant> plants = new HashMap<String,Plant>();
+	private final Set<Plant> plants = new HashSet<Plant>();
 	
 	public void addPlant(Plant plant) {
 		assert plant.canHaveAsWorld(this);
-		plant.setKey("Plant"+plants.size());
-		plants.put(plant.getKey(), plant);
+		plants.add(plant);
 		plant.setWorld(this);
 	}
 	
 	public void removePlant(Plant plant) {
 		assert this.hasAsPlant(plant) && (plant.hasAsWorld(this));
-		plants.remove(plant.getKey());
+		plants.remove(plant);
 	}
 	
 	public Collection<Slime> getSlimes(){
-		Collection<Slime> elements = slimes.values();
+		Collection<Slime> elements = slimes;
 		return new ArrayList<Slime>(elements);
 	}
 	
 	public boolean hasAsSlime(Slime slime) {
-        try {
-            return slimes.get(slime.getKey()) == slime;
-        }
-        catch (NullPointerException exc) {
-        	// The slime either does not exist or is not yet assigned
-        	// to a world thus does not have a key.
-            assert (slime == null) || (slime.getKey() == null);
-            return false;
-        }
+        return slimes.contains(slime);
+
     }
 	
-	private final Map<String,Slime> slimes = new HashMap<String,Slime>();
+	private final Set<Slime> slimes = new HashSet<Slime>();
 	
 	public void addSlime(Slime slime) {
 		assert slime.canHaveAsWorld(this);
-		slime.setKey("Slime"+slimes.size());
-		slimes.put(slime.getKey(), slime);
+		slimes.add(slime);
 		slime.setWorld(this);
 	}
 	
 	public void removeSlime(Slime slime) {
 		assert this.hasAsSlime(slime) && (slime.hasAsWorld(this));
-		slimes.remove(slime.getKey());
+		slimes.remove(slime);
 	}
 	
 	public Collection<Shark> getSharks(){
-		Collection<Shark> elements = sharks.values();
+		Collection<Shark> elements = sharks;
 		return new ArrayList<Shark>(elements);
 	}
 	
 	public boolean hasAsShark(Shark shark) {
-        try {
-            return sharks.get(shark.getKey()) == shark;
-        }
-        catch (NullPointerException exc) {
-        	// The shark either does not exist or is not yet assigned
-        	// to a world thus does not have a key.
-            assert (shark == null) || (shark.getKey() == null);
-            return false;
-        }
+          return sharks.contains(shark);
     }
 	
-	private final Map<String,Shark> sharks = new HashMap<String,Shark>();
+	private final Set<Shark> sharks = new HashSet<Shark>();
 	
 	public void addShark(Shark shark) {
 		assert shark.canHaveAsWorld(this);
-		shark.setKey("Shark"+sharks.size());
-		sharks.put(shark.getKey(), shark);
+		sharks.add(shark);
 		shark.setWorld(this);
 	}
 	
 	public void removeShark(Shark shark) {
 		assert this.hasAsShark(shark) && (shark.hasAsWorld(this));
-		sharks.remove(shark.getKey());
+		sharks.remove(shark);
 	}
 	
 	public boolean canHaveAsObject(Object object) {
@@ -492,16 +480,15 @@ public class World {
 //		System.out.println("MAZUB");
 		mazub.advanceTime(dt);
 		updateWindowPosition();
-		for (String key : plants.keySet()) {
+		for (Plant plant : plants) {
 //			System.out.println("PLANT?");
-			plants.get(key).advanceTime(dt);
+			plant.advanceTime(dt);
 		}
-		for (String key : slimes.keySet()) {
-			slimes.get(key).advanceTime(dt);
+		for (Slime slime : slimes) {
+			slime.advanceTime(dt);
 		}
-		for (String key : sharks.keySet()) {
-//			System.out.println("shark");
-			sharks.get(key).advanceTime(dt);
+		for (Shark shark : sharks) {
+			shark.advanceTime(dt);
 		}
 	}
 
@@ -529,32 +516,6 @@ public class World {
 			return true;
 		else
 			return false;
-	}
-	
-	public int[][] getOccupiedTiles(int leftX, int bottomY, int rightX, int topY) {
-		List<int[]> tiles = new ArrayList<int[]>();
-		int amountXTiles = getAmountOfOccupiedTiles(leftX, getTileSize(), rightX-leftX );
-		int amountYTiles = getAmountOfOccupiedTiles(bottomY, getTileSize(), topY - bottomY);
-		for (int i = 0; i < amountYTiles; i++) {
-			for (int j = 0; j < amountXTiles; j++) {
-				int[] position = new int[]{leftX + (j* getTileSize()),bottomY + (i*getTileSize())};
-				tiles.add(position);
-			}
-		}
-		int[][] tilesInt = new int[tiles.size()][];
-		for (int i = 0; i < tiles.size(); i++) {
-		    int[] row = tiles.get(i);
-		    tilesInt[i] = row;
-		}
-		return tilesInt;
-	}
-	
-	public static int getAmountOfOccupiedTiles(int position, int tileLength, int length) {
-		if (position % tileLength == 0) {
-			return (length / tileLength) + 1;
-		}
-		else
-			return length / tileLength;
 	}
 	
 	public void setGameStarted(boolean flag){

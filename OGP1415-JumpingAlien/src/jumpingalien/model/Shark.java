@@ -102,7 +102,9 @@ public class Shark extends LivingCreatures {
 				setState(State.DYING);
 				setDeathTimer(0);
 			}
+
 		}
+
 	}
 
 	/**
@@ -163,7 +165,7 @@ public class Shark extends LivingCreatures {
 				this.setRunTime(0);
 				this.endJump();
 				this.endMove();
-				this.startJump(2.0,-10.0);
+				this.startJump(2,-10);
 				this.startMove(this.getDirection().oppositeDirection());
 				this.setDirection(this.getDirection().oppositeDirection());
 				this.generateRandomTime();
