@@ -128,9 +128,10 @@ public class World {
 	
 	/**
 	 * Return the position of the bottom left pixel of the given tile.
-	 * @param tileX
-	 * @param tileY
-	 * @return [tileX * getTileSize(), tileY * getTileSize()]
+	 * @param 	tileX
+	 * @param 	tileY
+	 * @return 	...
+	 * 			| [tileX * getTileSize(), tileY * getTileSize()]
 	 */
 	public int[] getBottomLeftPixelOfTile(int tileX, int tileY) {
 		return new int[]{tileX*getTileSize(), tileY*getTileSize()};
@@ -142,12 +143,18 @@ public class World {
 	 * 			The X coordinate of the given position.
 	 * @param 	pixelY
 	 * 			The Y coordinate of the given position.
+	 * @post	if (pixelX > getPixelWidth())
+	 * 				then (position[0] = getPixelWidth())
+	 * @post	if (pixelY > getPixelHeigh())
+	 * 				then (position[1] = getPixelHeigth())
+	 * @return	An array of integers where position[0] is the x_T position
+	 * 			and position [1] is the x_Y position
 	 */
 	public int[] getTilePosition(int pixelX,int pixelY) {
 		if (Util.fuzzyGreaterThanOrEqualTo(pixelX, this.getPixelWidth()))
-			pixelX = this.getPixelWidth() - 1;
+			pixelX = this.getPixelWidth();
 		if (Util.fuzzyGreaterThanOrEqualTo(pixelY, this.getPixelHeight()))
-			pixelY = this.getPixelHeight() -1;
+			pixelY = this.getPixelHeight();
 		int[] position = new int[2];
 		position[0] = (pixelX / getTileSize());
 		position[1] = (pixelY / getTileSize());
@@ -171,6 +178,16 @@ public class World {
 		return (tileX % tileSize == 0) && (tileY % tileSize == 0);
 	}
 	
+	/**
+	 * Check whether the given position is a valid position in the world.
+	 * @param 	leftX
+	 * @param 	bottomY
+	 * @param 	world
+	 * @return 	...
+	 * 			| result ==
+	 * 			|	(leftX < 0) || (leftX > world.getPixelWidth()) || (bottomY < 0) || 
+				|	(bottomY > world.getPixelHeight())
+	 */
 	public static boolean isValidPosition(int leftX, int bottomY, World world) {
 		return ((leftX < 0) || (leftX > world.getPixelWidth()) || (bottomY < 0) || 
 				(bottomY > world.getPixelHeight()));
@@ -180,11 +197,14 @@ public class World {
 	 * Adds a tile type to the map of tile types.
 	 * @param 	tile
 	 * 			The tile of which the tile type has to be added.
+	 * @pre		...
+	 * 			| isValidTilePosition(tileX, tileY, getTileSize)
 	 * @post	...
 	 * 			| new.getTileType(tile.getLeftX(),tile.getBottomY()) == tile.getType
 	 */
 	@Raw
 	public void addTileType(int tileX, int tileY,int tileType) {
+		assert isValidTilePosition(tileX, tileY, getTileSize());
 		tileTypes[tileX][tileY] =  tileType;
 	}
 	
@@ -196,8 +216,7 @@ public class World {
 	 * 			The Y position of the tile to get the type from.
 	 * @throws	IllegalTileException
 	 * 			The given position is not a valid position for a tile in this World.
-	 * 			| ! isValidTilePosition(leftX,bottomY)
-	 * 			
+	 * 			| ! isValidTilePosition(leftX,bottomY)	
 	 */
 	public int getTileType(int leftX, int bottomY) throws IllegalXPositionException, IllegalYPositionException {
 		if (!Position.isValidXPosition(leftX, this.getPixelWidth()))
@@ -226,6 +245,15 @@ public class World {
 	 */
 	private int[][] tileTypes;
 	
+	/**
+	 * Return the positions of tiles occupied by the given region.
+	 * @param 	leftX
+	 * @param 	bottomY
+	 * @param 	rightX
+	 * @param 	topY
+	 * @return	...
+	 * 			| //TODO like wtf moete wij hier schrijve
+	 */
 	public int[][] getOccupiedTiles(int leftX, int bottomY, int rightX, int topY) {
 		List<int[]> tiles = new ArrayList<int[]>();
 		int amountXTiles = getAmountOfOccupiedTiles(leftX, getTileSize(), rightX-leftX );
@@ -237,14 +265,25 @@ public class World {
 				tiles.add(position);
 			}
 		}
-		int[][] tilesInt = new int[tiles.size()][];
+		int[][] tilesInt = new int[tiles.size()][2];
 		for (int i = 0; i < tiles.size(); i++) {
-		    int[] row = tiles.get(i);
-		    tilesInt[i] = row;
+		    tilesInt[i][0] = tiles.get(i)[0];
+		    tilesInt[i][1] = tiles.get(i)[1];
 		}
 		return tilesInt;
 	}
 	
+	/**
+	 * Return the amount of occupied tiles with given startposition
+	 * 	 and length and tileLength.
+	 * @param 	position
+	 * @param 	tileLength
+	 * @param 	length
+	 * @return	| if (position % tileLength == 0)
+	 *			|	return length / tileLength + 1
+	 *			| else
+	 *			|	return length / tileLength
+	 */
 	public static int getAmountOfOccupiedTiles(int position, int tileLength, int length) {
 		if (position % tileLength == 0) {
 			return (length / tileLength) + 1;
