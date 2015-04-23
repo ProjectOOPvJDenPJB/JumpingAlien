@@ -56,7 +56,7 @@ public class School {
 	 * 		  |  new.slimesFromNewSchool.getHP() ==  old.slimesFromNewSchool.getHP() + 1 
 	 */
 	public void addSlime(Slime slime){
-		if (this.getAmountSlimes() < 10){
+		if (this.getAmountSlimes() < 10 && slime.isAlive()){
 			School oldSchool = slime.getSchool();
 			slime.setSchool(this);
 			this.setAmountSlimes(this.getAmountSlimes() + 1);
@@ -82,11 +82,8 @@ public class School {
 	 * 		 | 		new.slime.getSchool() == null
 	 */
 	public void removeSlime(Slime slime){
-		if (slime.isDying()){
 			slime.setSchool(null);
 			this.setAmountSlimes(this.getAmountSlimes() - 1);
-
-		}
 	}
 	
 }

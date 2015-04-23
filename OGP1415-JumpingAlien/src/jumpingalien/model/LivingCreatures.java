@@ -23,7 +23,6 @@ public abstract class LivingCreatures {
 		this.initialHorizontalVelocity = initialHorizontalVelocity;
 		this.setMaximumHorizontalVelocity(maximumHorizontalVelocity);
 		this.setWorld(world);
-		this.setPosition(XPosition, YPosition);
 		this.setHorizontalVelocity(horizontalVelocity);
 		this.setVerticalVelocity(verticalVelocity);
 		this.setHP(hitpoints);
@@ -32,6 +31,7 @@ public abstract class LivingCreatures {
 		this.spriteArray = sprites;		
 		this.setHitTimer(0.6);
 		this.setState(State.ALIVE);
+		this.setPosition(XPosition, YPosition);
 	}
 	
 	protected LivingCreatures(int XPosition, int YPosition, double horizontalVelocity, 
@@ -104,22 +104,27 @@ public abstract class LivingCreatures {
 			position =  new Position(positionLeftX,positionBottomY,getWorld());
 		} catch (IllegalXPositionException | IllegalYPositionException exc) {
 			if (positionLeftX < 0) {
-				positionLeftX = 0;
-				//terminate();
+				//positionLeftX = 0;
+				this.setOutOfBounds(true);
+				this.terminate();
 			}
-			else if (positionLeftX > getWorld().getPixelWidth())
-				positionLeftX = getWorld().getPixelWidth();
-				//terminate();
-			if (positionBottomY < 0)
+			else if (positionLeftX > getWorld().getPixelWidth()){
+				//positionLeftX = getWorld().getPixelWidth();
+				this.setOutOfBounds(true);
+				this.terminate();
+			}
+				
+			else if (positionBottomY < 0){
 				positionBottomY = 0;
-				//terminate();
-			else if (positionBottomY > getWorld().getPixelHeight())
+				//comment creatures mogen normaal niet langs onder uit de map gaan.
+			}
+			else if (positionBottomY > getWorld().getPixelHeight()){
 				positionBottomY = getWorld().getPixelHeight();
-				//terminate();
-//			setOutOfBounds(true);
-//			terminate();
+				this.setOutOfBounds(true);
+				this.terminate();
+			}
 		}
-		position =  new Position(positionLeftX, positionBottomY,getWorld());
+		//position =  new Position(positionLeftX, positionBottomY,getWorld());
 	}
 	
 	public void setXPosition(double positionLeftX) {
@@ -703,21 +708,21 @@ public abstract class LivingCreatures {
 	/**
 	 * @return whether the living creature is dead or not
  	 */
-	protected boolean isDead() {
+	public boolean isDead() {
 		return (this.getState() == State.DEAD);
 	}
 	
 	/**
 	 * @return whether the living creatures is dying or not
 	 */
-	protected boolean isDying() {
+	public boolean isDying() {
 		return (this.getState() == State.DYING);
 	}
 	
 	/**
 	 * @return whether the living creature is alive or not
 	 */
-	protected boolean isAlive() {
+	public boolean isAlive() {
 		return (this.getState() == State.ALIVE);
 	}
 	

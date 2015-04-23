@@ -45,8 +45,7 @@ public class Slime extends LivingCreatures {
 			double horizontalAcceleration,Sprite[] sprites, World world, School school, int hitpoints){
 		super(positionX,positionY,horizontalVelocity,verticalVelocity,horizontalAcceleration,2.5,
 				world,sprites,hitpoints);
-		this.setSchool(school);
-
+		school.addSlime(this);
 	}
 	
 	/**
@@ -74,7 +73,7 @@ public class Slime extends LivingCreatures {
 	 */
 	public Slime(int positionX, int positionY,double horizontalVelocity,double verticalVelocity, 
 			World world,Sprite[] sprites, School school){
-		this(positionX,positionY,horizontalVelocity,verticalVelocity,0.7,sprites, world,school,100);	
+			this(positionX,positionY,horizontalVelocity,verticalVelocity,0,sprites, world,school,100);	
 	}
 
 	/**
@@ -156,11 +155,13 @@ public class Slime extends LivingCreatures {
 	@Override
 	public void terminate() {
 		if (!isDead()) {
-			if ((isAlive() && (getHP() >= 0) && (! getOutOfBounds())))
+			if ((isAlive() && (getHP() > 0) && (! getOutOfBounds())))
 				throw new IllegalStateException("Slime is alive within the boundaries of the world!");
 			else if (((isDying()) && (Util.fuzzyGreaterThanOrEqualTo(getDeathTimer(), 0.6))) ||
 					(getOutOfBounds())){
-				this.getSchool().removeSlime(this);
+				if (!(this.getSchool() == null)){
+					this.getSchool().removeSlime(this);	
+				}
 				setState(State.DEAD);
 				World oldWorld = this.getWorld();
 				setWorld(null);
