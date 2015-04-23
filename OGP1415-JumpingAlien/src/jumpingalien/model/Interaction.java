@@ -28,27 +28,56 @@ public class Interaction{
 		return true;
 	}
 	
-	public static int collidesWithTerrain(LivingCreatures creature){
-			for (int x = (int) creature.getXPosition(); x<= creature.getXPosition() + creature.getSize()[0]; x = x + 1){
-				for (int y = (int) creature.getYPosition(); y<= creature.getYPosition() + creature.getSize()[1]; y = y + 1){
-					World world = creature.getWorld();
-					int tileType = world.getTileType(x, y);
-				    if (tileType == 3){
-						return 3;
-					}
-				    else if ((tileType == 2) && (!(creature instanceof Shark))){
-						return 2;
-					}
-				    else if ((tileType == 0) && (creature instanceof Shark)){
-				    	return 0;
-				    }
-				}		
-			}
-			if (creature instanceof Shark){
-				return 2;
-			}else{
+//	public static int collidesWithTerrain(LivingCreatures creature){
+//			for (int x = (int) creature.getXPosition(); x<= creature.getXPosition() + creature.getSize()[0] -2; x = x+1){
+//				for (int y = (int) creature.getYPosition(); y<= creature.getYPosition() + creature.getSize()[1] -2; y = y+1 ){
+//					World world = creature.getWorld();
+//					if (Util.fuzzyGreaterThanOrEqualTo(x, world.getPixelWidth()))
+//						x = world.getPixelWidth() -1;
+//					if (Util.fuzzyGreaterThanOrEqualTo(y, world.getPixelHeight()))
+//						y = world.getPixelHeight() -1;
+////					System.out.println(x+".."+y);
+//					int tileType = world.getTileType(x, y);
+//				    if (tileType == 3){
+//						return 3;
+//					}
+//				    else if ((tileType == 2) && (!(creature instanceof Shark))){
+//						return 2;
+//					}
+//				    else if ((tileType == 0) && (creature instanceof Shark)){
+//				    	return 0;
+//				    }
+//				}		
+//			}
+//			if (creature instanceof Shark){
+//				return 2;
+//			}else{
+//			return 0;
+//			}
+	/**
+	 * @return wether or not the living creature collides with the terrain
+	 */
+	public static int collidesWithTerrain(LivingCreatures creature) {
+		World world = creature.getWorld();
+		for (int[] tile : world.getOccupiedTiles((int)creature.getXPosition(),(int)creature.getYPosition(),
+				(int)creature.getXPosition()+creature.getCurrentSprite().getWidth(),(int)creature.getYPosition()+
+				creature.getCurrentSprite().getHeight())) {
+			int tileType = world.getTileType(tile[0], tile[1]);
+			    if (tileType == 3){
+					return 3;
+				}
+			    else if ((tileType == 2) && (!(creature instanceof Shark))){
+					return 2;
+				}
+			    else if ((tileType == 0) && (creature instanceof Shark)){
+			    	return 0;
+			    }
+		}
+		if (creature instanceof Shark){
+			return 2;
+		} else {
 			return 0;
-			}
+		}
 	}
 	
 	

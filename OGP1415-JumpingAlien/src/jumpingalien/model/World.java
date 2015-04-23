@@ -199,12 +199,19 @@ public class World {
 	public void updateWindowPosition() {
 		Position mazubPos = getMazub().getPosition();
 		Position windowPos = getVisibleWindowPosition();
-		if (mazubPos.getXPosition() < windowPos.getXPosition() + 200)
+		if (mazubPos.getXPosition() < windowPos.getXPosition() + 200) {
 			setWindowPosition(mazubPos.getXPosition() - 200, windowPos.getYPosition());
-		else if (mazubPos.getXPosition() > (windowPos.getXPosition() + getVisibleWindowWidth()) - 200)
-			setWindowPosition(mazubPos.getXPosition() + 200, windowPos.getYPosition());
-		if (mazubPos.getYPosition() < windowPos.getYPosition() +200)
+		}
+		else if (mazubPos.getXPosition() > (windowPos.getXPosition() + getVisibleWindowWidth()) - 200) {
+			setWindowPosition(windowPos.getXPosition() +
+					(mazubPos.getXPosition() -
+							(windowPos.getXPosition() + getVisibleWindowWidth() - 200)), 
+					windowPos.getYPosition());
+		}
+		windowPos = getVisibleWindowPosition();
+		if (mazubPos.getYPosition() < windowPos.getYPosition() +200){
 			setWindowPosition(windowPos.getXPosition(), mazubPos.getYPosition() - 200);
+		}
 		else if (mazubPos.getYPosition() > (windowPos.getYPosition() + getVisibleWindowHeight() -200))
 			setWindowPosition(windowPos.getXPosition(), mazubPos.getYPosition() + 200);
 	}
@@ -226,6 +233,10 @@ public class World {
 	 * 			The Y coordinate of the given position.
 	 */
 	public int[] getTilePosition(int pixelX,int pixelY) {
+		if (Util.fuzzyGreaterThanOrEqualTo(pixelX, this.getPixelWidth()))
+			pixelX = this.getPixelWidth() - 1;
+		if (Util.fuzzyGreaterThanOrEqualTo(pixelY, this.getPixelHeight()))
+			pixelY = this.getPixelHeight() -1;
 		int[] position = new int[2];
 		position[0] = (pixelX - (pixelX % getTileSize()));
 		position[1] = (pixelY - (pixelY % getTileSize()));
@@ -478,15 +489,18 @@ public class World {
 	}
 	
 	public void advanceTime(double dt) {
+//		System.out.println("MAZUB");
 		mazub.advanceTime(dt);
 		updateWindowPosition();
 		for (String key : plants.keySet()) {
+//			System.out.println("PLANT?");
 			plants.get(key).advanceTime(dt);
 		}
 		for (String key : slimes.keySet()) {
 			slimes.get(key).advanceTime(dt);
 		}
 		for (String key : sharks.keySet()) {
+//			System.out.println("shark");
 			sharks.get(key).advanceTime(dt);
 		}
 	}

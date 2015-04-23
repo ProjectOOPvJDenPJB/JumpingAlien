@@ -51,10 +51,6 @@ public class Mazub extends LivingCreatures {
 	public Mazub(int positionLeftX,int positionBottomY,	Sprite[] sprites,
 			double maximumHorizontalVelocity,double initialHorizontalVelocity, World world, int hitpoints) {
 		super(positionLeftX,positionBottomY,world,sprites,hitpoints);
-		assert isValidInitialVelocity(initialHorizontalVelocity, maximumHorizontalVelocity);
-		assert isValidMaximumHorizontalVelocity(maximumHorizontalVelocity, initialHorizontalVelocity);
-		this.initialHorizontalVelocity = initialHorizontalVelocity;
-		this.setMaximumHorizontalVelocity(maximumHorizontalVelocity);
 	}
 	
 	/**
@@ -186,51 +182,6 @@ public class Mazub extends LivingCreatures {
 			this.verticalAcceleration = 0;
 		else
 			this.verticalAcceleration = verticalAcceleration;
-	}
-	
-	/**
-	 * Return the initial horizontal velocity of this Mazub.
-	 */
-	@Immutable
-	public double getInitialHorizontalVelocity() {
-		return this.initialHorizontalVelocity;
-	}
-	
-	/**
-	 * Check whether the given initial horizontal velocity is a valid initial horizontal velocity.
-	 * 
-	 * @param 	initialHorizontalVelocity
-	 * 			The initial horizontal velocity to check.
-	 * @param	maximumHorizontalVelocity
-	 * 			The maximum horizontal velocity to check the initial velocity against.
-	 * @return 	True if the given initial horizontal velocity is a valid initial horizontal velocity.
-	 * 			| result ==
-	 * 			|	(initialHorizontalVelocity >= 1) && (initialHorizontalVelocity < maximumHorizontalVelocity)
-	 * 
-	 */
-	public static boolean isValidInitialVelocity(double initialHorizontalVelocity, double maximumHorizontalVelocity) {
-		return (Util.fuzzyGreaterThanOrEqualTo(initialHorizontalVelocity, 1)) && (initialHorizontalVelocity < maximumHorizontalVelocity);
-	}
-	
-	/**
-	 * Variable registering the initial horizontal velocity of this Mazub.
-	 */
-	private final double initialHorizontalVelocity;
-	
-	
-	/**
-	 * Sets the maximum horizontal velocity of this Mazub to the given maximum horizontal velocity.
-	 * @param	maximumHorizontalVelocity
-	 * 			The new maximum horizontal velocity for this Mazub.
-	 * @pre		The given maximum horizontal velocity must be a valid maximum horizontal velocity
-	 * 			for this Mazub.
-	 * 			| isValidMaximumHorizontalVelocity(maximumHorizontalVelocity, this.getInitialHorizontalVelocity())
-	 * @post	The new maximum horizontal velocity of this Mazub is equal to the given maximum horizontal velocity.
-	 * 			| new.getMaximumHorizontalVelocity() == maximumHorizontalVelocity
-	 */
-	private void setMaximumHorizontalVelocity(double maximumHorizontalVelocity) {
-		assert isValidMaximumHorizontalVelocity(maximumHorizontalVelocity, this.getInitialHorizontalVelocity());
-		this.maximumHorizontalVelocity = maximumHorizontalVelocity;
 	}
 	
 	/**
@@ -435,6 +386,7 @@ public class Mazub extends LivingCreatures {
 	 * @note	In the execution of the method advanceTime the maximum horizontal velocity may be limited to 1 if
 	 * 			this Mazub is ducking. After advanceTime is done running it is set back to its original value.
 	 */
+	@Override
 	public void advanceTime(double timeInterval) throws IllegalTimeIntervalException {
 		if (! isValidTimeInterval(timeInterval))
 			throw new IllegalTimeIntervalException(timeInterval);

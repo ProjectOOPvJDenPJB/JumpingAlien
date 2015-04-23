@@ -43,7 +43,7 @@ public class Slime extends LivingCreatures {
 	 */
 	public Slime(int positionX, int positionY, double horizontalVelocity,double verticalVelocity,
 			double horizontalAcceleration,Sprite[] sprites, World world, School school, int hitpoints){
-		super(positionX,positionY,horizontalVelocity,verticalVelocity,horizontalAcceleration,
+		super(positionX,positionY,horizontalVelocity,verticalVelocity,horizontalAcceleration,2.5,
 				world,sprites,hitpoints);
 		this.setSchool(school);
 

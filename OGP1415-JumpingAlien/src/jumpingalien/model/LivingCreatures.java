@@ -8,14 +8,20 @@ import jumpingalien.model.Position;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
 import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Immutable;
 import be.kuleuven.cs.som.annotate.Raw;
 
 public abstract class LivingCreatures {
 
 	protected LivingCreatures(int XPosition, int YPosition,double horizontalVelocity, 
 			double verticalVelocity, double horizontalAcceleration,double verticalAcceleration,
-			World world, Sprite[] sprites,int hitpoints){
+			double initialHorizontalVelocity,
+			double maximumHorizontalVelocity, World world, Sprite[] sprites,int hitpoints){
 		LivingCreatures.isValidSpriteArray(sprites,this);
+		assert isValidMaximumHorizontalVelocity(maximumHorizontalVelocity, initialHorizontalVelocity);
+		assert isValidInitialVelocity(initialHorizontalVelocity, maximumHorizontalVelocity);
+		this.initialHorizontalVelocity = initialHorizontalVelocity;
+		this.setMaximumHorizontalVelocity(maximumHorizontalVelocity);
 		this.setWorld(world);
 		this.setPosition(XPosition, YPosition);
 		this.setHorizontalVelocity(horizontalVelocity);
@@ -25,26 +31,30 @@ public abstract class LivingCreatures {
 		this.setVerticalAcceleration(verticalAcceleration);
 		this.spriteArray = sprites;		
 		this.setHitTimer(0.6);
+		this.setState(State.ALIVE);
 	}
 	
 	protected LivingCreatures(int XPosition, int YPosition, double horizontalVelocity, 
-			double verticalVelocity, double horizontalAcceleration, 
+			double verticalVelocity, double horizontalAcceleration,
+			double maximumHorizontalVelocity,
 			World world, Sprite[] sprites, int hitpoints){
 		this(XPosition,YPosition,horizontalVelocity,verticalVelocity, horizontalAcceleration, 
-				0,world, sprites, hitpoints);
+				0, 0, maximumHorizontalVelocity, world, sprites, hitpoints);
 	}
 	
 	protected LivingCreatures(int XPosition, int YPosition, double horizontalVelocity, 
-			double verticalVelocity,World world, Sprite[] sprites, int hitpoints){
-		this(XPosition,YPosition,horizontalVelocity,verticalVelocity, 0,world, sprites, hitpoints);
+			double verticalVelocity,
+			double maximumHorizontalVelocity, World world, Sprite[] sprites, int hitpoints){
+		this(XPosition,YPosition,horizontalVelocity,verticalVelocity, 0, maximumHorizontalVelocity,
+				world, sprites, hitpoints);
 	}
 	
 	protected LivingCreatures(int XPosition, int YPosition,World world, Sprite[] sprites, int hitpoints){
-		this(XPosition,YPosition,0,0,world, sprites, hitpoints);
+		this(XPosition,YPosition,0,0, 3,world, sprites, hitpoints);
 	}
 	
 	protected LivingCreatures(int XPosition, int Yposition,Sprite[] sprites, int hitpoints) {
-		this(XPosition,Yposition,0,0,null,sprites, hitpoints);
+		this(XPosition,Yposition, null,sprites, hitpoints);
 	}
 	
 	protected LivingCreatures(Sprite[] sprites, int hitpoints) {
@@ -97,14 +107,14 @@ public abstract class LivingCreatures {
 				positionLeftX = 0;
 				//terminate();
 			}
-			else if (positionLeftX > getPosition().getWidth())
-				positionLeftX = getPosition().getWidth();
+			else if (positionLeftX > getWorld().getPixelWidth())
+				positionLeftX = getWorld().getPixelWidth();
 				//terminate();
 			if (positionBottomY < 0)
 				positionBottomY = 0;
 				//terminate();
-			else if (positionBottomY > getPosition().getHeight())
-				positionBottomY = getPosition().getHeight();
+			else if (positionBottomY > getWorld().getPixelHeight())
+				positionBottomY = getWorld().getPixelHeight();
 				//terminate();
 //			setOutOfBounds(true);
 //			terminate();
@@ -175,6 +185,35 @@ public abstract class LivingCreatures {
 			this.horizontalVelocity = horizontalVelocity;
 		}
 	}
+	
+	/**
+	 * Return the initial horizontal velocity of this Mazub.
+	 */
+	@Immutable
+	public double getInitialHorizontalVelocity() {
+		return this.initialHorizontalVelocity;
+	}
+	
+	/**
+	 * Check whether the given initial horizontal velocity is a valid initial horizontal velocity.
+	 * 
+	 * @param 	initialHorizontalVelocity
+	 * 			The initial horizontal velocity to check.
+	 * @param	maximumHorizontalVelocity
+	 * 			The maximum horizontal velocity to check the initial velocity against.
+	 * @return 	True if the given initial horizontal velocity is a valid initial horizontal velocity.
+	 * 			| result ==
+	 * 			|	(initialHorizontalVelocity >= 1) && (initialHorizontalVelocity < maximumHorizontalVelocity)
+	 * 
+	 */
+	public static boolean isValidInitialVelocity(double initialHorizontalVelocity, double maximumHorizontalVelocity) {
+		return (Util.fuzzyGreaterThanOrEqualTo(initialHorizontalVelocity, 1)) && (initialHorizontalVelocity < maximumHorizontalVelocity);
+	}
+	
+	/**
+	 * Variable registering the initial horizontal velocity of this Mazub.
+	 */
+	private final double initialHorizontalVelocity;
 
 	/**
 	 *  Return the vertical velocity of this living creature.
@@ -214,7 +253,7 @@ public abstract class LivingCreatures {
 	 * Variable registering the horizontal acceleration of this living creature.
 	 * 	The standard horizontal acceleration is 0.
 	 */
-	private double horizontalAcceleration = 0;
+	private double horizontalAcceleration;
 	
 	/**
 	 * Sets the horizontal acceleration of this living creature to the given horizontal acceleration.
@@ -690,19 +729,20 @@ public abstract class LivingCreatures {
 	 * 			new.getXPosition = this.getXPosition() + distanceCalculated
 	 */
 	public void changeHorizontalPosition(double timeInterval){
+//		System.out.println("Dafak");
 		if (Util.fuzzyGreaterThanOrEqualTo(horizontalVelocity,this.getMaximumHorizontalVelocity())) 
 			this.setHorizontalAcceleration(0);
 		double newPositionX = this.getXPosition() + this.getDirection().getInt() * (100 * this.getHorizontalVelocity()*timeInterval 
-				+ 50 * this.getHorizontalAcceleration()*timeInterval*timeInterval); 
+				+ 50 * this.getHorizontalAcceleration()*timeInterval*timeInterval);
 		
 		if (Util.fuzzyGreaterThanOrEqualTo(newPositionX, this.getXPosition())){
 			for(double i = this.getXPosition(); Util.fuzzyLessThanOrEqualTo(i, newPositionX); i += 0.01){
+//				System.out.println(i + ".." + getXPosition());
 				setXPosition(i);
 				Interaction.interactWithOtherCreatures(this);
 				if (this.getMovementBlocked() || this.collidesWithTerrain()){
 					this.setMovementBlocked(false);
 					//movement blocked wordt kort op true gezet als de beweging wordt geblokeerd, maar wordt elke keer gerefreshed.
-					break;
 				}
 			}
 		}else{
@@ -711,7 +751,6 @@ public abstract class LivingCreatures {
 					Interaction.interactWithOtherCreatures(this);
 					if (this.getMovementBlocked() || this.collidesWithTerrain()){
 						this.setMovementBlocked(false);
-							break;
 					}
 				}
 			}
@@ -782,8 +821,8 @@ public abstract class LivingCreatures {
 	 */
 	@Basic
 	public void setMovingVertical(boolean flag) throws IllegalStateException {
-		if (this.getMovingVertical() == flag)
-			throw new IllegalStateException();
+//		if (this.getMovingVertical() == flag)
+//			throw new IllegalStateException();
 		this.movingVertical = flag;
 	}
 	
@@ -851,6 +890,21 @@ public abstract class LivingCreatures {
 	 */
 	protected double maximumHorizontalVelocity;
 	
+	
+	/**
+	 * Sets the maximum horizontal velocity of this Mazub to the given maximum horizontal velocity.
+	 * @param	maximumHorizontalVelocity
+	 * 			The new maximum horizontal velocity for this Mazub.
+	 * @pre		The given maximum horizontal velocity must be a valid maximum horizontal velocity
+	 * 			for this Mazub.
+	 * 			| isValidMaximumHorizontalVelocity(maximumHorizontalVelocity, this.getInitialHorizontalVelocity())
+	 * @post	The new maximum horizontal velocity of this Mazub is equal to the given maximum horizontal velocity.
+	 * 			| new.getMaximumHorizontalVelocity() == maximumHorizontalVelocity
+	 */
+	protected void setMaximumHorizontalVelocity(double maximumHorizontalVelocity) {
+		assert isValidMaximumHorizontalVelocity(maximumHorizontalVelocity, this.getInitialHorizontalVelocity());
+		this.maximumHorizontalVelocity = maximumHorizontalVelocity;
+	}
 	
 	/**
 	 * Returns the size of a sprite of this Mazub.

@@ -28,7 +28,7 @@ public class Plant extends LivingCreatures{
 	 * 
 	 */
 	public Plant(int positionX, int positionY, double horizontalVelocity, Sprite[] sprites, World world, int hitpoints){
-		super(positionX,positionY, horizontalVelocity,0,world,sprites, hitpoints);
+		super(positionX,positionY, horizontalVelocity,0,0.5,world,sprites, hitpoints);
 	}
 
 	/**

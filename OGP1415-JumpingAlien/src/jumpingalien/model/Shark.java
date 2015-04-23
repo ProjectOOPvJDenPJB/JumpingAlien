@@ -43,7 +43,7 @@ public class Shark extends LivingCreatures {
 	 */
 	public Shark(int positionX, int positionY, double horizontalVelocity, double verticalVelocity,
 			World world,Sprite[] sprites, int hitpoints){
-		super(positionX,positionY, horizontalVelocity, verticalVelocity,world,sprites, hitpoints);
+		super(positionX,positionY, horizontalVelocity, verticalVelocity,4,world,sprites, hitpoints);
 
 	}
 
@@ -157,7 +157,7 @@ public class Shark extends LivingCreatures {
 			this.setDeathTimer(getDeathTimer() + timeInterval);
 		}
 		if (isAlive()) {
-			
+						
 			if (Util.fuzzyGreaterThanOrEqualTo(getRunTime(),getRandomTime())) {
 				generateRandomTime();
 				this.setRunTime(0);
@@ -177,6 +177,7 @@ public class Shark extends LivingCreatures {
 			this.setVerticalVelocity(this.getVerticalVelocity() + this.getVerticalAcceleration()*timeInterval);	
 			this.setHitTimer(this.getHitTimer() + timeInterval);
 			this.applyTerrainDmg(timeInterval);
+			
 		}
 	}
 	

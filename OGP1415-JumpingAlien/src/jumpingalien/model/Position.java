@@ -40,7 +40,7 @@ public class Position {
 			throw new IllegalYPositionException(YPosition);
 		}
 		this.YPos = YPosition;
-		
+//		System.out.println(getXPosition()+ "......" + getYPosition());		
 	}
 	
 	/**

@@ -180,7 +180,7 @@ public class Facade implements IFacadePart2  {
 	public void setGeologicalFeature(World world, int tileX, int tileY,
 			int tileType) {
 		if (!world.gameStarted()){
-			Tile tile = new Tile(tileX * world.getTileSize(),tileY * world.getTileSize(),tileType);
+			Tile tile = new Tile((tileX * world.getTileSize()),tileY * world.getTileSize(),tileType);
 			world.addTileType(tile);
 		}
 	}
