@@ -49,8 +49,10 @@ public class Mazub extends LivingCreatures {
 	 * 
 	 */
 	public Mazub(int positionLeftX,int positionBottomY,	Sprite[] sprites,
-			double maximumHorizontalVelocity,double initialHorizontalVelocity, World world, int hitpoints) {
-		super(positionLeftX,positionBottomY,0,0,0,0,initialHorizontalVelocity,maximumHorizontalVelocity,world,sprites,hitpoints);
+			double maximumHorizontalVelocity,double initialHorizontalVelocity,
+			World world, int hitpoints) {
+		super(positionLeftX,positionBottomY,0,0,0,0,initialHorizontalVelocity,
+				maximumHorizontalVelocity,world,sprites,hitpoints);
 	}
 	
 	/**

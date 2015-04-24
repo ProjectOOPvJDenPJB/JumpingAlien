@@ -28,10 +28,10 @@ public abstract class LivingCreatures {
 		this.setHP(hitpoints);
 		this.setHorizontalAcceleration(horizontalAcceleration);
 		this.setVerticalAcceleration(verticalAcceleration);
+		this.setPosition(XPosition, YPosition);
 		this.spriteArray = sprites;		
 		this.setHitTimer(0.6);
 		this.setState(State.ALIVE);
-		this.setPosition(XPosition, YPosition);
 	}
 	
 	protected LivingCreatures(int XPosition, int YPosition, double horizontalVelocity, 
@@ -66,7 +66,6 @@ public abstract class LivingCreatures {
 	 * 	The position is the actual position of the left X pixel of
 	 * 	the living creature character in the gameworld.
 	 */
-	@Basic
 	public double getXPosition() {
 		return getPosition().getXPosition();
 	}
@@ -76,16 +75,23 @@ public abstract class LivingCreatures {
 	 * 	The position is the actual position of the bottom Y pixel of
 	 * 	the living creature character in the gameworld.
 	 */
-	@Basic
 	public double getYPosition () {
 		return getPosition().getYPosition();
 	}
 	
+	/**
+	 * Return the position of this living creature.
+	 * 	The position is represented as an object of the Position value class.
+	 */
+	@Basic
 	public Position getPosition() {
 		return position;
 	}
 	
-
+	/**
+	 * Variable registering the position of this living creature as an object
+	 * 	of the Position value class.
+	 */
 	protected Position position = new Position();
 
 	/**
@@ -229,6 +235,16 @@ public abstract class LivingCreatures {
 	}
 	
 	/**
+	 * Checks whether the current vertical velocity is a valid vertical velocity.
+	 * @param 	verticalVelocity
+	 * @return	...
+	 * 			| Double.isFinite(verticalVelocity)
+	 */
+	public boolean isValidVerticalVelocity(double verticalVelocity) {
+		return (Double.isFinite(verticalVelocity));
+	}
+	
+	/**
 	 * Variable registering the vertical velocity of this living creature.
 	 * 	The standard vertical velocity is 0.
 	 */
@@ -245,7 +261,8 @@ public abstract class LivingCreatures {
 	 * 			| 	then new.verticalVelocity = verticalVelocity
 	 */
 	public void setVerticalVelocity(double verticalVelocity){
-			this.verticalVelocity = verticalVelocity;
+		assert isValidVerticalVelocity(verticalVelocity);
+		this.verticalVelocity = verticalVelocity;
 	}
 	
 	/**
