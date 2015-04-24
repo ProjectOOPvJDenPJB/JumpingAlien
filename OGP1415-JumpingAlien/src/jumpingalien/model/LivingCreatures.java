@@ -108,14 +108,14 @@ public abstract class LivingCreatures {
 	public void setPosition(double positionLeftX, double positionBottomY) throws IllegalXPositionException, IllegalYPositionException {
 		if (this instanceof Shark)
 		try {
-			position =  new Position(positionLeftX,positionBottomY,getWorld());
+			this.position =  new Position(positionLeftX,positionBottomY,getWorld());
 		} catch (IllegalXPositionException | IllegalYPositionException exc) {
 			if (positionLeftX < 0) {
 				//positionLeftX = 0;
 				this.setOutOfBounds(true);
 				this.terminate();
 			}
-			else if (positionLeftX > getWorld().getPixelWidth()){
+			else if ((int)positionLeftX > getWorld().getPixelWidth()){
 				//positionLeftX = getWorld().getPixelWidth();
 				this.setOutOfBounds(true);
 				this.terminate();
@@ -125,7 +125,7 @@ public abstract class LivingCreatures {
 				positionBottomY = 0;
 				//comment creatures mogen normaal niet langs onder uit de map gaan.
 			}
-			else if (positionBottomY > getWorld().getPixelHeight()){
+			else if ((int)positionBottomY > getWorld().getPixelHeight()){
 				positionBottomY = getWorld().getPixelHeight();
 				this.setOutOfBounds(true);
 				this.terminate();
@@ -749,19 +749,21 @@ public abstract class LivingCreatures {
 		
 		if (Util.fuzzyGreaterThanOrEqualTo(newPositionX, this.getXPosition())){
 			for(double i = this.getXPosition(); Util.fuzzyLessThanOrEqualTo(i, newPositionX); i += 0.01){
-				setXPosition(i);
-				Interaction.interactWithOtherCreatures(this);
 				if (this.getMovementBlocked() || this.collidesWithTerrain()){
 					this.setMovementBlocked(false);
 					//movement blocked wordt kort op true gezet als de beweging wordt geblokeerd, maar wordt elke keer gerefreshed.
+				}else{
+					setXPosition(i);
+					Interaction.interactWithOtherCreatures(this);
 				}
 			}
 		}else{
 				for(double i = this.getXPosition(); Util.fuzzyGreaterThanOrEqualTo(i, newPositionX); i -= 0.01){
-					setXPosition(i);
-					Interaction.interactWithOtherCreatures(this);
 					if (this.getMovementBlocked() || this.collidesWithTerrain()){
 						this.setMovementBlocked(false);
+					}else{
+						setXPosition(i);
+						Interaction.interactWithOtherCreatures(this);
 					}
 				}
 			}
@@ -791,15 +793,16 @@ public abstract class LivingCreatures {
 				}
 			}else{
 					for(double i = this.getXPosition(); Util.fuzzyGreaterThanOrEqualTo(i, newPositionY); i -= 0.01){
-						this.setYPosition(i);
-						Interaction.interactWithOtherCreatures(this);
-						if (this.getMovementBlocked() || this.collidesWithTerrain()){
+						if (this.getMovementBlocked() || Interaction.collidesWithTerrain(this) != 1 || Util.fuzzyLessThanOrEqualTo(i,0)){
 							this.setVerticalVelocity(0);
 							this.setVerticalAcceleration(0);
 							this.setMovingVertical(false);
 							this.endJump();
 							this.setMovementBlocked(false);
-						}								
+						}else{
+							this.setYPosition(i);
+							Interaction.interactWithOtherCreatures(this);
+						}
 					}
 			}
 }

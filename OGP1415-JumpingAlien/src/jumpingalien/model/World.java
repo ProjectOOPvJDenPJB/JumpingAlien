@@ -516,7 +516,7 @@ public class World {
 	}
 	
 	public void advanceTime(double dt) {
-//		System.out.println("MAZUB");
+		System.out.println("MAZUB");
 		mazub.advanceTime(dt);
 		updateWindowPosition();
 		for (Plant plant : plants) {

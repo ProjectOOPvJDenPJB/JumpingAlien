@@ -55,13 +55,19 @@ public class Interaction{
 //			return 0;
 //			}
 	/**
-	 * @return wether or not the living creature collides with the terrain
+	 * @return whether or not the living creature collides with the terrain
 	 */
 	public static int collidesWithTerrain(LivingCreatures creature) {
 		World world = creature.getWorld();
-		for (int[] tile : world.getOccupiedTiles((int)creature.getXPosition(),(int)creature.getYPosition(),
+		int[][] tiles;
+		try{tiles =  world.getOccupiedTiles((int)creature.getXPosition(),(int)creature.getYPosition(),
 				(int)creature.getXPosition()+creature.getCurrentSprite().getWidth(),(int)creature.getYPosition()+
-				creature.getCurrentSprite().getHeight())) {
+				creature.getCurrentSprite().getHeight());
+		}catch(NullPointerException exc){
+			return 0;
+		}
+		
+		for (int[] tile : tiles) {
 			int tileType = world.getTileType(tile[0], tile[1]);
 			    if (tileType == 3){
 					return 3;
