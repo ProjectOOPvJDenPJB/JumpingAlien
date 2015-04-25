@@ -106,7 +106,6 @@ public abstract class LivingCreatures {
 	 */
 	@Basic @Raw
 	public void setPosition(double positionLeftX, double positionBottomY) throws IllegalXPositionException, IllegalYPositionException {
-		if (this instanceof Shark)
 		try {
 			this.position =  new Position(positionLeftX,positionBottomY,getWorld());
 		} catch (IllegalXPositionException | IllegalYPositionException exc) {
@@ -747,29 +746,15 @@ public abstract class LivingCreatures {
 		double newPositionX = this.getXPosition() + this.getDirection().getInt() * (100 * this.getHorizontalVelocity()*timeInterval 
 				+ 50 * this.getHorizontalAcceleration()*timeInterval*timeInterval);
 		
-		if (Util.fuzzyGreaterThanOrEqualTo(newPositionX, this.getXPosition())){
-			for(double i = this.getXPosition(); Util.fuzzyLessThanOrEqualTo(i, newPositionX); i += 1){
-				if (this.getMovementBlocked() || this.collidesWithTerrain() 
-						|| Interaction.interactWithMovementBlockingCreature(this, this.getWorld())){
-					this.setMovementBlocked(false);
-					//movement blocked wordt kort op true gezet als de beweging wordt geblokeerd, maar wordt elke keer gerefreshed.
-				}else{
-					setXPosition(i);
-					Interaction.interactWithOtherCreatures(this);
-				}
-			}
+		if (this.getMovementBlocked() || this.collidesWithTerrain() 
+				|| Interaction.interactWithMovementBlockingCreature(this, this.getWorld())){
+			this.setMovementBlocked(false);
+			//movement blocked wordt kort op true gezet als de beweging wordt geblokeerd, maar wordt elke keer gerefreshed.
 		}else{
-				for(double i = this.getXPosition(); Util.fuzzyGreaterThanOrEqualTo(i, newPositionX); i -= 1){
-					if (this.getMovementBlocked() || this.collidesWithTerrain()
-							|| Interaction.interactWithMovementBlockingCreature(this, this.getWorld())){
-						this.setMovementBlocked(false);
-					}else{
-						setXPosition(i);
-						Interaction.interactWithOtherCreatures(this);
-					}
-				}
-			}
-}
+			setXPosition(newPositionX);
+			Interaction.interactWithOtherCreatures(this);
+		}
+	}
 	
 	
 	 /**
@@ -785,7 +770,7 @@ public abstract class LivingCreatures {
 					+ 50 * this.getVerticalAcceleration() * timeInterval * timeInterval;
 			
 			if (Util.fuzzyGreaterThanOrEqualTo(newPositionY, this.getYPosition())){
-				for(double i = this.getXPosition(); Util.fuzzyLessThanOrEqualTo(i, newPositionY); i += 0.01){
+				for(double i = this.getXPosition(); Util.fuzzyLessThanOrEqualTo(i, newPositionY); i += 1){
 					this.setYPosition(i);
 					Interaction.interactWithOtherCreatures(this);
 					if (this.getMovementBlocked() || this.collidesWithTerrain()){
@@ -794,7 +779,7 @@ public abstract class LivingCreatures {
 					}
 				}
 			}else{
-					for(double i = this.getXPosition(); Util.fuzzyGreaterThanOrEqualTo(i, newPositionY); i -= 0.01){
+					for(double i = this.getXPosition(); Util.fuzzyGreaterThanOrEqualTo(i, newPositionY); i -= 1){
 						if (this.getMovementBlocked() || Interaction.collidesWithTerrain(this) != 1 || Util.fuzzyLessThanOrEqualTo(i,0)){
 							this.setVerticalVelocity(0);
 							this.setVerticalAcceleration(0);
@@ -807,7 +792,17 @@ public abstract class LivingCreatures {
 						}
 					}
 			}
-}
+	}
+	
+	public double getSmallestDT(double dt) {
+		double horizontalDT = 
+				0.01 / (this.getHorizontalAcceleration() + this.getHorizontalAcceleration() * dt);
+		double verticalDT = 
+				0.01 / (Math.abs(this.getVerticalVelocity()) + Math.abs(this.getVerticalAcceleration() * dt));
+		
+		return Math.min(Math.min(horizontalDT, verticalDT), dt);
+		
+	}
 			
 	
 	/**

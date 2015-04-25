@@ -10,6 +10,7 @@ import jumpingalien.model.IllegalSizeException;
 //import jumpingalien.model.IllegalXPositionException;
 //import jumpingalien.model.IllegalYPositionException;
 import jumpingalien.model.Mazub;
+import jumpingalien.model.World;
 import jumpingalien.tests.util.TestUtils;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
@@ -248,12 +249,15 @@ public class MazubTest {
 	
 	@Test
 	public void changeHorizontalPosition_validPositionAtMaxSpeed(){
-		Mazub alien = new Mazub(spriteArrayForSize(2, 2));
+		World world = new World(70, 50, 50, 1024, 768, 20, 20);
+		Mazub alien = new Mazub(0, 0, spriteArrayForSize(2, 2),3, 1, world, 100);
 		alien.setDirection(Direction.RIGHT);
 		alien.setHorizontalVelocity(3);
 		alien.setHorizontalAcceleration(1);
 		
 		alien.changeHorizontalPosition(1);
+		System.out.println(alien.getXPosition());
+		System.out.println(alien.getHorizontalAcceleration());
 		// newPosition = 0 + (100 * 3*1) + 0) = 300;
 		assertTrue(alien.getXPosition() == 300);
 		assertTrue(alien.getHorizontalAcceleration() == 0);
