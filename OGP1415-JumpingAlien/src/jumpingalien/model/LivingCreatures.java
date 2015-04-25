@@ -748,8 +748,9 @@ public abstract class LivingCreatures {
 				+ 50 * this.getHorizontalAcceleration()*timeInterval*timeInterval);
 		
 		if (Util.fuzzyGreaterThanOrEqualTo(newPositionX, this.getXPosition())){
-			for(double i = this.getXPosition(); Util.fuzzyLessThanOrEqualTo(i, newPositionX); i += 0.01){
-				if (this.getMovementBlocked() || this.collidesWithTerrain()){
+			for(double i = this.getXPosition(); Util.fuzzyLessThanOrEqualTo(i, newPositionX); i += 1){
+				if (this.getMovementBlocked() || this.collidesWithTerrain() 
+						|| Interaction.interactWithMovementBlockingCreature(this, this.getWorld())){
 					this.setMovementBlocked(false);
 					//movement blocked wordt kort op true gezet als de beweging wordt geblokeerd, maar wordt elke keer gerefreshed.
 				}else{
@@ -758,8 +759,9 @@ public abstract class LivingCreatures {
 				}
 			}
 		}else{
-				for(double i = this.getXPosition(); Util.fuzzyGreaterThanOrEqualTo(i, newPositionX); i -= 0.01){
-					if (this.getMovementBlocked() || this.collidesWithTerrain()){
+				for(double i = this.getXPosition(); Util.fuzzyGreaterThanOrEqualTo(i, newPositionX); i -= 1){
+					if (this.getMovementBlocked() || this.collidesWithTerrain()
+							|| Interaction.interactWithMovementBlockingCreature(this, this.getWorld())){
 						this.setMovementBlocked(false);
 					}else{
 						setXPosition(i);

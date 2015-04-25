@@ -152,5 +152,4 @@ public class Position {
 		else
 			return world.getPixelHeight();
 	}
-
 }

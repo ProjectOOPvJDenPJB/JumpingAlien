@@ -1,7 +1,6 @@
 package jumpingalien.model;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Set;
 
 import jumpingalien.util.Util;
 
@@ -10,13 +9,6 @@ public class Interaction{
 	public Interaction(){
 		
 	}
-	
-	private final static Map<String,Plant> plants = new HashMap<String,Plant>();
-	
-	private final static Map<String,Slime> slimes = new HashMap<String,Slime>();
-
-	private final static Map<String,Shark> sharks = new HashMap<String,Shark>();
-
 
 	public static boolean collidesWithCreature(LivingCreatures creature1, LivingCreatures creature2) {
 		if ((creature1.getXPosition() + (creature1.getSize()[0] - 1) < creature2.getXPosition()) || 
@@ -88,23 +80,51 @@ public class Interaction{
 	
 	
 	public static void interactWithOtherCreatures(LivingCreatures creature){
-		for (String key : plants.keySet()) {
-			if (collidesWithCreature(creature,plants.get(key))){
-				interactWithPlant(creature,plants.get(key));
+		World world =creature.getWorld();
+		for (Plant plant : world.getPlants()) {
+			if (collidesWithCreature(creature,plant)){
+				interactWithPlant(creature,plant);
 			}
 			
 		}
-		for (String key : slimes.keySet()) {
-			if (collidesWithCreature(creature,slimes.get(key))){
-				interactWithSlime(creature, slimes.get(key));
+		for (Slime slime : world.getSlimes()) {
+			if (collidesWithCreature(creature,slime)){
+				interactWithSlime(creature, slime);
 			}
 		}
-		for (String key : sharks.keySet()) {
-			if (collidesWithCreature(creature,sharks.get(key))){
-				interactWithShark(creature, sharks.get(key));
+		for (Shark shark : world.getSharks()) {
+			if (collidesWithCreature(creature,shark)){
+				interactWithShark(creature, shark);
 			}
 		}
 	}	
+	
+	public static boolean interactWithMovementBlockingCreature (LivingCreatures creature, World world){
+			for (Plant plant : world.getPlants()) {
+				if (collidesWithCreature(creature,plant)){
+					return true;
+				}
+				
+			}
+			for (Slime slime : world.getSlimes()) {
+				if (collidesWithCreature(creature,slime)){
+					return true;
+				}
+			}
+			for (Shark shark : world.getSharks()) {
+				if (collidesWithCreature(creature,shark)){
+					return true;
+				}
+			}
+			Mazub mazub = world.getMazub();
+			if (mazub != null){
+				if (collidesWithCreature(creature,world.getMazub())){
+					return true;
+				}
+			}
+			return false;
+		}
+
 	
 	public static void interactWithPlant(LivingCreatures creature, Plant plant){
 		if (creature instanceof Mazub){
@@ -112,6 +132,7 @@ public class Interaction{
 			if (mazub.getHP() < 500){
 				assert plant.isEatablePlant();
 				mazub.addHP(mazub.getHealAmount());
+				plant.addHP(-1);
 				plant.terminate();
 			}
 		}

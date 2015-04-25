@@ -247,6 +247,8 @@ public class Facade implements IFacadePart2  {
 	public void addSlime(World world, Slime slime) {
 		if (!world.gameStarted()){
 			world.addSlime(slime);
+			System.out.println(slime.getXPosition());
+
 		}
 	}
 

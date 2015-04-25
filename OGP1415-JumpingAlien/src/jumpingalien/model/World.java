@@ -416,8 +416,10 @@ public class World {
 	
 	public void addSlime(Slime slime) {
 		assert slime.canHaveAsWorld(this);
-		slimes.add(slime);
-		slime.setWorld(this);
+		if (!Interaction.interactWithMovementBlockingCreature(slime,this)){
+			slimes.add(slime);
+			slime.setWorld(this);
+		}
 	}
 	
 	public void removeSlime(Slime slime) {
@@ -455,7 +457,7 @@ public class World {
 		return (object != null) && (((LivingCreatures) object).canHaveAsWorld(this));
 	}
 	
-	private Mazub getMazub() {
+	public Mazub getMazub() {
 		return this.mazub;
 	}
 	
@@ -516,17 +518,17 @@ public class World {
 	}
 	
 	public void advanceTime(double dt) {
-		System.out.println("MAZUB");
+		//System.out.println("MAZUB");
 		mazub.advanceTime(dt);
 		updateWindowPosition();
-		for (Plant plant : plants) {
+		for (Plant plant : this.getPlants()) {
 //			System.out.println("PLANT?");
 			plant.advanceTime(dt);
 		}
-		for (Slime slime : slimes) {
+		for (Slime slime : this.getSlimes()) {
 			slime.advanceTime(dt);
 		}
-		for (Shark shark : sharks) {
+		for (Shark shark : this.getSharks()) {
 			shark.advanceTime(dt);
 		}
 	}
