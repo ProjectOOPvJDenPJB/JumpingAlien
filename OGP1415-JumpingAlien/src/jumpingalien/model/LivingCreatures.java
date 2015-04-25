@@ -28,10 +28,10 @@ public abstract class LivingCreatures {
 		this.setHP(hitpoints);
 		this.setHorizontalAcceleration(horizontalAcceleration);
 		this.setVerticalAcceleration(verticalAcceleration);
-		this.setPosition(XPosition, YPosition);
 		this.spriteArray = sprites;		
 		this.setHitTimer(0.6);
 		this.setState(State.ALIVE);
+		this.setPosition(XPosition, YPosition);
 	}
 	
 	protected LivingCreatures(int XPosition, int YPosition, double horizontalVelocity, 
@@ -122,7 +122,8 @@ public abstract class LivingCreatures {
 				
 			else if (positionBottomY < 0){
 				positionBottomY = 0;
-				//comment creatures mogen normaal niet langs onder uit de map gaan.
+				this.setOutOfBounds(true);
+				this.terminate();
 			}
 			else if ((int)positionBottomY > getWorld().getPixelHeight()){
 				positionBottomY = getWorld().getPixelHeight();

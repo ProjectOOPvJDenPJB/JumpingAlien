@@ -3,8 +3,6 @@ package jumpingalien.part2.tests;
 import static jumpingalien.tests.util.TestUtils.spriteArrayForSize;
 import static org.junit.Assert.*;
 import jumpingalien.model.Direction;
-import jumpingalien.model.IllegalTimeIntervalException;
-import jumpingalien.model.Mazub;
 import jumpingalien.model.School;
 import jumpingalien.model.Slime;
 import jumpingalien.model.World;
@@ -34,12 +32,12 @@ public class SlimeTest {
 
 	@Test
 	public void extendedConstructor$LegalCase() {	
-		Slime slime = new Slime(0, 0, 0, 0, 0, defaultSprites, defaultWorld,school1,100);
-		assertTrue(slime.getXPosition() == 0);
-		assertTrue(slime.getYPosition() == 0);
-		assertTrue(slime.getHorizontalVelocity() == 0);
-		assertTrue(slime.getVerticalVelocity() ==0);
-		assertTrue(slime.getHorizontalAcceleration()==0);
+		Slime slime = new Slime(5, 10, 1, 20, 25,defaultSprites, defaultWorld,school1,100);
+		assertTrue(slime.getXPosition() == 5);
+		assertTrue(slime.getYPosition() == 10);
+		assertTrue(slime.getHorizontalVelocity() == 1);
+		assertTrue(slime.getVerticalVelocity() ==20);
+		assertTrue(slime.getHorizontalAcceleration()==25);
 		assertTrue(slime.getVerticalAcceleration() == 0);
 		assertTrue(slime.getWorld() == defaultWorld);
 		assertTrue(slime.getSchool() == school1);

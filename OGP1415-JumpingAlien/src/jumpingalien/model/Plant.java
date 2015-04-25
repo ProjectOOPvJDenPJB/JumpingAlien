@@ -59,7 +59,7 @@ public class Plant extends LivingCreatures{
 	 * 			| this(0,0,sprites, null)
 	 */
 	public Plant(Sprite[] sprites){
-		this(0,0,0.5,sprites, null,1);	
+		this(0,0,sprites);	
 
 	}
 	

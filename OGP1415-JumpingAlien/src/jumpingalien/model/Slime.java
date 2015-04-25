@@ -121,7 +121,7 @@ public class Slime extends LivingCreatures {
 	 * 			| this(0,0,sprites, null)
 	 */
 	public Slime(Sprite[] sprites, School school){
-		this(100,100,sprites,school);	
+		this(0,0,sprites,school);	
 
 	}
 	
