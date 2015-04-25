@@ -742,8 +742,9 @@ public abstract class LivingCreatures {
 	 * 			new.getXPosition = this.getXPosition() + distanceCalculated
 	 */
 	public void changeHorizontalPosition(double timeInterval){
-		if (Util.fuzzyGreaterThanOrEqualTo(horizontalVelocity,this.getMaximumHorizontalVelocity())) 
+		if (Util.fuzzyGreaterThanOrEqualTo(horizontalVelocity,this.getMaximumHorizontalVelocity())){
 			this.setHorizontalAcceleration(0);
+		}
 		double newPositionX = this.getXPosition() + this.getDirection().getInt() * (100 * this.getHorizontalVelocity()*timeInterval 
 				+ 50 * this.getHorizontalAcceleration()*timeInterval*timeInterval);
 		
@@ -795,6 +796,7 @@ public abstract class LivingCreatures {
 			}
 	}
 	
+	//comment gaat errors geven als ge nie beweegt, of als ge enkel in 1 richting beweegt (delen door 0 gaat nie)
 	public double getSmallestDT(double dt) {
 		double horizontalDT = 
 				0.01 / (this.getHorizontalAcceleration() + this.getHorizontalAcceleration() * dt);
