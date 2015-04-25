@@ -843,16 +843,19 @@ public abstract class LivingCreatures {
 		if (Util.fuzzyGreaterThanOrEqualTo(horizontalVelocity,this.getMaximumHorizontalVelocity())){
 			this.setHorizontalAcceleration(0);
 		}
-		double newPositionX = this.getXPosition() + this.getDirection().getInt() * (100 * this.getHorizontalVelocity()*timeInterval 
-				+ 50 * this.getHorizontalAcceleration()*timeInterval*timeInterval);
-		
-		if (this.getMovementBlocked() || this.collidesWithTerrain() 
-				|| Interaction.interactWithMovementBlockingCreature(this, this.getWorld())){
-			this.setMovementBlocked(true);
-			//movement blocked wordt kort op true gezet als de beweging wordt geblokeerd, maar wordt elke keer gerefreshed.
-		}else{
-			setXPosition(newPositionX);
-			Interaction.interactWithOtherCreatures(this);
+		double dt_min = getSmallestDT(timeInterval);
+		for (double dt = dt_min; dt <= timeInterval; dt += dt_min){
+			double newPositionX = this.getXPosition() + this.getDirection().getInt() * (100 * this.getHorizontalVelocity()*dt 
+					+ 50 * this.getHorizontalAcceleration()*dt*dt);
+			
+			if (this.getMovementBlocked() || this.collidesWithTerrain() 
+					|| Interaction.interactWithMovementBlockingCreature(this, this.getWorld())){
+				this.setMovementBlocked(true);
+				//movement blocked wordt kort op true gezet als de beweging wordt geblokeerd, maar wordt elke keer gerefreshed.
+			}else{
+				setXPosition(newPositionX);
+				Interaction.interactWithOtherCreatures(this);
+			}
 		}
 	}
 	
@@ -865,33 +868,28 @@ public abstract class LivingCreatures {
 	  * 		new.getYPosition = this.getYPosition() + distanceCalculated
 	  */
 	public void changeVerticalPosition(double timeInterval) {
-			double newPositionY = this.getYPosition() 
-					+ 100 * this.getVerticalVelocity() * timeInterval
-					+ 50 * this.getVerticalAcceleration() * timeInterval * timeInterval;
-			
-			if (Util.fuzzyGreaterThanOrEqualTo(newPositionY, this.getYPosition())){
-				for(double i = this.getXPosition(); Util.fuzzyLessThanOrEqualTo(i, newPositionY); i += 1){
-					this.setYPosition(i);
+			double dt_min = getSmallestDT(timeInterval);
+			for (double dt = dt_min; dt <= timeInterval; dt += dt_min){
+				double newPositionY = this.getYPosition() 
+						+ 100 * this.getVerticalVelocity() * timeInterval
+						+ 50 * this.getVerticalAcceleration() * timeInterval * timeInterval;
 					Interaction.interactWithOtherCreatures(this);
-					if (this.getMovementBlocked() || this.collidesWithTerrain()){
+					if (this.getMovementBlocked() || this.collidesWithTerrainThroughBottomBorder()){
+						this.setVerticalVelocity(0);
+						this.setVerticalAcceleration(0);
+						this.setMovingVertical(false);
 						this.endJump();
-						this.setMovementBlocked(false);
+						this.setMovementBlocked(true);
 					}
-				}
-			}else{
-					for(double i = this.getXPosition(); Util.fuzzyGreaterThanOrEqualTo(i, newPositionY); i -= 1){
-						if (this.getMovementBlocked() || Interaction.collidesWithTerrain(this) != 1 || Util.fuzzyLessThanOrEqualTo(i,0)){
-							this.setVerticalVelocity(0);
-							this.setVerticalAcceleration(0);
-							this.setMovingVertical(false);
-							this.endJump();
-							this.setMovementBlocked(false);
-						}else{
-							this.setYPosition(i);
-							Interaction.interactWithOtherCreatures(this);
-						}
-					}
+					
+					else if (this.getMovementBlocked() || this.collidesWithTerrain() 
+						|| Interaction.interactWithMovementBlockingCreature(this, this.getWorld())){
+						this.endJump();
+						this.setMovementBlocked(true);
+					}else
+							this.setYPosition(newPositionY);					
 			}
+			Interaction.interactWithOtherCreatures(this);
 	}
 	
 	//comment gaat errors geven als ge nie beweegt, of als ge enkel in 1 richting beweegt (delen door 0 gaat nie)
@@ -1060,6 +1058,17 @@ public abstract class LivingCreatures {
 			}
 		}
 		return false;
+	}
+	
+	public boolean collidesWithTerrainThroughBottomBorder(){
+		World world = this.getWorld();
+		if ((world.getTileType((int)this.getXPosition(), (int)this.getYPosition()) != 1) 
+				||((world.getTileType((int)(this.getXPosition() + this.getSize()[0]), (int)(this.getYPosition())) != 1))){
+			return false;
+		}
+		else {
+			return true;
+		}
 	}
 	
 	/**

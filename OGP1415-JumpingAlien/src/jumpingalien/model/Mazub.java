@@ -284,39 +284,39 @@ public class Mazub extends LivingCreatures {
 	public void advanceTime(double timeInterval) throws IllegalTimeIntervalException {
 		if (! isValidTimeInterval(timeInterval))
 			throw new IllegalTimeIntervalException(timeInterval);
-		if (isDying()) {
+		else if (isDying()) {
 			terminate();
 			this.setDeathTimer(getDeathTimer() + timeInterval);
 		}
-		if (hasWonGame()) {
+		else if (hasWonGame()) {
 			getWorld().terminate();
 		}
 		else if (isDead())
 			throw new IllegalStateException("Mazub is already dead.");
 		else {
-			double dt_min = getSmallestDT(timeInterval);
+			//double dt_min = getSmallestDT(timeInterval);
 			double vHmax = this.getMaximumHorizontalVelocity();
-			for (double dt = dt_min; Util.fuzzyLessThanOrEqualTo(dt, timeInterval); dt += dt_min) {
+			//for (double dt = dt_min; Util.fuzzyLessThanOrEqualTo(dt, timeInterval); dt += dt_min) {
 				if (this.getDucking() == true) {
 					this.setMaximumHorizontalVelocity(1);
 				}
 				if (this.getMoving() == true){
 					this.setHorizontalAcceleration(0.9);
-					this.changeHorizontalPosition(dt);
-					this.setHorizontalVelocity(this.getHorizontalVelocity() + this.getHorizontalAcceleration()*dt);
+					this.changeHorizontalPosition(timeInterval);
 				}
 				
 				if (this.getMovingVertical() == true) {
-					changeVerticalPosition(dt);
+					changeVerticalPosition(timeInterval);
 					if (this.getMovingVertical() == true){
-						this.setVerticalVelocity(this.getVerticalVelocity() + this.getVerticalAcceleration()*dt);
 					}
 				}
+			//}
+				this.setHorizontalVelocity(this.getHorizontalVelocity() + this.getHorizontalAcceleration()*timeInterval);
+				this.setVerticalVelocity(this.getVerticalVelocity() + this.getVerticalAcceleration()*timeInterval);
 				this.setMaximumHorizontalVelocity(vHmax);
-				this.setRunTime(this.getRunTime() + dt);
-				this.setHitTimer(this.getHitTimer() + dt);
-				this.applyTerrainDmg(dt);
-			}
+				this.setRunTime(this.getRunTime() + timeInterval);
+				this.setHitTimer(this.getHitTimer() + timeInterval);
+				this.applyTerrainDmg(timeInterval);
 		}
 	}
 			
