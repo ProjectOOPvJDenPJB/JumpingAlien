@@ -230,11 +230,12 @@ public class World {
 	public boolean isPassable(int leftX,int bottomY){
 		int[] position = getTilePosition(leftX, bottomY);
 			if (this.tileTypes[position[0]][position[1]] == 1) {
-			if ((bottomY % getTileSize() == getTileSize()-1) &&
-					(isPassable(leftX, bottomY+1)))
-				return true;
-			else
 				return false;
+//			if ((bottomY % getTileSize() == getTileSize()-1) &&
+//					(isPassable(leftX, bottomY+1)))
+//				return true;
+//			else
+//				return false;
 		}
 		else
 			return true;

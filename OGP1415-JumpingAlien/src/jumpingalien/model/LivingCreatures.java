@@ -748,7 +748,7 @@ public abstract class LivingCreatures {
 		
 		if (this.getMovementBlocked() || this.collidesWithTerrain() 
 				|| Interaction.interactWithMovementBlockingCreature(this, this.getWorld())){
-			this.setMovementBlocked(false);
+			this.setMovementBlocked(true);
 			//movement blocked wordt kort op true gezet als de beweging wordt geblokeerd, maar wordt elke keer gerefreshed.
 		}else{
 			setXPosition(newPositionX);
@@ -948,15 +948,17 @@ public abstract class LivingCreatures {
 	}
 	
 	/**
-	 * @return wether or not the living creature collides with the terrain
+	 * @return whether or not the living creature collides with the terrain
 	 */
 	public boolean collidesWithTerrain() {
 		for (int[] tile : getWorld().getOccupiedTiles((int)getXPosition(),(int)getYPosition(),
 				(int)getXPosition()+getCurrentSprite().getWidth(),(int)getYPosition()+getCurrentSprite().getHeight())) {
-			if (! getWorld().isPassable(tile[0], tile[1]))
-				return false;
+			System.out.println(tile);
+			if (!getWorld().isPassable(tile[0], tile[1])){
+				return true;
+			}
 		}
-		return true;
+		return false;
 	}
 	
 	/**

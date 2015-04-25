@@ -203,10 +203,11 @@ public class Slime extends LivingCreatures {
 		
 		if (isAlive()) {
 			
-			if (Util.fuzzyGreaterThanOrEqualTo(getRunTime(), getRandomTime())) {
+			if (Util.fuzzyGreaterThanOrEqualTo(getRunTime(), getRandomTime())  || this.getMovementBlocked()) {
 				startMoveOpposite();
 				setRandomTime();
 				setRunTime(0);
+				setMovementBlocked(false);
 			}
 			else
 				this.setRunTime(getRunTime() + timeInterval);

@@ -10,13 +10,24 @@ public class Interaction{
 	}
 
 	public static boolean collidesWithCreature(LivingCreatures creature1, LivingCreatures creature2) {
-		if ((creature1.getXPosition() + (creature1.getSize()[0] - 1) < creature2.getXPosition()) || 
-				(creature2.getXPosition() + (creature2.getSize()[0] - 1) < creature1.getXPosition()) ||
-				(creature1.getYPosition() + (creature1.getSize()[1] - 1) <creature2.getYPosition()) ||
-				(creature2.getYPosition() + (creature2.getSize()[1] - 1) < creature1.getYPosition())) {
-			return false;
+//		if ((creature1.getXPosition() + (creature1.getSize()[0] - 1) < creature2.getXPosition()) || 
+//				(creature2.getXPosition() + (creature2.getSize()[0] - 1) < creature1.getXPosition()) ||
+//				(creature1.getYPosition() + (creature1.getSize()[1] - 1) <creature2.getYPosition()) ||
+//				(creature2.getYPosition() + (creature2.getSize()[1] - 1) < creature1.getYPosition())) {
+//			return false;		
+//		}
+		if (  (((creature1.getXPosition() < creature2.getXPosition()) 
+				&& (creature2.getXPosition() < creature1.getXPosition() + creature1.getSize()[0])) 
+				||(  (creature1.getXPosition() < creature2.getXPosition()) 
+				&& (creature2.getXPosition() < creature1.getXPosition() + creature1.getSize()[0])))
+				
+				&& (((creature1.getYPosition() < creature2.getYPosition()) 
+			    && (creature1.getYPosition() + creature1.getSize()[1] > creature2.getYPosition())) || 
+				((creature2.getYPosition() < creature1.getYPosition()) && 
+				(creature2.getYPosition() + creature2.getSize()[1] > creature1.getYPosition())))){
+			return true;
 		}
-		return true;
+		return false;
 	}
 	
 //	public static int collidesWithTerrain(LivingCreatures creature){
@@ -80,47 +91,54 @@ public class Interaction{
 	
 	public static void interactWithOtherCreatures(LivingCreatures creature){
 		World world =creature.getWorld();
-		for (Plant plant : world.getPlants()) {
-			if (collidesWithCreature(creature,plant)){
-				interactWithPlant(creature,plant);
+		try{
+			for (Plant plant : world.getPlants()) {
+				if (collidesWithCreature(creature,plant)){
+					interactWithPlant(creature,plant);
+				}	
 			}
-			
+		}catch(NullPointerException exc){
 		}
-		for (Slime slime : world.getSlimes()) {
-			if (collidesWithCreature(creature,slime)){
-				interactWithSlime(creature, slime);
+		try{
+			for (Slime slime : world.getSlimes()) {
+				if (collidesWithCreature(creature,slime)){
+					interactWithSlime(creature, slime);
+				}
 			}
+		}catch(NullPointerException exc){
 		}
-		for (Shark shark : world.getSharks()) {
-			if (collidesWithCreature(creature,shark)){
-				interactWithShark(creature, shark);
+		try{
+			for (Shark shark : world.getSharks()) {
+				if (collidesWithCreature(creature,shark)){
+					interactWithShark(creature, shark);
+				}
 			}
+		}catch(NullPointerException exc){
 		}
 	}	
 	
 	public static boolean interactWithMovementBlockingCreature (LivingCreatures creature, World world){
-			for (Plant plant : world.getPlants()) {
-				if (collidesWithCreature(creature,plant)){
-					return true;
-				}
-				
-			}
 			for (Slime slime : world.getSlimes()) {
 				if (collidesWithCreature(creature,slime)){
+					System.out.println("fucking slimes");
+
 					return true;
 				}
 			}
 			for (Shark shark : world.getSharks()) {
 				if (collidesWithCreature(creature,shark)){
+					System.out.println("fuckin sharks");
 					return true;
 				}
 			}
 			Mazub mazub = world.getMazub();
 			if (mazub != null){
 				if (collidesWithCreature(creature,world.getMazub())){
+					System.out.println("mazub");
 					return true;
 				}
 			}
+			System.out.println("creature ok");
 			return false;
 		}
 
