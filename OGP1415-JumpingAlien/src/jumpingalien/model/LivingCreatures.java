@@ -98,62 +98,70 @@ public abstract class LivingCreatures {
 	 * Set the X position of this living creature to the given X position.
 	 * @param	xPosition
 	 * 			The new position on the X-axis of the leftmost pixel for this living creature.
-	 * @post	The new X position of the leftmost pixel of the living creature is equal to the
-	 * 			given xPosition.
-	 * @throws 	IllegalXPositionException
-	 * 			The given X position is not a valid X position for a living creature.
-	 * 			| ! isValidXPosition(xPosition)
+	 * @post	If the given position was a valid position in regards to the world this creature is in,
+	 * 			the new position is set to the given position.
+ 	 *			| new.getPosition().getPosition() == [positionLeftX, positionBottomY]
+	 * @post	If the given position is not a valid position, the creature is set to be out of bounds and
+	 * 			is terminated.
+	 * 			| new.getOutOfBounds == true && (new.isDead() || new.isDying())
 	 */
 	@Basic @Raw
-	public void setPosition(double positionLeftX, double positionBottomY) throws IllegalXPositionException, IllegalYPositionException {
+	public void setPosition(double positionLeftX, double positionBottomY) {
 		try {
 			this.position =  new Position(positionLeftX,positionBottomY,getWorld());
 		} catch (IllegalXPositionException | IllegalYPositionException exc) {
-			if (positionLeftX < 0) {
-				//positionLeftX = 0;
-				this.setOutOfBounds(true);
-				this.terminate();
-			}
-			else if ((int)positionLeftX > getWorld().getPixelWidth()){
-				//positionLeftX = getWorld().getPixelWidth();
-				this.setOutOfBounds(true);
-				this.terminate();
-			}
-				
-			else if (positionBottomY < 0){
-				positionBottomY = 0;
-				this.setOutOfBounds(true);
-				this.terminate();
-			}
-			else if ((int)positionBottomY > getWorld().getPixelHeight()){
-				positionBottomY = getWorld().getPixelHeight();
-				this.setOutOfBounds(true);
-				this.terminate();
-			}
+			this.setOutOfBounds(true);
+			this.terminate();
 		}
-		//position =  new Position(positionLeftX, positionBottomY,getWorld());
 	}
 	
+	/**
+	 * Sets the new X position of this creature to the given X position.
+	 * @param 	positionLeftX
+	 * 			The new X position to be set.
+	 * @effect	The new position of this creature is set to the given X position and
+	 * 			current Y position
+	 * 			| setPosition(positionLeftX, getYPosition())
+	 */
 	public void setXPosition(double positionLeftX) {
 		setPosition(positionLeftX, getYPosition());
 	}
 	
+	/**
+	 * Sets the new Y position of this creature to the given Y position.
+	 * @param 	positionBottomY
+	 * 			The new Y position to be set.
+	 * @effect	The new position of this creature is set to the current X position
+	 * 			and the given Y position.
+	 * 			| setPosition(getXPosition(), positionBottomY
+	 */
 	public void setYPosition(double positionBottomY) {
 		setPosition(getXPosition(), positionBottomY);
 	}
 	
+	/**
+	 * Return whether this creature is out of bounds or not.
+	 */
 	public boolean getOutOfBounds() {
 		return this.outOfBounds;
 	}
 	
+	/**
+	 * Variable registering whether this creature is out of bounds or not.
+	 */
 	public boolean outOfBounds;
 	
+	/**
+	 * Sets the outOfBounds boolean to the given flag.
+	 * @param 	flag
+	 * 			The flag to be set, either true or false.
+	 */
 	public void setOutOfBounds(boolean flag) {
 		this.outOfBounds = true;
 	}
 	
 	/**
-	 *  Return the horizontal velocity of this Mazub.
+	 *  Return the horizontal velocity of this creature.
 	 */
 	@Basic
 	public double getHorizontalVelocity() {
@@ -161,28 +169,28 @@ public abstract class LivingCreatures {
 	}
 	
 	/**
-	 * Variable registering the horizontal velocity of this Mazub.
+	 * Variable registering the horizontal velocity of this creature.
 	 * 	The standard horizontal velocity is 0.
 	 */
 	private double horizontalVelocity = 0;
 	
 	/**
-	 * Sets the horizontal velocity of this Mazub to the given horizontal velocity.
+	 * Sets the horizontal velocity of this creature to the given horizontal velocity.
 	 * 
 	 * @param	horizontalVelocity
-	 * 			The new horizontal velocity for this Mazub.
+	 * 			The new horizontal velocity for this creature.
 	 * @post	If the given horizontalVelocity is greater than or equal to zero and smaller or equal to
-	 * 			the maximumHorizontalVelocity then the horizontalVelocity of this Mazub is equal to
+	 * 			the maximumHorizontalVelocity then the horizontalVelocity of this creature is equal to
 	 * 			the given horizontalVelocity.
 	 * 			| if (horizontalVelocity >= 0) 
 	 * 			|	&& (horizontalVelocity <= this.getMaximumHorizontalVelocity())
 	 * 			|	then new.getHorizontalVelocity() == horizontalVelocity
-	 * @post	If the given horizontalVelocity is smaller than zero then the horizontalVelocity of this Mazub
+	 * @post	If the given horizontalVelocity is smaller than zero then the horizontalVelocity of this creature
 	 * 			is equal to zero.
 	 * 			| if (horizontalVelocity  < 0)
 	 * 			|	then new.getHorizontalVelocity() == 0
 	 * @post	If the given horizontalVelocity is greater than the maximumHorizontalVelocity then the
-	 * 			horizontalVelocity of this Mazub is equal to the maximumHorizontalVelocity.
+	 * 			horizontalVelocity of this creature is equal to the maximumHorizontalVelocity.
 	 * 			| if (horizontalVelocity > this.getMaximumHorizontalVelocity())
 	 * 			|	then new.getHorizontalVelocity() == this.getMaximumHorizontalVelocity()
 	 */
@@ -199,7 +207,7 @@ public abstract class LivingCreatures {
 	}
 	
 	/**
-	 * Return the initial horizontal velocity of this Mazub.
+	 * Return the initial horizontal velocity of this creature.
 	 */
 	@Immutable
 	public double getInitialHorizontalVelocity() {
@@ -223,12 +231,12 @@ public abstract class LivingCreatures {
 	}
 	
 	/**
-	 * Variable registering the initial horizontal velocity of this Mazub.
+	 * Variable registering the initial horizontal velocity of this creature.
 	 */
 	private final double initialHorizontalVelocity;
 
 	/**
-	 *  Return the vertical velocity of this living creature.
+	 *  Return the vertical velocity of this creature.
 	 */
 	public double getVerticalVelocity(){
 		return this.verticalVelocity;
@@ -237,8 +245,8 @@ public abstract class LivingCreatures {
 	/**
 	 * Checks whether the current vertical velocity is a valid vertical velocity.
 	 * @param 	verticalVelocity
-	 * @return	...
-	 * 			| Double.isFinite(verticalVelocity)
+	 * @return	The verticalVelocity must be a finite number.
+	 * 			| result == Double.isFinite(verticalVelocity)
 	 */
 	public boolean isValidVerticalVelocity(double verticalVelocity) {
 		return (Double.isFinite(verticalVelocity));
@@ -256,6 +264,7 @@ public abstract class LivingCreatures {
 	 * @param	verticalVelocity
 	 * 			The new vertical velocity for this living creature.
 	 * @pre		The given verticalVelocity is a valid velocity for this living creature.
+	 * 			| isValidVerticalVelocity(verticalVelocity)
 	 * @post	The new vertical velocity is equal to the
 	 * 			given vertical velocity.
 	 * 			| 	then new.verticalVelocity = verticalVelocity
@@ -273,8 +282,18 @@ public abstract class LivingCreatures {
 	}
 	
 	/**
+	 * Checks whether the given horizontalAcceleration is a valid one for this creature.
+	 * @param 	horizontalAcceleration
+	 * 			The horizontal acceleration to check.
+	 * @return	True if and only if the given acceleration is positive or zero.
+	 * 			| result == (horizontalAcceleration >= 0)
+	 */
+	public static boolean isValidHorizontalAcceleration(double horizontalAcceleration) {
+		return horizontalAcceleration >= 0;
+	}
+	
+	/**
 	 * Variable registering the horizontal acceleration of this living creature.
-	 * 	The standard horizontal acceleration is 0.
 	 */
 	private double horizontalAcceleration;
 	
@@ -284,12 +303,14 @@ public abstract class LivingCreatures {
 	 * @param	horizontalVelocity
 	 * 			The new horizontal acceleration for this living creature.
 	 * @pre		The given horizontalAcceleration is a valid acceleration for this living creature.
+	 * 			| isValidHorizontalAcceleration(horizontalAcceleration)
 	 * @post	The new horizontal acceleration is equal to the
 	 * 			given horizontal acceleration.
 	 * 			| 	then new.horizontalAcceleration = horizontalAcceleration
 	 */
 	public void setHorizontalAcceleration(double horizontalAcceleration){
-			this.horizontalAcceleration = horizontalAcceleration;
+		assert isValidHorizontalAcceleration(horizontalAcceleration);
+		this.horizontalAcceleration = horizontalAcceleration;
 	}
 	
 	/**
@@ -297,6 +318,18 @@ public abstract class LivingCreatures {
 	 */
 	public double getVerticalAcceleration(){
 		return this.verticalAcceleration;
+	}
+	
+	/**
+	 * Checks whether the given verticalAcceleartion is a valid one for a creature.
+	 * @param 	verticalAcceleration
+	 * 			The vertical acceleration to check.
+	 * @return	If the verticalAcceleration is 0 or -10 it is valid.
+	 * 			| result == 
+	 * 			|	(verticalAcceleration == 0) || (verticalAcceleration == -10)
+	 */
+	public static boolean isValidVerticalAcceleration(double verticalAcceleration) {
+		return (verticalAcceleration) == 0 || (verticalAcceleration == -10);
 	}
 	
 	/**
@@ -316,9 +349,20 @@ public abstract class LivingCreatures {
 	 * 			| 	then new.verticalAcceleration = verticalAcceleration
 	 */
 	public void setVerticalAcceleration(double verticalAcceleration){
-			this.verticalAcceleration = verticalAcceleration;
+		assert isValidVerticalAcceleration(verticalAcceleration);
+		this.verticalAcceleration = verticalAcceleration;
 	}
 	
+	/**
+	 * Return world in which the living creature is located.
+	 */
+	public World getWorld(){
+		return this.world;
+	}
+	
+	/**
+	 * Variable registering the world of this creature.
+	 */
 	protected World world;
 	
 	
@@ -328,26 +372,30 @@ public abstract class LivingCreatures {
 	 * 			The new world for this living creature.
 	 * @post	The new world for the living creature is equal to the
 	 * 			given world.
+	 * 			| new.getWorld() == world
 	 */
 	public void setWorld(World world){
 		assert canHaveAsWorld(world);
 		this.world = world;
 	}
+
+	/**
+	 * Checks whether this creature is in a world.
+	 * @return 	The world must not be of null type.
+	 * 			| result == (world != null)
+	 */
+	public boolean isInWorld(){
+		return (world != null);
+	}
 	
 	/**
-	 * Return world in which the living creature is located.
+	 * Checks whether the given world is the world in which the creature
+	 * 	is located.
+	 * @param 	world
+	 * 			The world to check.
+	 * @return	True if the given world is the world of this creature, false otherwise.
+	 * 			| result == (getWorld() == world)
 	 */
-	public World getWorld(){
-		return this.world;
-	}
-		
-	public boolean isInWorld(){
-		if (world != null)
-			return true;
-		else
-			return false;
-	}
-	
 	public boolean hasAsWorld(World world) {
 		try {
 			return this.getWorld() == world;
@@ -359,6 +407,15 @@ public abstract class LivingCreatures {
         }
 	}
 	
+	/**
+	 * Checks whether this creature can have the given world as world.
+	 * @param 	world
+	 * 			The world to check
+	 * @return	The world must not be null and the world must be able to have
+	 * 			this creature as an object.
+	 * 			| result ==
+	 * 			|	 (world != null) && (world.canHaveAsObject(this))
+	 */
 	public boolean canHaveAsWorld(World world) {
 		return (world != null) && (world.canHaveAsObject(this));
 	}
@@ -375,9 +432,12 @@ public abstract class LivingCreatures {
 	 * 
 	 * @param 	spriteArray
 	 * 			The spriteArray to check against.
-	 * @return	True if the spriteArray is a valid spriteArray.
-	 * 			| result ==
-	 * 			|	(spriteArray.length >= 0) &&  (spriteArray.length % 2 == 0)
+	 * @effect	If the object is of type Mazub, then the checker of the Mazub class is invoked.
+	 * 			| if (object instanceof Mazub)
+	 * 			|	then Mazub.isValidSpriteArray(spriteArray)
+	 * @return	True if the spriteArray is a valid spriteArray for a creature apart from Mazub.
+	 * 			These spriteArrays must be of length 2.
+	 * 			| result == (spriteArray.length == 2)
 	 */
 	public static boolean isValidSpriteArray(Sprite[] spriteArray,Object object) {
 		if (object instanceof Mazub)
@@ -401,15 +461,14 @@ public abstract class LivingCreatures {
 	}
 	
 	/**
-	 * TODO
-	 * @return
+	 * Return the direction of this creature.
 	 */
 	public Direction getDirection() {
 		return this.direction;
 	}
 	
 	/**
-	 * Variable indicating the direction of this living creature. -1 indicates left, 1 indicates right.
+	 * Variable registering the direction of this living creature.
 	 */
 	private Direction direction = Direction.RIGHT;
 
@@ -426,10 +485,24 @@ public abstract class LivingCreatures {
 	 * 			|	then new.getDirection() == RIGHT
 	 */
 	public void setDirection(Direction direction) {
-		//TODO Manier van programmeren?
 		this.direction = direction;
 	}
 	
+	/**
+	 * Sets the direction of this living creature to the given integer direction.
+	 * 	A 1 resembles right and a -1 resembles left.
+	 * @param 	direction
+	 * 			The new direction of this living creature in form of an integer.
+	 * @post	If the given direction integer was 1, then the new direction of this creature is right.
+	 * 			| if (direction == 1)
+	 * 			|	then new.getDirection() == RIGHT
+	 * @post	If the given direction integer was -1, then the new direction of this creature is left.
+	 * 			| if (direction == -1)
+	 * 			|	then new.getDirection() == LEFT
+	 * @post	If the given direction integer was not 1 or -1, nothing happens.
+	 * 			| if (direction != 1) && (direction != -1)
+	 * 			|	then new.getDirection() == old.getDirection()
+	 */
 	public void setDirection(int direction){
 		if (direction == 1){
 			this.direction = Direction.RIGHT;
@@ -456,7 +529,7 @@ public abstract class LivingCreatures {
 	/**
 	 * Sets the boolean indicating whether this living creature is moving horizontally.
 	 * @param 	flag
-	 * 		 	The new boolean that indicates wether or not living creature is moving horiztonally.
+	 * 		 	The new boolean that indicates whether or not living creature is moving horizontally.
 	 * @post	The new moving state of this living creature is equal to the 
 	 * 			given flag.
 	 * 			| new.getMoving == flag
@@ -466,12 +539,35 @@ public abstract class LivingCreatures {
 		this.moving = flag;
 	}
 	
+	/**
+	 * Return the hitpoints of this living creature.
+	 */
 	public int getHP() {
 		return this.hitpoints;
 	}
 	
+	/**
+	 * Variable registering the hitpoints of this living creature.
+	 */
 	private int hitpoints;
 	
+	/**
+	 * Sets the hitpoints of this living creature to the given hitpoints.
+	 * @param 	HP
+	 * 			The new hitpoints to be set for this living creature.
+	 * @post	If the hitpoints are lower than the minimum hitpoints for this creature
+	 * 			then the creature is terminated and the hitpoints are set to the minimum hitpoints.
+	 * 			| if (HP <= getMinHp())
+	 * 			|	then ((isDead()) || (isDying())) && new.getHP() == getMinHP()
+	 * @post	If the hitpoints are higher than the maximum hitpoints of this creature, then the hitpoints
+	 * 			are set to the maximum hitpoints.
+	 * 			| if (HP > getMaxHP())
+	 * 			|	then new.getHP() == getMaxHP()
+	 * @post	If the hitpoints are neither lower than the minimum hitpoints or higher than the maximum hitpoints
+	 * 			then the hitpoints are set to the given hitpoints.
+	 * 			| if (HP <= getMaxHP()) && (HP > getMinHP())
+	 * 			|	then new.getHP() == HP
+	 */
 	public void setHP(int HP) {
 		if (HP <= getMinHP()) {
 			hitpoints = getMinHP();
@@ -483,9 +579,11 @@ public abstract class LivingCreatures {
 			hitpoints = HP;
 	}
 	
+	//TODO
 	public abstract void terminate();
 
 	public abstract int getMaxHP();
+	
 	public abstract int getMinHP();
 	
 	public static final int MIN_HP = 0;

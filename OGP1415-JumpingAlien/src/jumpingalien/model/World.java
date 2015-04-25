@@ -485,7 +485,7 @@ public class World {
 	 * Adds the given plant to this world.
 	 * @param 	plant
 	 * @pre		...
-	 * 			| assert plant.canHaveAsWorld(this)
+	 * 			| plant.canHaveAsWorld(this)
 	 * @post	...
 	 * 			| new.hasAsPlant(plant) == true
 	 * @post	...
@@ -501,7 +501,7 @@ public class World {
 	 * Removes the given plant from this world.
 	 * @param 	plant
 	 * @pre		...
-	 * 			| assert (hasAsPlant(plant) && plant.hasAsWorld(this))
+	 * 			| (hasAsPlant(plant) && plant.hasAsWorld(this))
 	 * @post	...
 	 * 			| new.hasAsPlant(plant) == false
 	 */
@@ -538,7 +538,7 @@ public class World {
 	 * Adds the given slime to this world.
 	 * @param 	slime
 	 * @pre		...
-	 * 			| assert slime.canHaveAsWorld(this)
+	 * 			| slime.canHaveAsWorld(this)
 	 * @post	...
 	 * 			| new.hasAsSlime(slime) == true
 	 * @post	...
@@ -556,7 +556,7 @@ public class World {
 	 * Removes the given slime from this world.
 	 * @param 	slime
 	 * @pre		...
-	 * 			| assert (hasAsSlime(slime) && slime.hasAsWorld(this))
+	 * 			| (hasAsSlime(slime) && slime.hasAsWorld(this))
 	 * @post	...
 	 * 			| new.hasAsSlime(slime) == false
 	 */
@@ -592,7 +592,7 @@ public class World {
 	 * Adds the given shark to this world.
 	 * @param 	shark
 	 * @pre		...
-	 * 			| assert shark.canHaveAsWorld(this)
+	 * 			| shark.canHaveAsWorld(this)
 	 * @post	...
 	 * 			| new.hasAsShark(shark) == true
 	 * @post	...
@@ -608,7 +608,7 @@ public class World {
 	 * Removes the given shark from this world.
 	 * @param 	shark
 	 * @pre		...
-	 * 			| assert (hasAsShark(shark) && shark.hasAsWorld(this))
+	 * 			| (hasAsShark(shark) && shark.hasAsWorld(this))
 	 * @post	...
 	 * 			| new.hasAsShark(shark) == false
 	 */
@@ -666,7 +666,7 @@ public class World {
 	 * Sets the given Mazub in this world.
 	 * @param 	alien
 	 * @pre		...
-	 * 			| assert canHaveAsMazub(alien)
+	 * 			| canHaveAsMazub(alien)
 	 * @post	...
 	 * 			| new.getMazub() == alien
 	 * @post	...
