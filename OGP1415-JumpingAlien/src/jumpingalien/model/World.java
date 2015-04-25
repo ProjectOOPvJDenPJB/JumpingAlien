@@ -242,6 +242,13 @@ public class World {
 	 */
 	private int[][] tileTypes;
 	
+	
+	private final Set<Tile> tiles = new HashSet<Tile>();
+
+	public Collection<Tile> getTiles(){
+		Collection<Tile> elements = tiles;
+		return new ArrayList<Tile>(elements);
+	}
 	/**
 	 * Return the positions of tiles occupied by the given region.
 	 * @param 	leftX
@@ -253,7 +260,7 @@ public class World {
 	 * 			|	where (tilesInt[i][0] == tile_X)
 	 * 			|	and (tilesInt[i][1] == tile_Y)
 	 */
-	public int[][] getOccupiedTiles(int leftX, int bottomY, int rightX, int topY) {
+	public int[][] getOccupiedTiles1(int leftX, int bottomY, int rightX, int topY) {
 		List<int[]> tiles = new ArrayList<int[]>();
 		int amountXTiles = getAmountOfOccupiedTiles(leftX, getTileSize(), rightX-leftX );
 		int amountYTiles = getAmountOfOccupiedTiles(bottomY, getTileSize(), topY - bottomY);
@@ -270,6 +277,22 @@ public class World {
 		    tilesInt[i][1] = tiles.get(i)[1];
 		}
 		return tilesInt;
+	}	
+		
+	public List<Tile> getOccupiedTiles(int leftX, int bottomY, int rightX, int topY){
+		List<Tile> tiles = new ArrayList<Tile>();
+		for  (Tile tile : this.getTiles()){
+			if (((tile.getLeftX() >= leftX) && (tile.getLeftX()+this.getTileSize() <= rightX) 
+					&& ((tile.getBottomY() >= bottomY) && (tile.getBottomY() + this.getTileSize() < topY) 
+					|| (tile.getBottomY() < bottomY) && (tile.getBottomY() + this.getTileSize() >= topY)) 
+					&& 
+					(tile.getLeftX() <= leftX) && (tile.getLeftX()+this.getTileSize() >= rightX) 
+					&& ((tile.getBottomY() >= bottomY) && (tile.getBottomY() + this.getTileSize() < topY) 
+					|| (tile.getBottomY() < bottomY) && (tile.getBottomY() + this.getTileSize() >= topY)))){
+				tiles.add(tile);
+			}	
+		}
+		return tiles;
 	}
 	
 	/**

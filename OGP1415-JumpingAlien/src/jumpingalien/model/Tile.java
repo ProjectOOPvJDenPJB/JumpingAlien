@@ -84,4 +84,5 @@ public class Tile {
 		assert (state != null);
 		this.state = state;
 	}
+	
 }

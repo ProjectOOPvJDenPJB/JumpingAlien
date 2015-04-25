@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import jumpingalien.model.Position;
+import jumpingalien.part2.internal.tmxfile.data.ImageTile.TileType;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
 import be.kuleuven.cs.som.annotate.Basic;
@@ -857,6 +858,9 @@ public abstract class LivingCreatures {
 				Interaction.interactWithOtherCreatures(this);
 			}
 		}
+		if (!this.collidesWithTerrainThroughBottomBorder()){
+			this.startFall();
+		}
 	}
 	
 	
@@ -970,6 +974,10 @@ public abstract class LivingCreatures {
 		}
 	}
 	
+	public void startFall(){
+		this.setVerticalAcceleration(this.getVerticalAcceleration());
+		this.setMovingVertical(true);
+	}
 	
 	/**
 	 * Return the maximum horizontal velocity of this Mazub.
@@ -1050,14 +1058,22 @@ public abstract class LivingCreatures {
 	 * @return whether or not the living creature collides with the terrain
 	 */
 	public boolean collidesWithTerrain() {
-		for (int[] tile : getWorld().getOccupiedTiles((int)getXPosition(),(int)getYPosition(),
+		for (Tile tile : getWorld().getOccupiedTiles((int)getXPosition(),(int)getYPosition(),
 				(int)getXPosition()+getCurrentSprite().getWidth(),(int)getYPosition()+getCurrentSprite().getHeight())) {
 			System.out.println(tile);
-			if (!getWorld().isPassable(tile[0], tile[1])){
+			if (!tile.getType().getPassable()){
+				System.out.println("i need you to appear");
 				return true;
 			}
 		}
 		return false;
+	}
+	
+	public boolean collidesWithTerrain1(){
+		
+		
+		
+		return true;
 	}
 	
 	public boolean collidesWithTerrainThroughBottomBorder(){

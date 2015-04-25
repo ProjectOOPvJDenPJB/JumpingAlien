@@ -1,6 +1,8 @@
 package jumpingalien.model;
 
 
+import java.util.List;
+
 import jumpingalien.util.Util;
 
 public class Interaction{
@@ -61,7 +63,7 @@ public class Interaction{
 	 */
 	public static int collidesWithTerrain(LivingCreatures creature) {
 		World world = creature.getWorld();
-		int[][] tiles;
+		List<Tile> tiles;
 		try{tiles =  world.getOccupiedTiles((int)creature.getXPosition(),(int)creature.getYPosition(),
 				(int)creature.getXPosition()+creature.getCurrentSprite().getWidth(),(int)creature.getYPosition()+
 				creature.getCurrentSprite().getHeight());
@@ -69,8 +71,8 @@ public class Interaction{
 			return 0;
 		}
 		
-		for (int[] tile : tiles) {
-			int tileType = world.getTileType(tile[0], tile[1]);
+		for (Tile tile : tiles) {
+			int tileType = tile.getType().getInt();
 			    if (tileType == 3){
 					return 3;
 				}
@@ -120,25 +122,20 @@ public class Interaction{
 	public static boolean interactWithMovementBlockingCreature (LivingCreatures creature, World world){
 			for (Slime slime : world.getSlimes()) {
 				if (collidesWithCreature(creature,slime)){
-					System.out.println("fucking slimes");
-
 					return true;
 				}
 			}
 			for (Shark shark : world.getSharks()) {
 				if (collidesWithCreature(creature,shark)){
-					System.out.println("fuckin sharks");
 					return true;
 				}
 			}
 			Mazub mazub = world.getMazub();
 			if (mazub != null){
 				if (collidesWithCreature(creature,world.getMazub())){
-					System.out.println("mazub");
 					return true;
 				}
 			}
-			System.out.println("creature ok");
 			return false;
 		}
 

@@ -317,6 +317,7 @@ public class Mazub extends LivingCreatures {
 				this.setRunTime(this.getRunTime() + timeInterval);
 				this.setHitTimer(this.getHitTimer() + timeInterval);
 				this.applyTerrainDmg(timeInterval);
+				this.setMovementBlocked(false);
 		}
 	}
 			
