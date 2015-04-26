@@ -311,6 +311,7 @@ public class Mazub extends LivingCreatures {
 					}
 				}
 			//}
+				Interaction.interactWithOtherCreatures(this);
 				this.setHorizontalVelocity(this.getHorizontalVelocity() + this.getHorizontalAcceleration()*timeInterval);
 				this.setVerticalVelocity(this.getVerticalVelocity() + this.getVerticalAcceleration()*timeInterval);
 				this.setMaximumHorizontalVelocity(vHmax);
@@ -516,7 +517,7 @@ public class Mazub extends LivingCreatures {
 	
 	public void terminate() {
 		if (!isDead()) {
-			if ((isAlive() && (getHP() > 0) && (! getOutOfBounds()) && (! hasWonGame())))
+			if ((isAlive() && (getHP() > 0) && (! getOutOfBounds()) && (! hasWonGame()) && (!this.getWorld().isTerminating())))
 				throw new IllegalStateException("Mazub is alive within the boundaries of the world and didn't win!");
 			else if (((isDying()) && (Util.fuzzyGreaterThanOrEqualTo(getDeathTimer(), 0.6))) ||
 					(getOutOfBounds())) {

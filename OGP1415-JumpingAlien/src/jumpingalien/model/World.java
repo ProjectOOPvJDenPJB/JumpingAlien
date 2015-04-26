@@ -2,6 +2,7 @@ package jumpingalien.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -203,7 +204,9 @@ public class World {
 	@Raw
 	public void addTileType(int tileX, int tileY,int tileType) {
 		assert isValidTilePosition(tileX, tileY, getTileSize());
+		Tile tile = new Tile(tileX,tileY,tileType);
 		tileTypes[tileX][tileY] =  tileType;
+		tiles.add(tile);
 	}
 	
 	/**
@@ -279,20 +282,28 @@ public class World {
 		return tilesInt;
 	}	
 		
+	
+	public Collection<Slime> getSlihsdhmes(){
+		Collection<Slime> elements = slimes;
+		return new ArrayList<Slime>(elements);
+	}
+	
 	public List<Tile> getOccupiedTiles(int leftX, int bottomY, int rightX, int topY){
-		List<Tile> tiles = new ArrayList<Tile>();
+		List<Tile> occupiedTiles = new ArrayList<Tile>();
 		for  (Tile tile : this.getTiles()){
-			if (((tile.getLeftX() >= leftX) && (tile.getLeftX()+this.getTileSize() <= rightX) 
-					&& ((tile.getBottomY() >= bottomY) && (tile.getBottomY() + this.getTileSize() < topY) 
-					|| (tile.getBottomY() < bottomY) && (tile.getBottomY() + this.getTileSize() >= topY)) 
-					&& 
-					(tile.getLeftX() <= leftX) && (tile.getLeftX()+this.getTileSize() >= rightX) 
-					&& ((tile.getBottomY() >= bottomY) && (tile.getBottomY() + this.getTileSize() < topY) 
-					|| (tile.getBottomY() < bottomY) && (tile.getBottomY() + this.getTileSize() >= topY)))){
-				tiles.add(tile);
+			if ((((tile.getLeftX() >= leftX) && (tile.getLeftX() <= rightX)) 
+					&& (((tile.getBottomY() >= bottomY) && (tile.getBottomY() < topY) )
+					|| ((tile.getBottomY() + this.getTileSize() > bottomY) && (tile.getBottomY() + this.getTileSize() <= topY)))) 
+					|| 
+					(   ((tile.getLeftX() +this.getTileSize() >= leftX) && (tile.getLeftX()+this.getTileSize() <= rightX)) 
+					&& (((tile.getBottomY() >= bottomY) && (tile.getBottomY() < topY)) 
+					|| ((tile.getBottomY() + this.getTileSize() > bottomY) && (tile.getBottomY() + this.getTileSize() <= topY))))){
+				occupiedTiles.add(tile);
 			}	
 		}
-		return tiles;
+		System.out.println(occupiedTiles);
+
+		return occupiedTiles;
 	}
 	
 	/**
@@ -786,6 +797,15 @@ public class World {
 			shark.advanceTime(dt);
 		}
 	}
+	public boolean isTerminating(){
+		return this.terminating;
+	}
+	
+	private boolean terminating = false;
+	
+	public void setTerminating(boolean flag){
+		this.terminating = true;
+	}
 	
 	/**
 	 * Terminates this world.
@@ -793,6 +813,7 @@ public class World {
 	 */
 	public void terminate() {
 		if (! isTerminated()) {
+			this.setTerminating(true);
 			for (Plant plant : getPlants()) {
 				plant.terminate();
 			}

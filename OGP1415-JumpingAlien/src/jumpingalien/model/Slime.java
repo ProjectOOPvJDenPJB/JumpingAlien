@@ -6,6 +6,7 @@ import java.util.Random;
 
 
 
+
 //import jumpingalien.model.LivingCreatures.State;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
@@ -155,7 +156,7 @@ public class Slime extends LivingCreatures {
 	@Override
 	public void terminate() {
 		if (!isDead()) {
-			if ((isAlive() && (getHP() > 0) && (! getOutOfBounds())))
+			if ((isAlive() && (getHP() > 0) && (! getOutOfBounds()) && (!this.getWorld().isTerminating())))
 				throw new IllegalStateException("Slime is alive within the boundaries of the world!");
 			else if (((isDying()) && (Util.fuzzyGreaterThanOrEqualTo(getDeathTimer(), 0.6))) ||
 					(getOutOfBounds())){
@@ -213,6 +214,7 @@ public class Slime extends LivingCreatures {
 				this.setRunTime(getRunTime() + timeInterval);
 
 			this.changeHorizontalPosition(timeInterval);
+			Interaction.interactWithOtherCreatures(this);
 			this.setHorizontalVelocity(this.getHorizontalVelocity() + this.getHorizontalAcceleration()*timeInterval);
 			this.setHitTimer(this.getHitTimer() + timeInterval);
 			this.applyTerrainDmg(timeInterval);

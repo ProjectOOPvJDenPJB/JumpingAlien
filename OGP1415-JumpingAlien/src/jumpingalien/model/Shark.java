@@ -4,6 +4,7 @@ package jumpingalien.model;
 import java.util.Random;
 
 
+
 //import jumpingalien.model.LivingCreatures.State;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
@@ -88,7 +89,7 @@ public class Shark extends LivingCreatures {
 	@Override
 	public void terminate() {
 		if (!isDead()) {
-			if ((isAlive() && (getHP() > 0) && (! getOutOfBounds())))
+			if ((isAlive() && (getHP() > 0) && (! getOutOfBounds()) && (!this.getWorld().isTerminating())))
 				throw new IllegalStateException("Shark is alive within the boundaries of the world!");
 			else if (((isDying()) && (Util.fuzzyGreaterThanOrEqualTo(getDeathTimer(), 0.6))) ||
 					(getOutOfBounds())){
@@ -175,6 +176,7 @@ public class Shark extends LivingCreatures {
 			
 			this.changeHorizontalPosition(timeInterval);
 			this.changeVerticalPosition(timeInterval);
+			Interaction.interactWithOtherCreatures(this);
 			this.setHorizontalVelocity(this.getHorizontalVelocity() + this.getHorizontalAcceleration()*timeInterval);
 			this.setVerticalVelocity(this.getVerticalVelocity() + this.getVerticalAcceleration()*timeInterval);	
 			this.setHitTimer(this.getHitTimer() + timeInterval);

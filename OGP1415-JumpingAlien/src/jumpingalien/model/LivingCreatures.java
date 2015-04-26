@@ -855,7 +855,6 @@ public abstract class LivingCreatures {
 				//movement blocked wordt kort op true gezet als de beweging wordt geblokeerd, maar wordt elke keer gerefreshed.
 			}else{
 				setXPosition(newPositionX);
-				Interaction.interactWithOtherCreatures(this);
 			}
 		}
 		if (!this.collidesWithTerrainThroughBottomBorder()){
@@ -877,7 +876,6 @@ public abstract class LivingCreatures {
 				double newPositionY = this.getYPosition() 
 						+ 100 * this.getVerticalVelocity() * timeInterval
 						+ 50 * this.getVerticalAcceleration() * timeInterval * timeInterval;
-					Interaction.interactWithOtherCreatures(this);
 					if (this.getMovementBlocked() || this.collidesWithTerrainThroughBottomBorder()){
 						this.setVerticalVelocity(0);
 						this.setVerticalAcceleration(0);
@@ -1057,10 +1055,9 @@ public abstract class LivingCreatures {
 	/**
 	 * @return whether or not the living creature collides with the terrain
 	 */
-	public boolean collidesWithTerrain() {
+	public boolean collidesWithTerrain() {	
 		for (Tile tile : getWorld().getOccupiedTiles((int)getXPosition(),(int)getYPosition(),
 				(int)getXPosition()+getCurrentSprite().getWidth(),(int)getYPosition()+getCurrentSprite().getHeight())) {
-			System.out.println(tile);
 			if (!tile.getType().getPassable()){
 				System.out.println("i need you to appear");
 				return true;
@@ -1135,10 +1132,13 @@ public abstract class LivingCreatures {
 	public void applyTerrainDmg(double timeInterval){
 		int tileType = Interaction.collidesWithTerrain(this);
 		if (tileType == 3){
+			System.out.println("It Burns");
 			this.applyMagmaDamage(timeInterval);
 		}else if (tileType == 2){
 			if (!(this instanceof Shark)){
 			this.applyWaterDamage(timeInterval);
+			System.out.println("i'm drowning");
+
 			}else{
 				this.setTerrainTimer(0);
 			}

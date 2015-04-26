@@ -1,6 +1,7 @@
 package jumpingalien.model;
 
 
+import java.util.Collection;
 import java.util.List;
 
 import jumpingalien.util.Util;
@@ -63,14 +64,11 @@ public class Interaction{
 	 */
 	public static int collidesWithTerrain(LivingCreatures creature) {
 		World world = creature.getWorld();
-		List<Tile> tiles;
-		try{tiles =  world.getOccupiedTiles((int)creature.getXPosition(),(int)creature.getYPosition(),
+		Collection<Tile> tiles;
+		tiles =  world.getOccupiedTiles((int)creature.getXPosition(),(int)creature.getYPosition(),
 				(int)creature.getXPosition()+creature.getCurrentSprite().getWidth(),(int)creature.getYPosition()+
 				creature.getCurrentSprite().getHeight());
-		}catch(NullPointerException exc){
-			return 0;
-		}
-		
+
 		for (Tile tile : tiles) {
 			int tileType = tile.getType().getInt();
 			    if (tileType == 3){

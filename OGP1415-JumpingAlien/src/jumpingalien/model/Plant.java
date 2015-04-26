@@ -76,7 +76,7 @@ public class Plant extends LivingCreatures{
 	 */
 	public void terminate() {
 		if (!isDead()) {
-			if ((isAlive() && (getHP() > 0) && (! getOutOfBounds())))
+			if ((isAlive() && (getHP() > 0) && (! getOutOfBounds()) && (!this.getWorld().isTerminating())))
 				throw new IllegalStateException("Plant is alive within the boundaries of the world!");
 			else if (((isDying()) && (Util.fuzzyGreaterThanOrEqualTo(getDeathTimer(), 0.6))) ||
 					(getOutOfBounds())){
@@ -136,6 +136,8 @@ public class Plant extends LivingCreatures{
 			}
 			
 			this.changeHorizontalPosition(timeInterval);
+			Interaction.interactWithOtherCreatures(this);
+
 			
 	//		double newXposition = this.getXPosition() + this.getDirection().getInt() * this.getHorizontalVelocity();
 	//		
