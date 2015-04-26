@@ -829,14 +829,15 @@ public abstract class LivingCreatures {
 	 * 			new.getXPosition = this.getXPosition() + distanceCalculated
 	 */
 	public void changeHorizontalPosition(double timeInterval){
+		this.setHorizontalAcceleration(0.9);
 		if (Util.fuzzyGreaterThanOrEqualTo(horizontalVelocity,this.getMaximumHorizontalVelocity())){
 			this.setHorizontalAcceleration(0);
 		}
 		double newPositionX = this.getXPosition() + this.getDirection().getInt() * (100 * this.getHorizontalVelocity()*timeInterval 
 				+ 50 * this.getHorizontalAcceleration()*timeInterval*timeInterval);
 		double oldPositionX = this.getXPosition();
-		if (this instanceof Mazub)
-			System.out.println(timeInterval + ".." + newPositionX +" .. " + oldPositionX);
+	//	if (this instanceof Mazub)
+		//	System.out.println(timeInterval + ".." + newPositionX +" .. " + oldPositionX);
 		setXPosition(newPositionX);
 		if (this.getMovementBlocked() || this.collidesWithSolidTerrain() 
 				|| Interaction.interactWithMovementBlockingCreature(this, this.getWorld())){
@@ -845,7 +846,7 @@ public abstract class LivingCreatures {
 			//movement blocked wordt kort op true gezet als de beweging wordt geblokeerd, maar wordt elke keer gerefreshed.
 		}
 		if (!this.collidesWithTerrainThroughBottomBorder()){
-			this.startFall();
+			this.startFall(-10);
 		}
 	}
 	
@@ -858,35 +859,33 @@ public abstract class LivingCreatures {
 	  * 		new.getYPosition = this.getYPosition() + distanceCalculated
 	  */
 	public void changeVerticalPosition(double timeInterval) {
-			double newPositionY = this.getYPosition() 
-					+ 100 * this.getVerticalVelocity() * timeInterval
-					+ 50 * this.getVerticalAcceleration() * timeInterval * timeInterval;
-			if (this.getMovementBlocked() || this.collidesWithTerrainThroughBottomBorder()){
-				this.setVerticalVelocity(0);
-				this.setVerticalAcceleration(0);
-				this.setMovingVertical(false);
-				this.endJump();
-				this.setMovementBlocked(true);
-			}
-			
-			else if (this.getMovementBlocked() || this.collidesWithSolidTerrain() 
+		double oldPositionY = this.getYPosition();
+		double newPositionY = this.getYPosition() 
+				+ 100 * this.getVerticalVelocity() * timeInterval
+				+ 50 * this.getVerticalAcceleration() * timeInterval * timeInterval;
+		setYPosition(newPositionY);
+		if (this.getMovementBlocked() || this.collidesWithSolidTerrain()
 				|| Interaction.interactWithMovementBlockingCreature(this, this.getWorld())){
-				this.endJump();
-				this.setMovementBlocked(true);
-			}else
-				if (this instanceof Mazub) {
-					System.out.println(newPositionY +" .. "+getYPosition());
-				}
-				this.setYPosition(newPositionY);					
-			Interaction.interactWithOtherCreatures(this);
+			if (this instanceof Mazub)
+				System.out.println(oldPositionY +" .. "+ newPositionY);
+			setYPosition(oldPositionY);
+			this.endJump();
+			this.setMovementBlocked(true);
+			if (this.collidesWithTerrainThroughBottomBorder()){
+				System.out.println("YAY");
+				this.setMovingVertical(false);
+				this.setVerticalAcceleration(0);
+				this.setVerticalVelocity(0);
+		}
+		}
+		Interaction.interactWithOtherCreatures(this);
 	}
 	
 	public double getSmallestDT(double dt) {
 		double horizontalDT = 
 				0.01 / (this.getHorizontalVelocity() + this.getHorizontalAcceleration() * dt);
 		double verticalDT = 
-				0.01 / (Math.abs(this.getVerticalVelocity()) + Math.abs(this.getVerticalAcceleration() * dt));
-		
+				Math.abs(0.01 / (this.getVerticalVelocity() + this.getVerticalAcceleration() * dt));
 		return Math.min(Math.min(horizontalDT, verticalDT), dt);
 		
 	}
@@ -934,14 +933,11 @@ public abstract class LivingCreatures {
 	 *			|	&& new.getMovingVertical() == true
 	 */
 	public void startJump(double velocity,double acceleration){
-		try{
+		if (! getMovingVertical()){
 			this.setVerticalVelocity(velocity);
 			this.setVerticalAcceleration(acceleration);
 			this.setMovingVertical(true);
-		} catch (IllegalStateException exc) {
-			//Nothing happens if the Mazub is in an Illegal State.
 		}
-		
 	}
 	
 	/**
@@ -958,8 +954,8 @@ public abstract class LivingCreatures {
 		}
 	}
 	
-	public void startFall(){
-		this.setVerticalAcceleration(this.getVerticalAcceleration());
+	public void startFall(double acceleration){
+		this.setVerticalAcceleration(acceleration);
 		this.setMovingVertical(true);
 	}
 	
@@ -1045,17 +1041,10 @@ public abstract class LivingCreatures {
 		return Interaction.collidesWithTerrain(this, 1);
 	}
 	
-	public boolean collidesWithTerrain1(){
-		
-		
-		
-		return true;
-	}
-	
 	public boolean collidesWithTerrainThroughBottomBorder(){
 		World world = this.getWorld();
 		if ((world.getTileType((int)this.getXPosition(), (int)this.getYPosition()) != 1) 
-				||((world.getTileType((int)(this.getXPosition() + this.getSize()[0]), (int)(this.getYPosition())) != 1))){
+				&& ((world.getTileType((int)(this.getXPosition() + this.getSize()[0]), (int)(this.getYPosition())) != 1))){
 			return false;
 		}
 		else {
