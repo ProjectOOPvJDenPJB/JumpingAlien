@@ -64,7 +64,7 @@ public class Interaction{
 	 */
 	public static boolean collidesWithTerrain(LivingCreatures creature, int type) {
 		World world = creature.getWorld();
-		int[][] tiles =  world.getOccupiedTiles((int)creature.getXPosition()+1,(int)creature.getYPosition()+1,
+		int[][] tiles =  world.getOccupiedTiles((int)creature.getXPosition(),(int)creature.getYPosition()+1,
 				(int)creature.getXPosition()+creature.getCurrentSprite().getWidth(),(int)creature.getYPosition()+
 				creature.getCurrentSprite().getHeight());
 

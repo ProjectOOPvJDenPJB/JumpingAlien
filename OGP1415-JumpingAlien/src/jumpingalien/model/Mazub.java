@@ -192,15 +192,11 @@ public class Mazub extends LivingCreatures {
 	 * 			|	&& new.getMoving() == true && new.getRunTime() == 0
 	 */
 	public void startMove(double horizontalAcceleration){
-		if (this.getMoving() == false) {
-			// Vraag: The horizontal velocity shall not be set to zero wordt al gedaan.
-			// Hier is de implementatie om gewoon niets aan de snelheid te veranderen.
-			// Dat moeten we vragen aan assistenten.
 			assert isValidHorizontalAcceleration(horizontalAcceleration);
 			this.setHorizontalAcceleration(horizontalAcceleration);
 			this.setHorizontalVelocity(this.getInitialHorizontalVelocity());
 			this.setMoving(true);
-		}
+
 		this.setRunTime(0);
 	}
 		
@@ -294,30 +290,39 @@ public class Mazub extends LivingCreatures {
 		else if (isDead())
 			throw new IllegalStateException("Mazub is already dead.");
 		else {
-			double vHmax = this.getMaximumHorizontalVelocity();
-				if (this.getDucking() == true) {
-					this.setMaximumHorizontalVelocity(1);
-				}
-				if (this.getMoving() == true){
-					this.setHorizontalAcceleration(0.9);
-					this.changeHorizontalPosition(timeInterval);
-				}
-				
-				if (this.getMovingVertical() == true) {
-					changeVerticalPosition(timeInterval);
-					if (this.getMovingVertical() == true){
-					}
-				}
-				Interaction.interactWithOtherCreatures(this);
-				this.setHorizontalVelocity(this.getHorizontalVelocity() + this.getHorizontalAcceleration()*timeInterval);
-				this.setVerticalVelocity(this.getVerticalVelocity() + this.getVerticalAcceleration()*timeInterval);
-				this.setMaximumHorizontalVelocity(vHmax);
-				this.setRunTime(this.getRunTime() + timeInterval);
-				this.setHitTimer(this.getHitTimer() + timeInterval);
-				this.applyTerrainDmg(timeInterval);
-				this.setMovementBlocked(false);
+			double dt_min = getSmallestDT(timeInterval);
+			for (double dt = dt_min; dt <= timeInterval-dt_min; dt += dt_min){
+				advanceTimeAlive(dt_min);
+			}
+			advanceTimeAlive(timeInterval - (timeInterval - dt_min));
 		}
 	}
+		
+	public void advanceTimeAlive(double timeInterval) {
+		double vHmax = this.getMaximumHorizontalVelocity();
+		if (this.getDucking() == true) {
+			this.setMaximumHorizontalVelocity(1);
+		}
+		if (this.getMoving() == true){
+			this.setHorizontalAcceleration(0.9);
+			this.changeHorizontalPosition(timeInterval);
+		}
+		
+		if (this.getMovingVertical() == true) {
+			changeVerticalPosition(timeInterval);
+			if (this.getMovingVertical() == true){
+			}
+		}
+		Interaction.interactWithOtherCreatures(this);
+		this.setHorizontalVelocity(this.getHorizontalVelocity() + this.getHorizontalAcceleration()*timeInterval);
+		this.setVerticalVelocity(this.getVerticalVelocity() + this.getVerticalAcceleration()*timeInterval);
+		this.setMaximumHorizontalVelocity(vHmax);
+		this.setRunTime(this.getRunTime() + timeInterval);
+		this.setHitTimer(this.getHitTimer() + timeInterval);
+		this.applyTerrainDmg(timeInterval);
+		this.setMovementBlocked(false);
+	}
+
 			
 	/**
 	 * Selects a sprite based on the previous and current actions of mazub.

@@ -268,11 +268,9 @@ public class World {
 		int amountXTiles = getAmountOfOccupiedTiles(leftX, getTileSize(), rightX);
 		int amountYTiles = getAmountOfOccupiedTiles(bottomY, getTileSize(), topY);
 		int[] botLeftTile = getTilePosition(leftX, bottomY);
-		System.out.println(amountXTiles + ".tiles." + amountYTiles);
 		for (int i = botLeftTile[1]; i < amountYTiles + botLeftTile[1]; i++) {
 			for (int j = botLeftTile[0]; j < amountXTiles + botLeftTile[0]; j++) {
 				int[] position = new int[]{j, i};
-				System.out.println("("+j+","+i+")");
 				tiles.add(position);
 			}
 		}

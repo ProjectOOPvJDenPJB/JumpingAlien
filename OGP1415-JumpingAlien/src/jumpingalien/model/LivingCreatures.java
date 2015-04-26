@@ -832,22 +832,17 @@ public abstract class LivingCreatures {
 		if (Util.fuzzyGreaterThanOrEqualTo(horizontalVelocity,this.getMaximumHorizontalVelocity())){
 			this.setHorizontalAcceleration(0);
 		}
+		double newPositionX = this.getXPosition() + this.getDirection().getInt() * (100 * this.getHorizontalVelocity()*timeInterval 
+				+ 50 * this.getHorizontalAcceleration()*timeInterval*timeInterval);
+		double oldPositionX = this.getXPosition();
 		if (this instanceof Mazub)
-			System.out.println("Mazubhoriz");
-		double dt_min = getSmallestDT(timeInterval);
-		for (double dt = dt_min; dt <= timeInterval; dt += dt_min){
-			double newPositionX = this.getXPosition() + this.getDirection().getInt() * (100 * this.getHorizontalVelocity()*dt 
-					+ 50 * this.getHorizontalAcceleration()*dt*dt);
-			
-			if (this.getMovementBlocked() || this.collidesWithSolidTerrain() 
-					|| Interaction.interactWithMovementBlockingCreature(this, this.getWorld())){
-				if (this instanceof Mazub)
-					System.out.println(this.collidesWithSolidTerrain());
-				this.setMovementBlocked(true);
-				//movement blocked wordt kort op true gezet als de beweging wordt geblokeerd, maar wordt elke keer gerefreshed.
-			}else{
-				setXPosition(newPositionX);
-			}
+			System.out.println(timeInterval + ".." + newPositionX +" .. " + oldPositionX);
+		setXPosition(newPositionX);
+		if (this.getMovementBlocked() || this.collidesWithSolidTerrain() 
+				|| Interaction.interactWithMovementBlockingCreature(this, this.getWorld())){
+			this.setMovementBlocked(true);
+			setXPosition(oldPositionX);
+			//movement blocked wordt kort op true gezet als de beweging wordt geblokeerd, maar wordt elke keer gerefreshed.
 		}
 		if (!this.collidesWithTerrainThroughBottomBorder()){
 			this.startFall();
@@ -863,33 +858,32 @@ public abstract class LivingCreatures {
 	  * 		new.getYPosition = this.getYPosition() + distanceCalculated
 	  */
 	public void changeVerticalPosition(double timeInterval) {
-			double dt_min = getSmallestDT(timeInterval);
-			for (double dt = dt_min; dt <= timeInterval; dt += dt_min){
-				double newPositionY = this.getYPosition() 
-						+ 100 * this.getVerticalVelocity() * timeInterval
-						+ 50 * this.getVerticalAcceleration() * timeInterval * timeInterval;
-					if (this.getMovementBlocked() || this.collidesWithTerrainThroughBottomBorder()){
-						this.setVerticalVelocity(0);
-						this.setVerticalAcceleration(0);
-						this.setMovingVertical(false);
-						this.endJump();
-						this.setMovementBlocked(true);
-					}
-					
-					else if (this.getMovementBlocked() || this.collidesWithSolidTerrain() 
-						|| Interaction.interactWithMovementBlockingCreature(this, this.getWorld())){
-						this.endJump();
-						this.setMovementBlocked(true);
-					}else
-							this.setYPosition(newPositionY);					
+			double newPositionY = this.getYPosition() 
+					+ 100 * this.getVerticalVelocity() * timeInterval
+					+ 50 * this.getVerticalAcceleration() * timeInterval * timeInterval;
+			if (this.getMovementBlocked() || this.collidesWithTerrainThroughBottomBorder()){
+				this.setVerticalVelocity(0);
+				this.setVerticalAcceleration(0);
+				this.setMovingVertical(false);
+				this.endJump();
+				this.setMovementBlocked(true);
 			}
+			
+			else if (this.getMovementBlocked() || this.collidesWithSolidTerrain() 
+				|| Interaction.interactWithMovementBlockingCreature(this, this.getWorld())){
+				this.endJump();
+				this.setMovementBlocked(true);
+			}else
+				if (this instanceof Mazub) {
+					System.out.println(newPositionY +" .. "+getYPosition());
+				}
+				this.setYPosition(newPositionY);					
 			Interaction.interactWithOtherCreatures(this);
 	}
 	
-	//comment gaat errors geven als ge nie beweegt, of als ge enkel in 1 richting beweegt (delen door 0 gaat nie)
 	public double getSmallestDT(double dt) {
 		double horizontalDT = 
-				0.01 / (this.getHorizontalAcceleration() + this.getHorizontalAcceleration() * dt);
+				0.01 / (this.getHorizontalVelocity() + this.getHorizontalAcceleration() * dt);
 		double verticalDT = 
 				0.01 / (Math.abs(this.getVerticalVelocity()) + Math.abs(this.getVerticalAcceleration() * dt));
 		

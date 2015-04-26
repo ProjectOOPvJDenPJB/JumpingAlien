@@ -47,47 +47,47 @@ public class PartialFacadeTest {
 //		assertArrayEquals(doubleArray(0.0, 0.0), facade.getAcceleration(alien),
 //				Util.DEFAULT_EPSILON);
 //	}
-
-	@Test
-	public void testTilesInRegion() {
-		IFacadePart2 facade = new Facade();
-
-		World world = facade.createWorld(50, 3, 3, 1, 1, 1, 1);
-
-		int[][] actualTiles = facade
-				.getTilePositionsIn(world, 20, 20, 105, 105);
-		int[][] expectedTiles = { { 0, 0 }, { 1, 0 }, { 2, 0 }, { 0, 1 },
-				{ 1, 1 }, { 2, 1 }, { 0, 2 }, { 1, 2 }, { 2, 2 } };
-		assertArrayEquals(expectedTiles, actualTiles);
-		
-		int[][] actualTiles2 = facade
-				.getTilePositionsIn(world, 50, 50, 100, 100);
-		int[][] expectedTiles2 = {{ 1, 1 }, { 2, 1 }, { 1, 2 }, { 2, 2 } };
-		assertArrayEquals(expectedTiles2, actualTiles2);
-	}
-
+//
 //	@Test
-//	public void startMoveRightCorrect() {
+//	public void testTilesInRegion() {
 //		IFacadePart2 facade = new Facade();
 //
-//		// 2 vertical tiles, size 500px
-//		// ....
-//		// a...
-//		// XXXX
-//		// XXXX
-//		World world = facade.createWorld(500, 1, 2, 1, 1, 1, 1);
-//		facade.setGeologicalFeature(world, 0, 0, FEATURE_SOLID);
-//		Mazub alien = facade.createMazub(0, 499, spriteArrayForSize(3, 3));
-//		facade.setMazub(world, alien);
-//		facade.startMoveRight(alien);
-//		facade.advanceTime(world, 0.1);
+//		World world = facade.createWorld(50, 3, 3, 1, 1, 1, 1);
 //
-//		// x_new [m] = 0 + 1 [m/s] * 0.1 [s] + 1/2 0.9 [m/s^2] * (0.1 [s])^2 =
-//		// 0.1045 [m] = 10.45 [cm], which falls into pixel (10, 0)
-//
-//		assertArrayEquals(intArray(10, 499), facade.getLocation(alien));
+//		int[][] actualTiles = facade
+//				.getTilePositionsIn(world, 20, 20, 105, 105);
+//		int[][] expectedTiles = { { 0, 0 }, { 1, 0 }, { 2, 0 }, { 0, 1 },
+//				{ 1, 1 }, { 2, 1 }, { 0, 2 }, { 1, 2 }, { 2, 2 } };
+//		assertArrayEquals(expectedTiles, actualTiles);
+//		
+//		int[][] actualTiles2 = facade
+//				.getTilePositionsIn(world, 50, 50, 100, 100);
+//		int[][] expectedTiles2 = {{ 1, 1 }, { 2, 1 }, { 1, 2 }, { 2, 2 } };
+//		assertArrayEquals(expectedTiles2, actualTiles2);
 //	}
-//
+
+	@Test
+	public void startMoveRightCorrect() {
+		IFacadePart2 facade = new Facade();
+
+		// 2 vertical tiles, size 500px
+		// ....
+		// a...
+		// XXXX
+		// XXXX
+		World world = facade.createWorld(500, 1, 2, 1, 1, 1, 1);
+		facade.setGeologicalFeature(world, 0, 0, FEATURE_SOLID);
+		Mazub alien = facade.createMazub(0, 499, spriteArrayForSize(3, 3));
+		facade.setMazub(world, alien);
+		facade.startMoveRight(alien);
+		facade.advanceTime(world, 0.1);
+
+		// x_new [m] = 0 + 1 [m/s] * 0.1 [s] + 1/2 0.9 [m/s^2] * (0.1 [s])^2 =
+		// 0.1045 [m] = 10.45 [cm], which falls into pixel (10, 0)
+
+		assertArrayEquals(intArray(10, 499), facade.getLocation(alien));
+	}
+
 //	@Test
 //	public void startMoveRightMaxSpeedAtRightTime() {
 //		IFacadePart2 facade = new Facade();
