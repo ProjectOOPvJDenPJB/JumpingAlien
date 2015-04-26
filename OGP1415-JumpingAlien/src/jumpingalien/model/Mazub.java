@@ -294,9 +294,7 @@ public class Mazub extends LivingCreatures {
 		else if (isDead())
 			throw new IllegalStateException("Mazub is already dead.");
 		else {
-			//double dt_min = getSmallestDT(timeInterval);
 			double vHmax = this.getMaximumHorizontalVelocity();
-			//for (double dt = dt_min; Util.fuzzyLessThanOrEqualTo(dt, timeInterval); dt += dt_min) {
 				if (this.getDucking() == true) {
 					this.setMaximumHorizontalVelocity(1);
 				}
@@ -310,7 +308,6 @@ public class Mazub extends LivingCreatures {
 					if (this.getMovingVertical() == true){
 					}
 				}
-			//}
 				Interaction.interactWithOtherCreatures(this);
 				this.setHorizontalVelocity(this.getHorizontalVelocity() + this.getHorizontalAcceleration()*timeInterval);
 				this.setVerticalVelocity(this.getVerticalVelocity() + this.getVerticalAcceleration()*timeInterval);

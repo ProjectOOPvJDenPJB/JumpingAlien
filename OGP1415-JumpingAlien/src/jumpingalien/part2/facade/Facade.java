@@ -163,7 +163,7 @@ public class Facade implements IFacadePart2  {
 	@Override
 	public int[][] getTilePositionsIn(World world, int pixelLeft,
 			int pixelBottom, int pixelRight, int pixelTop) {
-		return world.getOccupiedTiles1(pixelLeft, pixelBottom, pixelRight, pixelTop);
+		return world.getOccupiedTiles(pixelLeft, pixelBottom, pixelRight, pixelTop);
 	}
 
 	@Override

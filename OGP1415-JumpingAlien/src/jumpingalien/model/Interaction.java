@@ -62,30 +62,18 @@ public class Interaction{
 	/**
 	 * @return whether or not the living creature collides with the terrain
 	 */
-	public static int collidesWithTerrain(LivingCreatures creature) {
+	public static boolean collidesWithTerrain(LivingCreatures creature, int type) {
 		World world = creature.getWorld();
-		Collection<Tile> tiles;
-		tiles =  world.getOccupiedTiles((int)creature.getXPosition(),(int)creature.getYPosition(),
+		int[][] tiles =  world.getOccupiedTiles((int)creature.getXPosition()+1,(int)creature.getYPosition()+1,
 				(int)creature.getXPosition()+creature.getCurrentSprite().getWidth(),(int)creature.getYPosition()+
 				creature.getCurrentSprite().getHeight());
 
-		for (Tile tile : tiles) {
-			int tileType = tile.getType().getInt();
-			    if (tileType == 3){
-					return 3;
-				}
-			    else if ((tileType == 2) && (!(creature instanceof Shark))){
-					return 2;
-				}
-			    else if ((tileType == 0) && (creature instanceof Shark)){
-			    	return 0;
-			    }
+		for(int i = 0; i < tiles.length; i++) {
+			int tileType = world.getTileType(tiles[i][0] * world.getTileSize(), tiles[i][1] * world.getTileSize());
+			    if (tileType == type)
+			    	return true;
 		}
-		if (creature instanceof Shark){
-			return 2;
-		} else {
-			return 0;
-		}
+		return false;
 	}
 	
 	

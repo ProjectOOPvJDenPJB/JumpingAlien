@@ -263,14 +263,16 @@ public class World {
 	 * 			|	where (tilesInt[i][0] == tile_X)
 	 * 			|	and (tilesInt[i][1] == tile_Y)
 	 */
-	public int[][] getOccupiedTiles1(int leftX, int bottomY, int rightX, int topY) {
+	public int[][] getOccupiedTiles(int leftX, int bottomY, int rightX, int topY) {
 		List<int[]> tiles = new ArrayList<int[]>();
-		int amountXTiles = getAmountOfOccupiedTiles(leftX, getTileSize(), rightX-leftX );
-		int amountYTiles = getAmountOfOccupiedTiles(bottomY, getTileSize(), topY - bottomY);
+		int amountXTiles = getAmountOfOccupiedTiles(leftX, getTileSize(), rightX);
+		int amountYTiles = getAmountOfOccupiedTiles(bottomY, getTileSize(), topY);
 		int[] botLeftTile = getTilePosition(leftX, bottomY);
-		for (int i = botLeftTile[1]; i < amountYTiles; i++) {
-			for (int j = botLeftTile[0]; j < amountXTiles; j++) {
-				int[] position = new int[]{ j, i};
+		System.out.println(amountXTiles + ".tiles." + amountYTiles);
+		for (int i = botLeftTile[1]; i < amountYTiles + botLeftTile[1]; i++) {
+			for (int j = botLeftTile[0]; j < amountXTiles + botLeftTile[0]; j++) {
+				int[] position = new int[]{j, i};
+				System.out.println("("+j+","+i+")");
 				tiles.add(position);
 			}
 		}
@@ -281,30 +283,6 @@ public class World {
 		}
 		return tilesInt;
 	}	
-		
-	
-	public Collection<Slime> getSlihsdhmes(){
-		Collection<Slime> elements = slimes;
-		return new ArrayList<Slime>(elements);
-	}
-	
-	public List<Tile> getOccupiedTiles(int leftX, int bottomY, int rightX, int topY){
-		List<Tile> occupiedTiles = new ArrayList<Tile>();
-		for  (Tile tile : this.getTiles()){
-			if ((((tile.getLeftX() >= leftX) && (tile.getLeftX() <= rightX)) 
-					&& (((tile.getBottomY() >= bottomY) && (tile.getBottomY() < topY) )
-					|| ((tile.getBottomY() + this.getTileSize() > bottomY) && (tile.getBottomY() + this.getTileSize() <= topY)))) 
-					|| 
-					(   ((tile.getLeftX() +this.getTileSize() >= leftX) && (tile.getLeftX()+this.getTileSize() <= rightX)) 
-					&& (((tile.getBottomY() >= bottomY) && (tile.getBottomY() < topY)) 
-					|| ((tile.getBottomY() + this.getTileSize() > bottomY) && (tile.getBottomY() + this.getTileSize() <= topY))))){
-				occupiedTiles.add(tile);
-			}	
-		}
-		System.out.println(occupiedTiles);
-
-		return occupiedTiles;
-	}
 	
 	/**
 	 * Return the amount of occupied tiles with given startposition
@@ -317,12 +295,10 @@ public class World {
 	 *			| else
 	 *			|	return length / tileLength
 	 */
-	public static int getAmountOfOccupiedTiles(int position, int tileLength, int length) {
-		if (position % tileLength == 0) {
-			return (length / tileLength) + 1;
-		}
-		else
-			return length / tileLength;
+	public static int getAmountOfOccupiedTiles(int startPosition, int tileLength, int endPosition) {
+		int tileStart = startPosition / tileLength;
+		int tileEnd = endPosition / tileLength;
+		return (tileEnd - tileStart) + 1;
 	}
 	
 	/**

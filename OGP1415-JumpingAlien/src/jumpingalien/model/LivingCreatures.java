@@ -844,13 +844,17 @@ public abstract class LivingCreatures {
 		if (Util.fuzzyGreaterThanOrEqualTo(horizontalVelocity,this.getMaximumHorizontalVelocity())){
 			this.setHorizontalAcceleration(0);
 		}
+		if (this instanceof Mazub)
+			System.out.println("Mazubhoriz");
 		double dt_min = getSmallestDT(timeInterval);
 		for (double dt = dt_min; dt <= timeInterval; dt += dt_min){
 			double newPositionX = this.getXPosition() + this.getDirection().getInt() * (100 * this.getHorizontalVelocity()*dt 
 					+ 50 * this.getHorizontalAcceleration()*dt*dt);
 			
-			if (this.getMovementBlocked() || this.collidesWithTerrain() 
+			if (this.getMovementBlocked() || this.collidesWithSolidTerrain() 
 					|| Interaction.interactWithMovementBlockingCreature(this, this.getWorld())){
+				if (this instanceof Mazub)
+					System.out.println(this.collidesWithSolidTerrain());
 				this.setMovementBlocked(true);
 				//movement blocked wordt kort op true gezet als de beweging wordt geblokeerd, maar wordt elke keer gerefreshed.
 			}else{
@@ -884,7 +888,7 @@ public abstract class LivingCreatures {
 						this.setMovementBlocked(true);
 					}
 					
-					else if (this.getMovementBlocked() || this.collidesWithTerrain() 
+					else if (this.getMovementBlocked() || this.collidesWithSolidTerrain() 
 						|| Interaction.interactWithMovementBlockingCreature(this, this.getWorld())){
 						this.endJump();
 						this.setMovementBlocked(true);
@@ -1055,15 +1059,8 @@ public abstract class LivingCreatures {
 	/**
 	 * @return whether or not the living creature collides with the terrain
 	 */
-	public boolean collidesWithTerrain() {	
-		for (Tile tile : getWorld().getOccupiedTiles((int)getXPosition(),(int)getYPosition(),
-				(int)getXPosition()+getCurrentSprite().getWidth(),(int)getYPosition()+getCurrentSprite().getHeight())) {
-			if (!tile.getType().getPassable()){
-				System.out.println("i need you to appear");
-				return true;
-			}
-		}
-		return false;
+	public boolean collidesWithSolidTerrain() {	
+		return Interaction.collidesWithTerrain(this, 1);
 	}
 	
 	public boolean collidesWithTerrain1(){
@@ -1130,11 +1127,10 @@ public abstract class LivingCreatures {
 	 * 		  The current timeInterval since the last change of position
 	 */
 	public void applyTerrainDmg(double timeInterval){
-		int tileType = Interaction.collidesWithTerrain(this);
-		if (tileType == 3){
+		if (Interaction.collidesWithTerrain(this, 3)){
 			System.out.println("It Burns");
 			this.applyMagmaDamage(timeInterval);
-		}else if (tileType == 2){
+		}else if (Interaction.collidesWithTerrain(this, 2)){
 			if (!(this instanceof Shark)){
 			this.applyWaterDamage(timeInterval);
 			System.out.println("i'm drowning");
