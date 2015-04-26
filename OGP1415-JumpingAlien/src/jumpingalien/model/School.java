@@ -1,7 +1,11 @@
 package jumpingalien.model;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 /**
  * A class of School.
  * Link to repository: https://github.com/ProjectOOPvJDenPJB/JumpingAlien
@@ -18,8 +22,6 @@ public class School {
 		
 	}
 	
-	private final static Map<String,Slime> slimes = new HashMap<String,Slime>();
-
 	/**
 	 * Sets the amount of Slimes for this school to the given amount.
 	 * 
@@ -29,7 +31,7 @@ public class School {
 	 * 			the given amount.	
 	 * 			| new.getAmountSlimes() == amount
 	 */
-	public void setAmountSlimes(int amount){
+	private void setAmountSlimes(int amount){
 		this.AmountOfSlimes = amount;
 	}
 	
@@ -55,21 +57,36 @@ public class School {
 	 * 		  |  new.slimesFromOldSchool.getHP() ==  old.slimesFromOldSchool.getHP() - 1 
 	 * 		  |  new.slimesFromNewSchool.getHP() ==  old.slimesFromNewSchool.getHP() + 1 
 	 */
+	
+	private final Set<Slime> slimes = new HashSet<Slime>();
+	
+	/**
+	 * Return the slimes currently in this school in the form of a collection.
+	 */
+	public Collection<Slime> getSlimes(){
+		Collection<Slime> elements = slimes;
+		return new ArrayList<Slime>(elements);
+	}
+	
 	public void addSlime(Slime slime){
 		if (this.getAmountSlimes() < 10 && slime.isAlive()){
 			School oldSchool = slime.getSchool();
-			slime.setSchool(this);
-			this.setAmountSlimes(this.getAmountSlimes() + 1);
-			for (String key : slimes.keySet()) {
-				if (slimes.get(key).getSchool() == oldSchool){
-					slimes.get(key).addHP(1);
+			if (oldSchool != null){
+				oldSchool.removeSlime(slime);
+
+				for (Slime oldSlimeMates : oldSchool.getSlimes()) {	
+					oldSlimeMates.addHP(1);
 					slime.addHP(-1);
 				}
-				if (slimes.get(key).getSchool() == slime.getSchool()){
-					slimes.get(key).addHP(-1);
+				for (Slime newSlimeMates: this.getSlimes()){
+					newSlimeMates.addHP(-1);
 					slime.addHP(1);
 				}
 			}
+			slime.setSchool(this);
+			slimes.add(slime);
+			this.setAmountSlimes(this.getAmountSlimes() + 1);
+
 		}
 	}
 	
@@ -82,8 +99,9 @@ public class School {
 	 * 		 | 		new.slime.getSchool() == null
 	 */
 	public void removeSlime(Slime slime){
-			slime.setSchool(null);
 			this.setAmountSlimes(this.getAmountSlimes() - 1);
+			slimes.remove(slime);
+			slime.setSchool(null);
 	}
 	
 }

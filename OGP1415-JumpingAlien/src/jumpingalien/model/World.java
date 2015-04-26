@@ -282,12 +282,7 @@ public class World {
 		return tilesInt;
 	}	
 		
-	
-	public Collection<Slime> getSlihsdhmes(){
-		Collection<Slime> elements = slimes;
-		return new ArrayList<Slime>(elements);
-	}
-	
+
 	public List<Tile> getOccupiedTiles(int leftX, int bottomY, int rightX, int topY){
 		List<Tile> occupiedTiles = new ArrayList<Tile>();
 		for  (Tile tile : this.getTiles()){

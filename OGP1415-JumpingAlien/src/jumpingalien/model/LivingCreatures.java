@@ -589,8 +589,6 @@ public abstract class LivingCreatures {
 	
 	public static final int MIN_HP = 0;
 	
-	private final static Map<String,Slime> slimes = new HashMap<String,Slime>();
-
 	/**
 	 * Adds the given hit points to the current hit points of this living creature
 	 * @param HP
@@ -602,16 +600,6 @@ public abstract class LivingCreatures {
 	 * 		  same school as the living creature.
 	 */
 	public void addHP(int HP) {
-		if(this instanceof Slime){
-			if (HP < 0){
-				Slime slime = (Slime) this;
-				for (String key : slimes.keySet()) {
-					if (slimes.get(key).getSchool() == slime.getSchool()){
-						slimes.get(key).addHP(-1);
-					}
-				}
-			}
-		}
 		this.setHP(getHP() + HP);
 	}
 	
