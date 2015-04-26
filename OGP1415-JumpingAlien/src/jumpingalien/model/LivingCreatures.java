@@ -1,11 +1,6 @@
 package jumpingalien.model;
 
-
-import java.util.HashMap;
-import java.util.Map;
-
 import jumpingalien.model.Position;
-import jumpingalien.part2.internal.tmxfile.data.ImageTile.TileType;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
 import be.kuleuven.cs.som.annotate.Basic;

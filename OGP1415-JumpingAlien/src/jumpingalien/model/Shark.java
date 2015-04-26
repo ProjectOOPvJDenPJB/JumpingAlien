@@ -160,29 +160,35 @@ public class Shark extends LivingCreatures {
 			this.setDeathTimer(getDeathTimer() + timeInterval);
 		}
 		if (isAlive()) {
-						
-			if (Util.fuzzyGreaterThanOrEqualTo(getRunTime(),getRandomTime())) {
-				generateRandomTime();
-				this.setRunTime(0);
-				this.endJump();
-				this.endMove();
-				this.startJump(2,-10);
-				this.startMove(this.getDirection().oppositeDirection());
-				this.setDirection(this.getDirection().oppositeDirection());
-				this.generateRandomTime();
+			double dt_min = getSmallestDT(timeInterval);
+			for (double dt = dt_min; dt <= timeInterval-dt_min; dt += dt_min){
+				advanceTimeAlive(dt_min);
 			}
-			else
-				this.setRunTime(getRunTime() + timeInterval);
-			
-			this.changeHorizontalPosition(timeInterval);
-			this.changeVerticalPosition(timeInterval);
-			Interaction.interactWithOtherCreatures(this);
-			this.setHorizontalVelocity(this.getHorizontalVelocity() + this.getHorizontalAcceleration()*timeInterval);
-			this.setVerticalVelocity(this.getVerticalVelocity() + this.getVerticalAcceleration()*timeInterval);	
-			this.setHitTimer(this.getHitTimer() + timeInterval);
-			this.applyTerrainDmg(timeInterval);
-			
+			advanceTimeAlive(timeInterval - (timeInterval - dt_min));
 		}
+	}
+	
+	public void advanceTimeAlive(double timeInterval) {
+		if (Util.fuzzyGreaterThanOrEqualTo(getRunTime(),getRandomTime())) {
+			generateRandomTime();
+			this.setRunTime(0);
+			this.endJump();
+			this.endMove();
+			this.startJump(2,-10);
+			this.startMove(this.getDirection().oppositeDirection());
+			this.setDirection(this.getDirection().oppositeDirection());
+			this.generateRandomTime();
+		}
+		else
+			this.setRunTime(getRunTime() + timeInterval);
+		
+		this.changeHorizontalPosition(timeInterval);
+		this.changeVerticalPosition(timeInterval);
+		Interaction.interactWithOtherCreatures(this);
+		this.setHorizontalVelocity(this.getHorizontalVelocity() + this.getHorizontalAcceleration()*timeInterval);
+		this.setVerticalVelocity(this.getVerticalVelocity() + this.getVerticalAcceleration()*timeInterval);	
+		this.setHitTimer(this.getHitTimer() + timeInterval);
+		this.applyTerrainDmg(timeInterval);
 	}
 	
 	/**

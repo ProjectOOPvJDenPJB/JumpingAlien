@@ -203,24 +203,33 @@ public class Slime extends LivingCreatures {
 		}
 		
 		if (isAlive()) {
-			
-			if (Util.fuzzyGreaterThanOrEqualTo(getRunTime(), getRandomTime())  || this.getMovementBlocked()) {
-				startMoveOpposite();
-				setRandomTime();
-				setRunTime(0);
-				setMovementBlocked(false);
+			double dt_min = getSmallestDT(timeInterval);
+			for (double dt = dt_min; dt <= timeInterval-dt_min; dt += dt_min){
+				advanceTimeAlive(dt_min);
 			}
-			else
-				this.setRunTime(getRunTime() + timeInterval);
-
-			this.changeHorizontalPosition(timeInterval);
-			Interaction.interactWithOtherCreatures(this);
-			this.setHorizontalVelocity(this.getHorizontalVelocity() + this.getHorizontalAcceleration()*timeInterval);
-			this.setHitTimer(this.getHitTimer() + timeInterval);
-			this.applyTerrainDmg(timeInterval);
+			advanceTimeAlive(timeInterval - (timeInterval - dt_min));
 		}
 		
 	}
+	
+	public void advanceTimeAlive(double timeInterval) {
+		
+		if (Util.fuzzyGreaterThanOrEqualTo(getRunTime(), getRandomTime())  || this.getMovementBlocked()) {
+			startMoveOpposite();
+			setRandomTime();
+			setRunTime(0);
+			setMovementBlocked(false);
+		}
+		else
+			this.setRunTime(getRunTime() + timeInterval);
+
+		this.changeHorizontalPosition(timeInterval);
+		Interaction.interactWithOtherCreatures(this);
+		this.setHorizontalVelocity(this.getHorizontalVelocity() + this.getHorizontalAcceleration()*timeInterval);
+		this.setHitTimer(this.getHitTimer() + timeInterval);
+		this.applyTerrainDmg(timeInterval);
+	}
+	
 	/**
 	 * returns the random time for the length of the movement of this slime
 	 */

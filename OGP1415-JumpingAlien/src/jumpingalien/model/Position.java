@@ -32,13 +32,16 @@ public class Position {
 	 */
 	public Position(double XPosition, double YPosition, World World) {
 		this.world = World;
-		if (! isValidXPosition(XPosition, getWidth())) {
-			throw new IllegalXPositionException(XPosition);
+		try {
+			if (! isValidXPosition(XPosition, getWidth())) {
+				throw new IllegalXPositionException(XPosition);
+			}
+			if (! isValidYPosition(YPosition, getHeight())) {
+				throw new IllegalYPositionException(YPosition);
+			}
+		} catch (IllegalStateException exc) {
 		}
 		this.XPos = XPosition;
-		if (! isValidYPosition(YPosition, getHeight())) {
-			throw new IllegalYPositionException(YPosition);
-		}
 		this.YPos = YPosition;
 //		System.out.println(getXPosition()+ "......" + getYPosition());		
 	}
@@ -136,9 +139,9 @@ public class Position {
 	/**
 	 * @return the width of the world from this position
 	 */
-	public int getWidth() {
+	public int getWidth() throws IllegalStateException {
 		if (this.getWorld() == null) 
-			return 1024;
+			throw new IllegalStateException("World is Null");
 		else 
 			return world.getPixelWidth();
 	}
@@ -146,9 +149,9 @@ public class Position {
 	/**
 	 * @return the height of the world from this position
 	 */
-	public int getHeight() {
+	public int getHeight() throws IllegalStateException {
 		if (this.getWorld() == null) 
-			return 768;
+			throw new IllegalStateException("World is Null");
 		else
 			return world.getPixelHeight();
 	}
