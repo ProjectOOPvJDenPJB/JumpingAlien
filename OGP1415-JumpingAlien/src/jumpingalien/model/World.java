@@ -283,28 +283,6 @@ public class World {
 		}
 		return tilesInt;
 	}	
-<<<<<<< HEAD
-=======
-		
-
-	public List<Tile> getOccupiedTiles(int leftX, int bottomY, int rightX, int topY){
-		List<Tile> occupiedTiles = new ArrayList<Tile>();
-		for  (Tile tile : this.getTiles()){
-			if ((((tile.getLeftX() >= leftX) && (tile.getLeftX() <= rightX)) 
-					&& (((tile.getBottomY() >= bottomY) && (tile.getBottomY() < topY) )
-					|| ((tile.getBottomY() + this.getTileSize() > bottomY) && (tile.getBottomY() + this.getTileSize() <= topY)))) 
-					|| 
-					(   ((tile.getLeftX() +this.getTileSize() >= leftX) && (tile.getLeftX()+this.getTileSize() <= rightX)) 
-					&& (((tile.getBottomY() >= bottomY) && (tile.getBottomY() < topY)) 
-					|| ((tile.getBottomY() + this.getTileSize() > bottomY) && (tile.getBottomY() + this.getTileSize() <= topY))))){
-				occupiedTiles.add(tile);
-			}	
-		}
-		System.out.println(occupiedTiles);
-
-		return occupiedTiles;
-	}
->>>>>>> origin/master
 	
 	/**
 	 * Return the amount of occupied tiles with given startposition
