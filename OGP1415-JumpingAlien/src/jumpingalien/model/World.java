@@ -154,6 +154,12 @@ public class World {
 			pixelX = this.getPixelWidth();
 		if (Util.fuzzyGreaterThanOrEqualTo(pixelY, this.getPixelHeight()))
 			pixelY = this.getPixelHeight();
+		if (pixelX < 0){
+			pixelX = 0;
+		}
+		if (pixelY < 0){
+			pixelY = 0;
+		}
 		int[] position = new int[2];
 		position[0] = (pixelX / getTileSize());
 		position[1] = (pixelY / getTileSize());
