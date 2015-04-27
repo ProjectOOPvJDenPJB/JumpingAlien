@@ -236,7 +236,7 @@ public class SharkTest {
 		shark.setHorizontalVelocity(5);
 		shark.setHorizontalAcceleration(2);
 		shark.setDirection(1);
-		shark.changeHorizontalPosition(0.1);
+		shark.changeHorizontalPosition(0.1,0);
 		assertEquals(shark.getXPosition(),51,Util.DEFAULT_EPSILON);
 	}
 	

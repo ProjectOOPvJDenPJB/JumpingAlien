@@ -201,7 +201,7 @@ public class Shark extends LivingCreatures {
 		else
 			this.setRunTime(getRunTime() + timeInterval);
 		
-		this.changeHorizontalPosition(timeInterval);
+		this.changeHorizontalPosition(timeInterval,getHorizontalAcceleration());
 		this.changeVerticalPosition(timeInterval);
 		Interaction.interactWithOtherCreatures(this);
 		this.setHorizontalVelocity(this.getHorizontalVelocity() + this.getHorizontalAcceleration()*timeInterval);

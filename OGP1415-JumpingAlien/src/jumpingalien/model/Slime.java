@@ -239,7 +239,6 @@ public class Slime extends LivingCreatures {
 			}
 			advanceTimeAlive(timeInterval - (timeInterval - dt_min));
 		}
-		
 	}
 	
 	/**
@@ -257,7 +256,7 @@ public class Slime extends LivingCreatures {
 			this.setRunTime(getRunTime() + timeInterval);
 		
 		this.changeVerticalPosition(timeInterval);
-		this.changeHorizontalPosition(timeInterval);
+		this.changeHorizontalPosition(timeInterval,getHorizontalAcceleration());
 		Interaction.interactWithOtherCreatures(this);
 		this.setHorizontalVelocity(this.getHorizontalVelocity() + this.getHorizontalAcceleration()*timeInterval);
 		this.setVerticalVelocity(this.getVerticalVelocity() + this.getVerticalAcceleration() * timeInterval);

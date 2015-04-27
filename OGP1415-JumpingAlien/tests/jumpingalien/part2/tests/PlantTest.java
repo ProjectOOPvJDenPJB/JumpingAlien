@@ -257,7 +257,7 @@ public class PlantTest {
 		plant2.setHorizontalVelocity(5);
 		plant2.setHorizontalAcceleration(2);
 		plant2.setDirection(1);
-		plant2.changeHorizontalPosition(0.1);
+		plant2.changeHorizontalPosition(0.1,0);
 		assertEquals(plant2.getXPosition(),5,Util.DEFAULT_EPSILON);
 	}
 	
