@@ -33,15 +33,21 @@ public class InteractionTest {
 		this.school2 = new School();
 		this.school3 = new School();
 		this.world = new World(10,100,100,500,500,700,700);
-		this.slime1 = new Slime(100,100, 0,0,0,defaultSprites,world,school,100);
-		this.slime2 = new Slime(102,102,0,0,0,defaultSprites,world,school,100);
-		this.slime3 = new Slime(202,202,0,0,0,defaultSprites,world,school2,100);
-		this.TheChosenSlime = new Slime(302,302,0,0,0,defaultSprites,world,school3,100);
-		this.shark = new Shark(110, 110, 0, 0, world,defaultSprites,100);
-		this.mazub = new Mazub(80,80,defaultSprites,5,3,world,100);
-		this.plant = new Plant(40,40,0.5,defaultSprites,world,1);
-
-
+		this.slime1 = new Slime(100,100, 0,0,0,defaultSprites,null,school,100);
+		this.slime2 = new Slime(102,102,0,0,0,defaultSprites,null,school,100);
+		this.slime3 = new Slime(202,202,0,0,0,defaultSprites,null,school2,100);
+		this.TheChosenSlime = new Slime(302,302,0,0,0,defaultSprites,null,school3,100);
+		this.shark = new Shark(110, 110, 0, 0, null,defaultSprites,100);
+		this.mazub = new Mazub(80,80,defaultSprites,5,3,null,100);
+		this.plant = new Plant(40,40,0.5,defaultSprites,null,1);
+		
+		world.addSlime(slime1);
+		world.addSlime(slime2);
+		world.addSlime(slime3);
+		world.addSlime(TheChosenSlime);
+		world.addShark(shark);
+		world.setMazub(mazub);
+		world.addPlant(plant);
 
 	}
 	

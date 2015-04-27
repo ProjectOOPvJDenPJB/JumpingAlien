@@ -259,6 +259,7 @@ public class Interaction{
 	 */
 	public static boolean interactWithMovementBlockingCreature(LivingCreatures creature, World world){
 		try{
+
 			for (Slime slime : world.getSlimes()) {
 				if (collidesWithCreature(creature,slime)){
 					return true;
