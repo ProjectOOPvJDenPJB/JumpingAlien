@@ -239,7 +239,6 @@ public class Slime extends LivingCreatures {
 			}
 			advanceTimeAlive(timeInterval - (timeInterval - dt_min));
 		}
-		
 	}
 	
 	/**

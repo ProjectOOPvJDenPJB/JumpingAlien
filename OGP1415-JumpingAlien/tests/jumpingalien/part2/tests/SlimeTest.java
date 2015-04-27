@@ -304,14 +304,14 @@ public class SlimeTest {
 		slime.setVerticalAcceleration(2);
 		slime.setDirection(1);
 		slime.changeVerticalPosition(0.1);
-		assertEquals(slime.getXPosition(),251,Util.DEFAULT_EPSILON);
+		assertEquals(slime.getXPosition(),0,Util.DEFAULT_EPSILON);
 		
 		Slime slime1 = new Slime(0,0,spriteArrayForSize(2, 2),school1);
 		slime1.setVerticalVelocity(-5);
 		slime1.setVerticalAcceleration(-2);
 		slime1.setDirection(1);
 		slime1.changeVerticalPosition(0.1);
-		assertEquals(slime.getXPosition(),149,Util.DEFAULT_EPSILON);
+		assertEquals(slime.getXPosition(),0,Util.DEFAULT_EPSILON);
 	}
 	
 	@Test 
