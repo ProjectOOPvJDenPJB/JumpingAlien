@@ -835,7 +835,7 @@ public abstract class LivingCreatures {
 		if (Interaction.collidesWithTerrainHorizontal(this, 1)){
 			setXPosition(oldPositionX);
 		}
-		if (Interaction.interactWithMovementBlockingCreature(this, this.getWorld())) {
+		if (Interaction.interactWithMovementBlockingCreature(this,this.getWorld())) {
 			Interaction.interactWithOtherCreatures(this);
 			setXPosition(oldPositionX);
 		}
@@ -871,7 +871,7 @@ public abstract class LivingCreatures {
 				+ 100 * this.getVerticalVelocity() * timeInterval
 				+ 50 * this.getVerticalAcceleration() * timeInterval * timeInterval;
 		setYPosition(newPositionY);
-		boolean creatureBlock = Interaction.interactWithMovementBlockingCreature(this, this.getWorld());
+		boolean creatureBlock = Interaction.interactWithMovementBlockingCreature(this,this.getWorld());
 		if (Interaction.collidesWithTerrainVertical(this, 1)
 				|| creatureBlock){
 			if (creatureBlock) {
