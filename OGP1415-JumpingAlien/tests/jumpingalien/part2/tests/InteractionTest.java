@@ -120,11 +120,11 @@ public class InteractionTest {
 	public void interactWithSlime$NotSLime(){
 		Interaction.interactWithSlime(mazub, slime1);
 		assertEquals(mazub.getHP(),50);
-		assertEquals(plant.getHP(),50);
+		assertEquals(slime1.getHP(),50);
 		
 		Interaction.interactWithSlime(mazub, slime1);
 		assertEquals(mazub.getHP(),50);
-		assertEquals(plant.getHP(),50);
+		assertEquals(slime1.getHP(),50);
 	}
 	
 	@Test
@@ -135,7 +135,7 @@ public class InteractionTest {
 		
 		Interaction.interactWithShark(mazub, shark);
 		assertEquals(mazub.getHP(),50);
-		assertEquals(plant.getHP(),50);
+		assertEquals(shark.getHP(),50);
 	}
 	
 	@Test
