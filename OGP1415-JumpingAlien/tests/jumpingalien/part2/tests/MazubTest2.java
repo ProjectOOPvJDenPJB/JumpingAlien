@@ -340,48 +340,6 @@ private Mazub mazub;
 	}
 	
 	@Test
-	public void isDead_True(){
-		mazub.setState(Mazub.State.DEAD);
-		assertTrue(mazub.isDead());
-	}
-	
-	@Test
-	public void isDead_False(){
-		mazub.setState(Mazub.State.ALIVE);
-		assertFalse(mazub.isDead());
-		mazub.setState(Mazub.State.DYING);
-		assertFalse(mazub.isDead());
-	}
-	
-	@Test
-	public void isDying_True(){
-		mazub.setState(Mazub.State.DYING);
-		assertTrue(mazub.isDying());
-	}
-	
-	@Test
-	public void isDying_False(){
-		mazub.setState(Mazub.State.ALIVE);
-		assertFalse(mazub.isDying());
-		mazub.setState(Mazub.State.DEAD);
-		assertFalse(mazub.isDying());
-	}
-	
-	@Test
-	public void isAlive_True(){
-		mazub.setState(Mazub.State.ALIVE);
-		assertTrue(mazub.isAlive());
-	}
-	
-	@Test
-	public void isAlive_False(){
-		mazub.setState(State.Mazub.DYING);
-		assertFalse(mazub.isAlive());
-		mazub.setState(State.Mazub.DEAD);
-		assertFalse(mazub.isAlive());
-	}
-	
-	@Test
 	public void changeHorizontalPosition(){
 		Mazub mazub = new Mazub(0,0,spriteArrayForSize(2, 2));
 		mazub.setHorizontalVelocity(5);
@@ -400,12 +358,12 @@ private Mazub mazub;
 		mazub.changeVerticalPosition(0.1);
 		assertEquals(mazub.getXPosition(),251,Util.DEFAULT_EPSILON);
 		
-		Mazub mazub = new Mazub(0,0,spriteArrayForSize(2, 2));
-		mazub.setVerticalVelocity(-5);
-		mazub.setVerticalAcceleration(-2);
-		mazub.setDirection(1);
-		mazub.changeVerticalPosition(0.1);
-		assertEquals(mazub.getXPosition(),149,Util.DEFAULT_EPSILON);
+		Mazub mazub1 = new Mazub(0,0,spriteArrayForSize(2, 2));
+		mazub1.setVerticalVelocity(-5);
+		mazub1.setVerticalAcceleration(-2);
+		mazub1.setDirection(1);
+		mazub1.changeVerticalPosition(0.1);
+		assertEquals(mazub1.getXPosition(),149,Util.DEFAULT_EPSILON);
 	}
 	
 	@Test 

@@ -283,48 +283,6 @@ public class SlimeTest {
 	}
 	
 	@Test
-	public void isDead_True(){
-		slime.setState(slime.State.DEAD);
-		assertTrue(slime.isDead());
-	}
-	
-	@Test
-	public void isDead_False(){
-		slime.setState(slime.State.ALIVE);
-		assertFalse(slime.isDead());
-		slime.setState(slime.State.DYING);
-		assertFalse(slime.isDead());
-	}
-	
-	@Test
-	public void isDying_True(){
-		slime.setState(slime.State.DYING);
-		assertTrue(slime.isDying());
-	}
-	
-	@Test
-	public void isDying_False(){
-		slime.setState(slime.State.ALIVE);
-		assertFalse(slime.isDying());
-		slime.setState(slime.State.DEAD);
-		assertFalse(slime.isDying());
-	}
-	
-	@Test
-	public void isAlive_True(){
-		slime.setState(slime.State.Alive);
-		assertTrue(slime.isAlive());
-	}
-	
-	@Test
-	public void isAlive_False(){
-		slime.setState(slime.State.DYING);
-		assertFalse(slime.isAlive());
-		slime.setState(slime.State.DEAD);
-		assertFalse(slime.isAlive());
-	}
-	
-	@Test
 	public void changeHorizontalPosition(){
 		Slime slime = new Slime(0,0,spriteArrayForSize(2, 2),school1);
 		slime.setHorizontalVelocity(5);

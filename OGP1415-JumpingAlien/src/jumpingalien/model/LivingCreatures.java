@@ -821,17 +821,17 @@ public abstract class LivingCreatures {
 	 * 			| result ==
 	 * 			|	(this.getState() == DEAD)
  	 */
-	protected boolean isDead() {
+	public boolean isDead() {
 		return (this.getState() == State.DEAD);
 	}
 	
 	/**
 	 * Check whether the living creatures is dying or not.
 	 * @return	True of the state of this creature is DYING.
-	 * 			| result ==
+	 * 			| result ==é
 	 * 			|	(this.getState() == DYING)
 	 */
-	protected boolean isDying() {
+	public boolean isDying() {
 		return (this.getState() == State.DYING);
 	}
 	
@@ -841,7 +841,7 @@ public abstract class LivingCreatures {
 	 * 			| result ==
 	 * 			|	(this.getState() == ALIVE)
 	 */
-	protected boolean isAlive() {
+	public boolean isAlive() {
 		return (this.getState() == State.ALIVE);
 	}
 	

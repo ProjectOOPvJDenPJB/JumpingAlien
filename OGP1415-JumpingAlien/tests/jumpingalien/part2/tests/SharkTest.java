@@ -229,48 +229,6 @@ public class SharkTest {
 		shark.setHP(shark.getMaxHP()+5);
 		assertTrue(shark.getHP() == shark.getMaxHP());
 	}
-	
-	@Test
-	public void isDead_True(){
-		shark.setState(shark.State.DEAD);
-		assertTrue(shark.isDead());
-	}
-	
-	@Test
-	public void isDead_False(){
-		shark.setState(shark.State.ALIVE);
-		assertFalse(shark.isDead());
-		shark.setState(shark.State.DYING);
-		assertFalse(shark.isDead());
-	}
-	
-	@Test
-	public void isDying_True(){
-		shark.setState(shark.State.DYING);
-		assertTrue(shark.isDying());
-	}
-	
-	@Test
-	public void isDying_False(){
-		shark.setState(shark.State.ALIVE);
-		assertFalse(shark.isDying());
-		shark.setState(shark.State.DEAD);
-		assertFalse(shark.isDying());
-	}
-	
-	@Test
-	public void isAlive_True(){
-		shark.setState(shark.State.Alive);
-		assertTrue(shark.isAlive());
-	}
-	
-	@Test
-	public void isAlive_False(){
-		shark.setState(shark.State.DYING);
-		assertFalse(shark.isAlive());
-		shark.setState(shark.State.DEAD);
-		assertFalse(shark.isAlive());
-	}
 
 	@Test
 	public void changeHorizontalPosition(){

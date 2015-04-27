@@ -221,48 +221,6 @@ public class PlantTest {
 	}
 	
 	@Test
-	public void isDead_True(){
-		plant.setState(Plant.State.DEAD);
-		assertTrue(plant.isDead());
-	}
-	
-	@Test
-	public void isDead_False(){
-		plant.setState(Plant.State.ALIVE);
-		assertFalse(plant.isDead());
-		plant.setState(Plant.State.DYING);
-		assertFalse(plant.isDead());
-	}
-	
-	@Test
-	public void isDying_True(){
-		plant.setState(Plant.State.DYING);
-		assertTrue(plant.isDying());
-	}
-	
-	@Test
-	public void isDying_False(){
-		plant.setState(Plant.State.ALIVE);
-		assertFalse(plant.isDying());
-		plant.setState(Plant.State.DEAD);
-		assertFalse(plant.isDying());
-	}
-	
-	@Test
-	public void isAlive_True(){
-		plant.setState(Plant.State.Alive);
-		assertTrue(plant.isAlive());
-	}
-	
-	@Test
-	public void isAlive_False(){
-		plant.setState(Plant.State.DYING);
-		assertFalse(plant.isAlive());
-		plant.setState(Plant.State.DEAD);
-		assertFalse(plant.isAlive());
-	}
-	
-	@Test
 	public void changeHorizontalPosition(){
 		Plant plant = new Plant(0,0,spriteArrayForSize(2, 2));
 		plant.setHorizontalVelocity(5);
