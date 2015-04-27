@@ -603,7 +603,7 @@ public abstract class LivingCreatures {
 			return Mazub.isValidSpriteArray(spriteArray);
 		else {			
 			int length = spriteArray.length;
-			return length == 2;
+			return (length == 2);
 		}
 	}
 	
@@ -828,7 +828,7 @@ public abstract class LivingCreatures {
 	 * 		  The time to check
 	 * @return	True if the time is valid otherwise returns false
 	 */
-	protected boolean isValidTimerValue(double time) {
+	public static boolean isValidTimerValue(double time) {
 		return Util.fuzzyGreaterThanOrEqualTo(time, 0);
 	}
 	
@@ -963,7 +963,7 @@ public abstract class LivingCreatures {
 	protected State getState() {
 		return this.state;
 	}
-	
+
 	/**
 	 * Variable registering the current state of this living creature.
 	 * 	The default value is ALIVE
@@ -995,7 +995,7 @@ public abstract class LivingCreatures {
 	/**
 	 * Check whether the living creatures is dying or not.
 	 * @return	True of the state of this creature is DYING.
-	 * 			| result ==
+	 * 			| result ==é
 	 * 			|	(this.getState() == DYING)
 	 */
 	public boolean isDying() {
