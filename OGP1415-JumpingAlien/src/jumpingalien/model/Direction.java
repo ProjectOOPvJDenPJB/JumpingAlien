@@ -6,7 +6,11 @@ import be.kuleuven.cs.som.annotate.Value;
  * An enumeration of Directions.
  * 		In its current implementation, the class only distinguishes
  * 		between left and right.
- * @author Joren
+ * Link to repository: https://github.com/ProjectOOPvJDenPJB/JumpingAlien
+ * 
+ * @author Joren Dhont (Ingenieurswetenschappen: Computerwetenschappen - Elektrotechniek) 
+ * 	& Pieterjan Beerden (Ingenieurswetenschappen: Elektrotechniek - Computerwetenschappen)
+ * @version 0.1
  */
 @Value
 public enum Direction {

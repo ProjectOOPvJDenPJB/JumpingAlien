@@ -2,6 +2,14 @@ package jumpingalien.model;
 
 import be.kuleuven.cs.som.annotate.Value;
 
+/**
+ * Enumeration of TileType
+ * Link to repository: https://github.com/ProjectOOPvJDenPJB/JumpingAlien
+ * 
+ * @author Joren Dhont (Ingenieurswetenschappen: Computerwetenschappen - Elektrotechniek) 
+ * 	& Pieterjan Beerden (Ingenieurswetenschappen: Elektrotechniek - Computerwetenschappen)
+ * @version 0.1
+ */
 @Value
 public enum TileType {
 	

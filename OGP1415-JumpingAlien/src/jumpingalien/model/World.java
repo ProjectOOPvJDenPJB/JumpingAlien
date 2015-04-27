@@ -10,6 +10,8 @@ import jumpingalien.util.Util;
 import be.kuleuven.cs.som.annotate.*;
 
 /**
+ * Link to repository: https://github.com/ProjectOOPvJDenPJB/JumpingAlien
+ * 
  * @author Joren Dhont (Ingenieurswetenschappen: Computerwetenschappen - Elektrotechniek) 
  * 	& Pieterjan Beerden (Ingenieurswetenschappen: Elektrotechniek - Computerwetenschappen)
  * @version 0.1

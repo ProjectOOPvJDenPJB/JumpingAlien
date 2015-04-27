@@ -7,6 +7,14 @@ import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Immutable;
 import be.kuleuven.cs.som.annotate.Raw;
 
+/**
+ * Class representing each living creature.
+ * Link to repository: https://github.com/ProjectOOPvJDenPJB/JumpingAlien
+ * 
+ * @author Joren Dhont (Ingenieurswetenschappen: Computerwetenschappen - Elektrotechniek) 
+ * 	& Pieterjan Beerden (Ingenieurswetenschappen: Elektrotechniek - Computerwetenschappen)
+ * @version 0.1
+ */
 public abstract class LivingCreatures {
 
 /**

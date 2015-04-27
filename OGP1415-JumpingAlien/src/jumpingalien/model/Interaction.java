@@ -2,6 +2,15 @@ package jumpingalien.model;
 
 import jumpingalien.util.Util;
 
+/**
+ * A class handling interactions
+ * Link to repository: https://github.com/ProjectOOPvJDenPJB/JumpingAlien
+ * 
+ * @author Joren Dhont (Ingenieurswetenschappen: Computerwetenschappen - Elektrotechniek) 
+ * 	& Pieterjan Beerden (Ingenieurswetenschappen: Elektrotechniek - Computerwetenschappen)
+ * @version 0.1
+ *
+ */
 public class Interaction{
 
 	public Interaction(){	

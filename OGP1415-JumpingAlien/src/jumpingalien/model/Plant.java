@@ -2,6 +2,15 @@ package jumpingalien.model;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
 
+/**
+ * Class of Plant
+ * Link to repository: https://github.com/ProjectOOPvJDenPJB/JumpingAlien
+ * 
+ * @author Joren Dhont (Ingenieurswetenschappen: Computerwetenschappen - Elektrotechniek) 
+ * 	& Pieterjan Beerden (Ingenieurswetenschappen: Elektrotechniek - Computerwetenschappen)
+ * @version 0.1
+ *
+ */
 public class Plant extends LivingCreatures{
 
 	/**
