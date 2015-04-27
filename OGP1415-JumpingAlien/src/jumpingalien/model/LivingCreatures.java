@@ -1020,8 +1020,8 @@ public abstract class LivingCreatures {
 	 * 			travelled calculated with a formula using the given time interval. 
 	 * 			new.getXPosition = this.getXPosition() + distanceCalculated
 	 */
-	public void changeHorizontalPosition(double timeInterval){
-		this.setHorizontalAcceleration(0.9);
+	public void changeHorizontalPosition(double timeInterval,double horizontalAcceleration){
+		this.setHorizontalAcceleration(horizontalAcceleration);
 		if (Util.fuzzyGreaterThanOrEqualTo(horizontalVelocity,this.getMaximumHorizontalVelocity())){
 			this.setHorizontalAcceleration(0);
 		}
@@ -1299,13 +1299,14 @@ public abstract class LivingCreatures {
 	 */
 	public boolean noTerrainUnderSidesOfObject(){
 		World world = this.getWorld();
-		if ((world.getTileType((int)this.getXPosition(), (int)this.getYPosition()-1) != 1) 
+		try{
+			if ((world.getTileType((int)this.getXPosition(), (int)this.getYPosition()-1) != 1) 
 				|| ((world.getTileType((int)(this.getXPosition() + this.getSize()[0]), (int)(this.getYPosition())-1) != 1))){
 			return true;
+			}
+		}catch(NullPointerException exc){
 		}
-		else {
 			return false;
-		}
 	}
 	
 	/**

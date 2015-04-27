@@ -337,7 +337,7 @@ public class Mazub extends LivingCreatures {
 			this.setMaximumHorizontalVelocity(1);
 		}
 		if (this.getMoving() == true){
-			this.changeHorizontalPosition(timeInterval);
+			this.changeHorizontalPosition(timeInterval,0.9);
 		}
 		
 		if (this.getMovingVertical() == true) {

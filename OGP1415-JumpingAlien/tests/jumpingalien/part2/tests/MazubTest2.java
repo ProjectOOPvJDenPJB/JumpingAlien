@@ -345,7 +345,7 @@ private Mazub mazub;
 		mazub.setHorizontalVelocity(5);
 		mazub.setHorizontalAcceleration(2);
 		mazub.setDirection(1);
-		mazub.changeHorizontalPosition(0.1);
+		mazub.changeHorizontalPosition(0.1,2);
 		assertEquals(mazub.getXPosition(),51,Util.DEFAULT_EPSILON);
 	}
 	

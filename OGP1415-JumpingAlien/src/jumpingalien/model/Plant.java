@@ -137,7 +137,7 @@ public class Plant extends LivingCreatures{
 				this.setRunTime(0);			
 			}
 			
-			this.changeHorizontalPosition(timeInterval);
+			this.changeHorizontalPosition(timeInterval,0);
 			Interaction.interactWithOtherCreatures(this);
 			this.setRunTime(getRunTime() + timeInterval);
 		}

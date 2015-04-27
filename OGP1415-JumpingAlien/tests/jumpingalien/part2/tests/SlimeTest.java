@@ -18,7 +18,7 @@ import org.junit.Test;
 public class SlimeTest {
 	
 	private Sprite[] defaultSprites;
-	private World defaultWorld;
+	private World defaultWorld,bigWorld;
 	private School school1;
 	private School school2;
 	private Slime slime, slime2;
@@ -26,6 +26,8 @@ public class SlimeTest {
 	@Before
 	public void setUp() {
 		this.defaultWorld = new World(10,10,10,10,10,9,9);
+		this.bigWorld = new World(10,100,100,500,500,700,700);
+
 		this.defaultSprites = spriteArrayForSize(2,2);
 		this.school1 = new School();
 		this.school2 = new School();
@@ -150,8 +152,9 @@ public class SlimeTest {
 	
 	@Test
 	public void testAdvanceTimeNormalCase(){
-		slime2.startMoveOpposite();
-		slime2.startMoveOpposite();
+		Slime slimy = new Slime(100,100,5,0,bigWorld,defaultSprites,school1);
+		slimy.startMoveOpposite();
+		slimy.startMoveOpposite();
 		for (int i = 0; i < 2; i+=1){
 			slime2.advanceTime(0.1);
 		}
@@ -285,11 +288,13 @@ public class SlimeTest {
 	@Test
 	public void changeHorizontalPosition(){
 		Slime slime = new Slime(0,0,spriteArrayForSize(2, 2),school1);
-		slime.setHorizontalVelocity(5);
+		slime.setHorizontalVelocity(2);
 		slime.setHorizontalAcceleration(2);
+		assertEquals(slime.getHorizontalAcceleration(),2,Util.DEFAULT_EPSILON);
+
 		slime.setDirection(1);
-		slime.changeHorizontalPosition(0.1);
-		assertEquals(slime.getXPosition(),51,Util.DEFAULT_EPSILON);
+		slime.changeHorizontalPosition(0.1,2);
+		assertEquals(slime.getXPosition(),21,Util.DEFAULT_EPSILON);
 	}
 	
 	@Test
