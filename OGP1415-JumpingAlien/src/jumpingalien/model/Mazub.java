@@ -546,8 +546,8 @@ public class Mazub extends LivingCreatures {
 					(getOutOfBounds())) {
 				setState(State.DEAD);
 				World oldWorld = getWorld();
-				setWorld(null);
 				oldWorld.terminate();
+				setWorld(null);
 				setHP(0);
 			}
 			else if (isAlive()) {

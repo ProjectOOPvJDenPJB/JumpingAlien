@@ -808,7 +808,6 @@ public class World {
 			for (Shark shark : getSharks()) {
 				shark.terminate();
 			}
-			this.getMazub().terminate();
 			this.setState(State.TERMINATED);
 				
 		}
