@@ -782,19 +782,36 @@ public class World {
 			shark.advanceTime(dt);
 		}
 	}
+	
+	/**
+	 * Return whether this world is terminating
+	 */
 	public boolean isTerminating(){
 		return this.terminating;
 	}
 	
+	/**
+	 * Variable registering whether this world is terminating.
+	 */
 	private boolean terminating = false;
 	
+	/**
+	 * Set whether this world is terminating.
+	 * @param 	flag
+	 * 			The flag to set.
+	 * @post	Whether this world is terminating is set to the given flag.
+	 * 			| new.isTerminating() == flag
+	 */
 	public void setTerminating(boolean flag){
 		this.terminating = true;
 	}
 	
 	/**
 	 * Terminates this world.
-	 * TODO
+	 * @post	If the world is not yet terminated, all objects in this world are terminated
+	 * 			and the state of this world is set to terminated.
+	 * @effect	If the world is not yet terminated, terminating is set to true
+	 * 			| setTerminating(true)
 	 */
 	public void terminate() {
 		if (! isTerminated()) {
@@ -809,7 +826,6 @@ public class World {
 				shark.terminate();
 			}
 			this.setState(State.TERMINATED);
-				
 		}
 	}
 	

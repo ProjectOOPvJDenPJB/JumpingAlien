@@ -69,7 +69,26 @@ public class School {
 	 * Adds the given slime to this school.
 	 * @param 	slime
 	 * 			The slime to be added to this school.
-	 * TODO
+	 * @post	If this school can accept new slimes and this slime is effective, 
+	 * 			then this slime is added to this school.
+	 * 			| if (this.getAmountSlimes() < 10 && slime.isAlive())
+	 * 			|	then newSlime.getSchool == this
+	 * 			|		&& slime is in new.getSlimes()
+	 * 			|		&& new.getAmountOfSlimes() == old.getAmountOfSlimes() + 1
+	 * 			If this slime can be added to this school and
+	 * 			if the old school the given slime belonged to is effective then
+	 * 			the given slime is removed from the old school and the given slime
+	 * 			transfers 1 hitpoint from himself to each of the slimes in his old school.
+	 * 			The slimes in the given slime's new school each transfer one hitpoint to
+	 * 			the given slime.
+	 * 			| if (oldSlime.getSchool != null)
+	 * 			|	then oldSlime.getSchool().removeSlime(slime)
+	 * 			|	&& (
+	 * 			|		for each slimeOS in oldSlime.getSchool().getSlimes()
+	 * 			|			slimeOS.addHP(1) && slime.addHP(-1)
+	 * 			|		for each slimeNS in getSlimes()
+	 * 			|			slimeNS.addHP(-1) && slime.addHP(1)
+	 * 			|	)
 	 */
 	public void addSlime(Slime slime){
 		if (this.getAmountSlimes() < 10 && slime.isAlive()){

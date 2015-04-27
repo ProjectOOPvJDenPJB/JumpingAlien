@@ -157,8 +157,19 @@ public class Shark extends LivingCreatures {
 	}
 	
 	/**
-	 * TODO
-	 * @param	timeInterval
+	 * Advances the time with a given timeInterval and changes every time-related attribute of this Shark
+	 * accordingly.
+	 * 
+	 * @effect	If this shark is dying, then this shark is terminated and
+	 * 			the death timer is increased by timeInterval
+	 * 			| if (isDying())
+	 * 			|	then terminate() && setDeathTimer(getDeathTimer() + timeInterval)
+	 * @effect	If this shark is alive then advanceTimeAlive is invoked.
+	 * 			| if (isAlive())
+	 * 			|	then advanceTimeAlive(timeInterval)
+	 * @throws	IllegalTimeIntervalException
+	 * 			The given time interval is not a valid time interval for this shark.
+	 * 			| (! isValidTimeInterval(timeInterval))
 	 */
 	@Override
 	public void advanceTime(double timeInterval) throws IllegalTimeIntervalException {
@@ -178,8 +189,36 @@ public class Shark extends LivingCreatures {
 	}
 	
 	/**
-	 * TODO
-	 * @param timeInterval
+	 * Advances the time with a given timeInterval and changes every time-related attribute of this Shark
+	 * accordingly.
+	 * 
+	 * @param 	timeInterval
+	 * 			The time that elapses in this invocation of the method advanceTimeAlive.
+	 * @post	The new horizontal velocity is equal to the current horizontal velocity
+	 * 			added to the horizontal velocity calculated with the horizontal acceleration and timeInterval.
+	 *			| new.getHorizontalVelocity() == this.getHorizontalVelocity() +  horizontalVelocityCalculated
+	 * @post	The new vertical velocity is equal to the current vertical velocity
+	 * 			added to the vertical velocity calculated with the vertical acceleration and timeinteval.
+	 * 			| new.getVerticalVelocity() == this.getVerticalVelocity + verticalVelocityCalculated
+	 * @post	The new hitTimer is equal to the current hitTimer added to the timeInterval.
+	 * 			| new.getHitTimer() == old.getHitTimer() + timeInterval
+	 * @post	If the run time of this Shark is greater than the random time, the shark starts to move
+	 * 			in the opposite direction and the random time is reset.
+	 * 			| if (getRunTime() >= getRandomTime())
+	 * 			|	then new.getRunTime() == 0
+	 * 			|		&& new.getDirection == old.getDirection.oppositeDirection()
+	 * 			|		&& new.getRandomTime == generateRandomTime()
+	 * 			Otherwise the run time is incremented by timeInterval
+	 * 			| else
+	 * 			|	then new.getRunTime() == old.getRunTime() + timeInterval
+	 * @effect	The new X position of this Shark is changed using timeInterval.
+	 * 			| this.changeHorizontalPosition(timeInterval, getHorizontalAcceleration())
+	 * @effect	The new Y position of this Shark is changed using timeInterval.
+	 * 			| this.changeVerticalPosition(timeInterval)
+	 * @effect	Terrain damage is applied if needed.
+	 * 			| applyTerrainDmg(timeInterval)
+	 * @effect	Interaction effects with other creatures are applied when applicable.
+	 * 			| Interaction.interactWithOtherCreatures(this)
 	 */
 	public void advanceTimeAlive(double timeInterval) {
 		if (Util.fuzzyGreaterThanOrEqualTo(getRunTime(),getRandomTime())) {

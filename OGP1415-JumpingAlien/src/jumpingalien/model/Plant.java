@@ -119,7 +119,19 @@ public class Plant extends LivingCreatures{
 	}
 	
 	/**
-	 * TODO
+	 * Advances the time with a given timeInterval and changes every time-related attribute of this Plant
+	 * accordingly.
+	 * 
+	 * @effect	If this plant is dying, then this plant is terminated and
+	 * 			the death timer is increased by timeInterval
+	 * 			| if (isDying())
+	 * 			|	then terminate() && setDeathTimer(getDeathTimer() + timeInterval)
+	 * @effect	If this plant is alive then advanceTimeAlive is invoked.
+	 * 			| if (isAlive())
+	 * 			|	then advanceTimeAlive(timeInterval)
+	 * @throws	IllegalTimeIntervalException
+	 * 			The given time interval is not a valid time interval for this Plant.
+	 * 			| (! isValidTimeInterval(timeInterval))
 	 */
 	@Override
 	public void advanceTime(double timeInterval) throws IllegalTimeIntervalException {
@@ -132,15 +144,39 @@ public class Plant extends LivingCreatures{
 		}
 		
 		if (isAlive()) {
-			if (Util.fuzzyGreaterThanOrEqualTo(this.getRunTime(), 0.5)){
-				this.setDirection(this.getDirection().oppositeDirection());
-				this.setRunTime(0);			
+			double dt_min = getSmallestDT(timeInterval);
+			for (double dt = dt_min; dt <= timeInterval-dt_min; dt += dt_min){
+				advanceTimeAlive(dt_min);
 			}
-			
-			this.changeHorizontalPosition(timeInterval,0);
-			Interaction.interactWithOtherCreatures(this);
-			this.setRunTime(getRunTime() + timeInterval);
+			advanceTimeAlive(timeInterval - (timeInterval - dt_min));
 		}
+	}
+	
+	/**
+	 * Advances the time with a given timeInterval and changes every time-related attribute of this Plant
+	 * accordingly.
+	 * 
+	 * @post	If the run time of this plant is greater 0.5, the plant starts to move
+	 * 			in the opposite direction and the run time is reset.
+	 * 			| if (getRunTime() >= getRandomTime())
+	 * 			|	then new.getRunTime() == 0
+	 * 			|		&& new.getDirection == old.getDirection.oppositeDirection()
+	 * @post	The new runTime is equal to the current runTime added to the timeInterval.
+	 * 			| new.getRunTime() == old.getRunTime() + timeInterval
+	 * @effect	The new X position of this plant is changed using timeInterval.
+	 * 			| this.changeHorizontalPosition(timeInterval, 0)
+	 * @effect	Interaction effects with other creatures are applied when applicable.
+	 * 			| Interaction.interactWithOtherCreatures(this)
+	 */
+	public void advanceTimeAlive(double timeInterval) {
+		if (Util.fuzzyGreaterThanOrEqualTo(this.getRunTime(), 0.5)){
+			this.setDirection(this.getDirection().oppositeDirection());
+			this.setRunTime(0);			
+		}
+		
+		this.changeHorizontalPosition(timeInterval,0);
+		Interaction.interactWithOtherCreatures(this);
+		this.setRunTime(getRunTime() + timeInterval);
 	}
 }
 	

@@ -281,10 +281,27 @@ public class Mazub extends LivingCreatures {
 
 	
 	/**
-	 *TODO
+	 * Advances the time with a given timeInterval and changes every time-related attribute of this Mazub
+	 * accordingly.
+	 * @effect	If this mazub is dying, then this mazub is terminated and
+	 * 			the death timer is increased by timeInterval
+	 * 			| if (isDying())
+	 * 			|	then terminate() && setDeathTimer(getDeathTimer() + timeInterval)
+	 * @effect	If this mazub has won the game, then this world is terminated.
+	 * 			| if (hasWonGame())
+	 * 			|	then getWorld().terminate()
+ 	 * @effect	If this Mazub is alive then advanceTimeAlive is invoked.
+	 * 			| if (isAlive())
+	 * 			|	then advanceTimeAlive(timeInterval)
+	 * @throws	IllegalStateException
+	 * 			Mazub is already dead.
+	 * 			| (isDead())
+	 * @throws	IllegalTimeIntervalException
+	 * 			The given time interval is not a valid time interval for this Mazub.
+	 * 			| (! isValidTimeInterval(timeInterval))
 	 */
 	@Override
-	public void advanceTime(double timeInterval) throws IllegalTimeIntervalException {
+	public void advanceTime(double timeInterval) throws IllegalTimeIntervalException, IllegalStateException {
 		if (! isValidTimeInterval(timeInterval))
 			throw new IllegalTimeIntervalException(timeInterval);
 		else if (isDying()) {
@@ -311,23 +328,24 @@ public class Mazub extends LivingCreatures {
 	 * 
 	 * @param 	timeInterval
 	 * 			The time that elapses in this invocation of the method advanceTimeAlive.
-	 * @post	If this Mazub is moving horizontally then the new horizontal velocity is equal to the current horizontal velocity
+	 * @post	The new horizontal velocity is equal to the current horizontal velocity
 	 * 			added to the horizontal velocity calculated with the horizontal acceleration and timeInterval.
-	 *			| if (this.getMoving() == true)
-	 *			|	then new.getHorizontalVelocity() == this.getHorizontalVelocity() +  horizontalVelocityCalculated
-	 * @post	If this Mazub is moving vertically after the Y position is changed then the new vertical velocity is equal to
-	 * 			the current vertical velocity added to the vertical velocity calculated with the vertical acceleration and timeinteval.
-	 * 			| if (this.getMovingVertically() == true)
-	 * 			|	then new.getVerticalVelocity() == this.getVerticalVelocity + verticalVelocityCalculated
+	 *			| new.getHorizontalVelocity() == this.getHorizontalVelocity() +  horizontalVelocityCalculated
+	 * @post	The new vertical velocity is equal to the current vertical velocity
+	 * 			added to the vertical velocity calculated with the vertical acceleration and timeinteval.
+	 * 			| new.getVerticalVelocity() == this.getVerticalVelocity + verticalVelocityCalculated
 	 * @post	The new runTime is equal to the current runTime added to the timeInterval.
-	 * 			|
+	 * 			| new.getRunTime() == old.getRunTime() + timeInterval
+	 * @post	The new hitTimer is equal to the current hitTimer added to the timeInterval.
+	 * 			| new.getHitTimer() == old.getHitTimer() + timeInterval
 	 * @effect	The new X position of this Mazub is changed using timeInterval if this Mazub is moving horizontally.
-	 * 			| this.changeHorizontalPosition(timeInterval)
+	 * 			| this.changeHorizontalPosition(timeInterval, 0.9)
 	 * @effect	The new Y position of this Mazub is changed using timeInterval if this Mazub is moving vertically.
 	 * 			| this.changeVerticalPosition(timeInterval)
-	 * @throws	IllegalTimeIntervalException
-	 * 			The given time interval is not a valid time interval for this Mazub.
-	 * 			| (! isValidTimeInterval(timeInterval))
+	 * @effect	Terrain damage is applied if needed.
+	 * 			| applyTerrainDmg(timeInterval)
+	 * @effect	Interaction effects with other creatures are applied when applicable.
+	 * 			| Interaction.interactWithOtherCreatures(this)
 	 * @note	In the execution of the method advanceTime the maximum horizontal velocity may be limited to 1 if
 	 * 			this Mazub is ducking. After advanceTime is done running it is set back to its original value.
 	 */

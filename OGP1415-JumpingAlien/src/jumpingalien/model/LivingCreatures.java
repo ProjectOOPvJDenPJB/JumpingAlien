@@ -1013,9 +1013,8 @@ public abstract class LivingCreatures {
 	}
 	
 	/**
-	 * TODO
 	 * @param 	timeInterval 
-	 * 			The time interval in which the position of this mazub has changed.
+	 * 			The time interval in which the position of this creature has changed.
 	 * @post	The new X position of this Mazub is equal to the current X position added to the horizontal distance
 	 * 			travelled calculated with a formula using the given time interval. 
 	 * 			new.getXPosition = this.getXPosition() + distanceCalculated
@@ -1048,9 +1047,8 @@ public abstract class LivingCreatures {
 	
 	
 	 /**
-	  * TODO
 	  * @param 	timeInterval
-	  * 		The time interval in which the position of this mazub has changed.
+	  * 		The time interval in which the position of this creature has changed.
 	  * @post	The new Y position of this Mazub is equal to the current Y position added to the vertical distance
 	  * 		travelled calculated with a formula using the given time interval. 
 	  * 		new.getYPosition = this.getYPosition() + distanceCalculated

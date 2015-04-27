@@ -8,6 +8,7 @@ import java.util.Random;
 
 
 
+
 //import jumpingalien.model.LivingCreatures.State;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
@@ -216,8 +217,22 @@ public class Slime extends LivingCreatures {
 	}
 	
 	/**
-	 * TODO
-	 * @param 	timeInterval
+	 * Advances the time with a given timeInterval and changes every time-related attribute of this Slime
+	 * accordingly.
+	 * 
+	 * @effect	If this slime is dying, then this slime is terminated and
+	 * 			the death timer is increased by timeInterval
+	 * 			| if (isDying())
+	 * 			|	then terminate() && setDeathTimer(getDeathTimer() + timeInterval)
+	 * @effect	If this slime is alive then advanceTimeAlive is invoked.
+	 * 			| if (isAlive())
+	 * 			|	then advanceTimeAlive(timeInterval)
+	 * 			If the slime is not on top of a solid tile, the slime starts to fall.
+	 * 			| if (!collidesWithTerrainThroughBottomBorder() && (!getMovingVertical()))
+	 * 			|	this.startFall(-10)
+	 * @throws	IllegalTimeIntervalException
+	 * 			The given time interval is not a valid time interval for this Slime.
+	 * 			| (! isValidTimeInterval(timeInterval))
 	 */
 	@Override
 	public void advanceTime(double timeInterval) throws IllegalTimeIntervalException {
@@ -242,8 +257,37 @@ public class Slime extends LivingCreatures {
 	}
 	
 	/**
-	 * TODO
+	 * Advances the time with a given timeInterval and changes every time-related attribute of this Slime
+	 * accordingly.
+	 * 
 	 * @param 	timeInterval
+	 * 			The time that elapses in this invocation of the method advanceTimeAlive.
+	 * @post	The new horizontal velocity is equal to the current horizontal velocity
+	 * 			added to the horizontal velocity calculated with the horizontal acceleration and timeInterval.
+	 *			| new.getHorizontalVelocity() == this.getHorizontalVelocity() +  horizontalVelocityCalculated
+	 * @post	The new vertical velocity is equal to the current vertical velocity
+	 * 			added to the vertical velocity calculated with the vertical acceleration and timeinteval.
+	 * 			| new.getVerticalVelocity() == this.getVerticalVelocity + verticalVelocityCalculated
+	 * @post	The new hitTimer is equal to the current hitTimer added to the timeInterval.
+	 * 			| new.getHitTimer() == old.getHitTimer() + timeInterval
+	 * @effect	If the runtime of this slime is greater than or equal to the random time,
+	 * 			the slimes starts to move in the opposite direction and the random time and
+	 * 			run time are reset
+	 * 			| if (getRunTime() > getRandomTime())
+	 * 			|	then startMoveOpposite()
+	 * 			|	&& setRandomTime()
+	 * 			|	&& setRunTime(0)
+	 * 			Otherwise the run time is increased by timeInterval
+	 * 			| else
+	 * 			|	then setRunTime(getRunTime() + timeInterval)
+	 * @effect	The new X position of this Slime is changed using timeInterval.
+	 * 			| this.changeHorizontalPosition(timeInterval, getHorizontalAcceleration())
+	 * @effect	The new Y position of this Slime is changed using timeInterval.
+	 * 			| this.changeVerticalPosition(timeInterval)
+	 * @effect	Terrain damage is applied if needed.
+	 * 			| applyTerrainDmg(timeInterval)
+	 * @effect	Interaction effects with other creatures are applied when applicable.
+	 * 			| Interaction.interactWithOtherCreatures(this)
 	 */
 	public void advanceTimeAlive(double timeInterval) {
 		
