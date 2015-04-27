@@ -69,6 +69,7 @@ public class School {
 	 * Adds the given slime to this school.
 	 * @param 	slime
 	 * 			The slime to be added to this school.
+	 * TODO
 	 */
 	public void addSlime(Slime slime){
 		if (this.getAmountSlimes() < 10 && slime.isAlive()){

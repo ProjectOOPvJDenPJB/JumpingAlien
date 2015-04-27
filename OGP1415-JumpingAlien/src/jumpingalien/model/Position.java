@@ -117,7 +117,11 @@ public class Position {
 	private final double YPos;
 
 	/**
-	 * Returns the X and Y position of this position in an integer array.
+	 * Returns the X and Y position of this position.
+	 * @return	The position is returned as an integer array with the X position
+	 * 			first and the Y position second.
+	 * 			| result[0] == getXPosition()
+	 * 			|	&& result[1] == getYPosition()
 	 */
 	public int[] getPosition() {
 		int[] Position = new int[2];
@@ -127,32 +131,40 @@ public class Position {
 	}
 
 	/**
-	 * 
-	 * @return the world of this position
+	 * Return the world for this position.
 	 */
 	private World getWorld() {
 		return this.world;
 	}
 
+	/**
+	 * Variable registering the world for this position.
+	 */
 	private final World world;
 	
 	/**
-	 * @return the width of the world from this position
+	 * Return the width of the world from this position
+	 * @throws	IllegalStateException
+	 * 			The world of this position is not effective.
+	 * 			| (this.getWorld() == null)
 	 */
 	public int getWidth() throws IllegalStateException {
 		if (this.getWorld() == null) 
 			throw new IllegalStateException("World is Null");
 		else 
-			return world.getPixelWidth();
+			return getWorld().getPixelWidth();
 	}
 	
 	/**
-	 * @return the height of the world from this position
+	 * Return the height of the world from this position
+	 * @throws	IllegalStateException
+	 * 			The world of this position is not effective.
+	 * 			| (this.getWorld() == null)
 	 */
 	public int getHeight() throws IllegalStateException {
 		if (this.getWorld() == null) 
 			throw new IllegalStateException("World is Null");
 		else
-			return world.getPixelHeight();
+			return getWorld().getPixelHeight();
 	}
 }

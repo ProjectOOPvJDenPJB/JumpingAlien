@@ -405,7 +405,7 @@ public class World {
 	 * 			| if (getMazub().getYposition() < getVisibleWindowPosition().getYPosition() + 200)
 	 * 			|	then new.getVisibleWindowPosition.getYPosition == 
 	 * 			|		getMazub().getYPosition() - 200
-	 * @post	... TODO
+	 * @post	...
 	 * 			| if (getMazub().getYPosition() > (getVisibleWindowPosition().getYPosition()
 	 * 			|		+ getVisibleWindowHeight() - 200))
 	 * 			|	then new.getVisibleWindowPosition.getYPosition ==
@@ -832,13 +832,25 @@ public class World {
 		return false;
 	}
 	
-	//Dit moet eigenlijk nog met State.INITIALISED gedaan worden
+	/**
+	 * Sets whether the game has started to the given flag.
+	 * @param 	flag
+	 * 			The flag to be set.
+	 * @post	Whether the game has started is set to the given flag.
+	 * 			| new.gameStarted() == flag
+	 */
 	public void setGameStarted(boolean flag){
 		this.gameStarted = flag;
 	}
 	
+	/**
+	 * Variable registering whether the game has started.
+	 */
 	private boolean gameStarted = false;
 	
+	/**
+	 * Return whether the game has started.
+	 */
 	public boolean gameStarted(){
 		return this.gameStarted;
 	}
