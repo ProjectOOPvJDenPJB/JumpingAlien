@@ -61,7 +61,7 @@ public class Plant extends LivingCreatures{
 	}
 	
 	/**
-	 * terminates this plant if it's still alive.
+	 * Terminates this plant if it's still alive.
 	 * @post If the plant isn't dying yet but meets the requirements to die
 	 * 		 |if isAlive() && (getHP() > 0) && (! getOutOfBounds())
 	 * 		 | new.getState == state.DYING
@@ -70,6 +70,9 @@ public class Plant extends LivingCreatures{
 	 * 		 | new.getWorld() == null
 	 * 		 | new.getState() == state.DEAD
 	 * 		 | new !in (old.getWorld().getSlimes())
+	 * @throws	IllegalStateException
+	 * 			This Plant is alive within the boundaries of the world and didnt win.
+	 * 			| (isAlive() && (getHP() > 0) && (! getOutOfBounds()) && (! hasWonGame())
 	 */
 	public void terminate() {
 		if (!isDead()) {
@@ -91,18 +94,16 @@ public class Plant extends LivingCreatures{
 	}
 
 	/**
-	 * @return true if the plant is eatable, else returns false
+	 * Checks whether this plant is eatable.
+	 * @return	True if this plant is alive, false otherwise.
+	 * 			| result == isAlive()
 	 */
 	public boolean isEatablePlant() {
-		if (isAlive()){
-			return true;
-		}
-		else
-			return false;
+		return (isAlive());
 	}
 	
 	/**
-	 * returns the maximum hit points for this slime
+	 * returns the maximum hit points for this plant
 	 */
 	@Override
 	public int getMaxHP() {
@@ -110,13 +111,16 @@ public class Plant extends LivingCreatures{
 	}
 
 	/**
-	 * returns the minimum hit points for this slime
+	 * returns the minimum hit points for this plant
 	 */
 	@Override
 	public int getMinHP() {
 		return 0;
 	}
-
+	
+	/**
+	 * TODO
+	 */
 	@Override
 	public void advanceTime(double timeInterval) throws IllegalTimeIntervalException {
 		if (! isValidTimeInterval(timeInterval))
@@ -135,12 +139,6 @@ public class Plant extends LivingCreatures{
 			
 			this.changeHorizontalPosition(timeInterval);
 			Interaction.interactWithOtherCreatures(this);
-
-			
-	//		double newXposition = this.getXPosition() + this.getDirection().getInt() * this.getHorizontalVelocity();
-	//		
-	//		if (Position.isPassable(this,newXposition,this.getYPosition()-1) == false);
-	//				this.setXPosition(newXposition);
 			this.setRunTime(getRunTime() + timeInterval);
 		}
 	}

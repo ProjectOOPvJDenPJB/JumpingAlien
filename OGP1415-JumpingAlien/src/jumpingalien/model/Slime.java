@@ -7,6 +7,7 @@ import java.util.Random;
 
 
 
+
 //import jumpingalien.model.LivingCreatures.State;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
@@ -20,27 +21,34 @@ import jumpingalien.util.Util;
  */
 public class Slime extends LivingCreatures {
 	/**
-	 * Initialize this new Slime with given position en sprites
+	 * Initialize this new Slime with given position, horizontal velocity,
+	 * 	vertical velocity, horizontal acceleration, sprites, world and hitpoints.
 	 * 
 	 * @param 	positionX
 	 * 			The position on the X-axis this new Slime.
 	 * @param 	positionY
 	 * 			The position on the Y-axis for this new Slime.
+	 * @param 	horizontalVelocity
+	 * 			The horizontal velocity for this new Slime.
+	 * @param	verticalVelocity
+	 * 			The vertical velocity for this new Slime.
+	 * @param	horizontalAcceleration
+	 * 			The horizontal acceleration for this new Slime.
 	 * @param 	sprites
 	 * 			The sprites for this new Slime.
 	 * @param   world
-	 * 			The world in which the Slime is located
-	 * @post	The position of this new Slime is the same as the given position.
-	 * 			| (new.getXPosition() == positionLeftX) && (new.getYPosition() == positionY)
-	 * @Post	The world in which the Slime is located is the same as the given world
-	 * 			| (new.getWorld() == world) && (new.isworld == True)
-	 * @throws	IllegalXPositionException
-	 * 			The given X position is not a valid X position for a Mazub.
-	 * 			| ! isValidXPosition(positionLeftX)
-	 * @throws	IllegalYPositionException
-	 * 			The given Y position is not a valid Y position for a Mazub.
-	 * 			| ! isValidYPosition(positionBottomY)
-	 * 
+	 * 			The world for this new Slime.
+	 * @param	school
+	 * 			The given school for this new Slime.
+	 * @param	hitpoints
+	 * 			The hitpoints for this new Slime.
+	 * @effect	The new slime is initialized as a LivingCreature with given position,
+	 * 			horizontal velocity, vertical velocity, horizontal acceleration, sprites, world and hitpoints.
+	 * 			The maximum horizontal velocity is set to 2.5.
+	 * 			| super(positionX,positionY,horizontalVelocity,verticalVelocity,horizontalAcceleration,2.5,
+	 *			|	world,sprites,hitpoints)
+	 * @effect	The new slime is added to the given school.
+	 * 			| school.addSlime(this)
 	 */
 	public Slime(int positionX, int positionY, double horizontalVelocity,double verticalVelocity,
 			double horizontalAcceleration,Sprite[] sprites, World world, School school, int hitpoints){
@@ -50,27 +58,27 @@ public class Slime extends LivingCreatures {
 	}
 	
 	/**
-	 * Initialize this new Slime with given position en sprites
+	 * Initialize this new Slime with given position, horizontal velocity,
+	 * 	vertical velocity, world, sprites and school.
 	 * 
 	 * @param 	positionX
 	 * 			The position on the X-axis this new Slime.
 	 * @param 	positionY
 	 * 			The position on the Y-axis for this new Slime.
+	 * @param 	horizontalVelocity
+	 * 			The horizontal velocity for this new Slime.
+	 * @param	verticalVelocity
+	 * 			The vertical velocity for this new Slime.
+	 * @param   world
+	 * 			The world for this new Slime.
 	 * @param 	sprites
 	 * 			The sprites for this new Slime.
-	 * @param   world
-	 * 			The world in which the Slime is located
-	 * @post	The position of this new Slime is the same as the given position.
-	 * 			| (new.getXPosition() == positionLeftX) && (new.getYPosition() == positionY)
-	 * @Post	The world in which the Slime is located is the same as the given world
-	 * 			| (new.getWorld() == world) && (new.isworld == True)
-	 * @throws	IllegalXPositionException
-	 * 			The given X position is not a valid X position for a Mazub.
-	 * 			| ! isValidXPosition(positionLeftX)
-	 * @throws	IllegalYPositionException
-	 * 			The given Y position is not a valid Y position for a Mazub.
-	 * 			| ! isValidYPosition(positionBottomY)
-	 //TODO Commentaar klopt niet meer
+	 * @param	school
+	 * 			The school for this new Slime.
+	 * @effect	The new slime is initialized with given position, horizontal velocity,
+	 * 			vertical velocity, world, sprites and school. The horizontal acceleration
+	 * 			is set to 0 and the hitpoints are set to 100.
+	 * 			| this(positionX,positionY,horizontalVelocity,verticalVelocity,0,sprites, world,school,100)
 	 */
 	public Slime(int positionX, int positionY,double horizontalVelocity,double verticalVelocity, 
 			World world,Sprite[] sprites, School school){
@@ -78,25 +86,32 @@ public class Slime extends LivingCreatures {
 	}
 
 	/**
-	 * Initialize this new Slime with given position en sprites
+	 * Initialize this new Slime with given position, horizontal velocity,
+	 * 	vertical velocity, sprites and school.
 	 * 
 	 * @param 	positionX
 	 * 			The position on the X-axis this new Slime.
 	 * @param 	positionY
 	 * 			The position on the Y-axis for this new Slime.
+	 * @param 	horizontalVelocity
+	 * 			The horizontal velocity for this new Slime.
+	 * @param	verticalVelocity
+	 * 			The vertical velocity for this new Slime.
 	 * @param 	sprites
 	 * 			The sprites for this new Slime.
-	 * @effect	The new Slime is initialized with the given position as its position,
-	 * 			the given sprites as its sprites and world as null
-	 * 			| this(positionX,positionY,sprites, null)
-	 //TODO Commentaar klopt niet meer	 */
+	 * @param	school
+	 * 			The school for this new Slime.
+	 * @effect	The new slime is initialized with given position, horizontal velocity,
+	 * 			vertical velocity, sprites and school. The world is set to null.
+	 * 			| this(positionX,positionY,horizontalVelocity,verticalVelocity, null,sprites, school)
+	 */
 	public Slime(int positionX, int positionY, double horizontalVelocity,double verticalVelocity,
 			Sprite[] sprites, School school){
 		this(positionX,positionY,horizontalVelocity,verticalVelocity, null,sprites, school);	
 	}
 	
 	/**
-	 * Initialize this new Slime with given position en sprites
+	 * Initialize this new Slime with given position, sprites and school.
 	 * 
 	 * @param 	positionX
 	 * 			The position on the X-axis this new Slime.
@@ -104,22 +119,26 @@ public class Slime extends LivingCreatures {
 	 * 			The position on the Y-axis for this new Slime.
 	 * @param 	sprites
 	 * 			The sprites for this new Slime.
-	 * @effect	The new Slime is initialized with the given position as its position,
-	 * 			the given sprites as its sprites and world as null
-	 * 			| this(positionX,positionY,sprites, null)
-	 //TODO Commentaar klopt niet meer	 */
+	 * @param	school
+	 * 			The school for this new Slime.
+	 * @effect	The new Slime is initialized with given position, sprites and school.
+	 * 			The horizontal and vertical velocity are set to 0.
+	 * 			| this(positionX,positionY,0,0,sprites, school)
+	 */
 	public Slime(int positionX, int positionY, Sprite[] sprites, School school){
 		this(positionX,positionY,0,0,sprites, school);	
 	}
 	
 	/**
-	 * Initialize this new Slime with sprites
+	 * Initialize this new Slime with given sprites and school.
 	 * 
 	 * @param 	sprites
 	 * 			The sprites for this new Slime.
-	 * @effect	The new Slime is initialized with the given sprites as its sprites 
-	 * and as for positionX and positionY the value zero as its position, and world as null.
-	 * 			| this(0,0,sprites, null)
+	 * @param	school
+	 * 			The school for this new Slime.
+	 * @effect	The new Slime is initialized with given sprites and school.
+	 * 			The position is set to (0,0)
+	 * 			| this(0,0,sprites, school)
 	 */
 	public Slime(Sprite[] sprites, School school){
 		this(0,0,sprites,school);	
@@ -142,6 +161,7 @@ public class Slime extends LivingCreatures {
 		this.setHorizontalVelocity(0);
 		this.setHorizontalAcceleration(0.7);
 		}
+	
 	/**
 	 * terminates this slime if it's still alive.
 	 * @post If the slime isn't dying yet but meets the requirements to die
@@ -152,6 +172,9 @@ public class Slime extends LivingCreatures {
 	 * 		 | new.getWorld() == null
 	 * 		 | new.getState() == state.DEAD
 	 * 		 | new !in (old.getWorld().getSlimes())
+	 * @throws	IllegalStateException
+	 * 			This Slime is alive within the boundaries of the world and didnt win.
+	 * 			| (isAlive() && (getHP() > 0) && (! getOutOfBounds()) && (! hasWonGame())
 	 */
 	@Override
 	public void terminate() {
@@ -192,6 +215,10 @@ public class Slime extends LivingCreatures {
 		return 0;
 	}
 	
+	/**
+	 * TODO
+	 * @param 	timeInterval
+	 */
 	@Override
 	public void advanceTime(double timeInterval) throws IllegalTimeIntervalException {
 		if (! isValidTimeInterval(timeInterval))
@@ -215,6 +242,10 @@ public class Slime extends LivingCreatures {
 		
 	}
 	
+	/**
+	 * TODO
+	 * @param 	timeInterval
+	 */
 	public void advanceTimeAlive(double timeInterval) {
 		
 		if (Util.fuzzyGreaterThanOrEqualTo(getRunTime(), getRandomTime())) {
@@ -235,12 +266,15 @@ public class Slime extends LivingCreatures {
 	}
 	
 	/**
-	 * returns the random time for the length of the movement of this slime
+	 * Return the random time for the length of the movement of this slime.
 	 */
 	private double getRandomTime() {
 		return this.randomTime;
 	}
 	
+	/**
+	 * Variable registering the random time for the length of the movement of this slime.
+	 */
 	private double randomTime = (2 + (6-2) * new Random().nextDouble());
 	
 	/**
@@ -253,6 +287,7 @@ public class Slime extends LivingCreatures {
 	private void setRandomTime() {
 		this.randomTime = (2 + (6-2) * new Random().nextDouble());
 	}
+	
 	/**
 	 * return the school of this slime
 	 */
@@ -260,6 +295,9 @@ public class Slime extends LivingCreatures {
 		return this.school;
 	}
 	
+	/**
+	 * Variable registering the school of this slime.
+	 */
 	private School school;
 	
 	/**

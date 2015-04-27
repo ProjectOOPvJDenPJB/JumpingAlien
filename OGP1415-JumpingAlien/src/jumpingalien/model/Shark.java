@@ -23,21 +23,21 @@ public class Shark extends LivingCreatures {
 	 * 			The position on the X-axis this new Shark.
 	 * @param 	positionY
 	 * 			The position on the Y-axis for this new Shark.
+	 * @param 	horizontalVelocity
+	 * 			The horizontal velocity for this new Shark.
+	 * @param 	verticalVelocity
+	 * 			The vertical velocity for this new Shark.
+	 * @param   world
+	 * 			The world for this new Shark.
 	 * @param 	sprites
 	 * 			The sprites for this new Shark.
-	 * @param   world
-	 * 			The world in which the Shark is located
-	 * @post	The position of this new Shark is the same as the given position.
-	 * 			| (new.getXPosition() == positionLeftX) && (new.getYPosition() == positionY)
-	 * @Post	The world in which the Shark is located is the same as the given world
-	 * 			| (new.getWorld() == world) && (new.isInWorld == True)
-	 * @throws	IllegalXPositionException
-	 * 			The given X position is not a valid X position for a Mazub.
-	 * 			| ! isValidXPosition(positionLeftX)
-	 * @throws	IllegalYPositionException
-	 * 			The given Y position is not a valid Y position for a Mazub.
-	 * 			| ! isValidYPosition(positionBottomY)
-	 * 
+	 * @param	hitpoints
+	 * 			The hitpoitns for this new Shark.
+	 * @effect	The new Shark is initialized as a LivingCreature with given position,
+	 * 			horizontal velocity, vertical velocity, sprites, world and hitpoints.
+	 * 			The horizontal acceleration is set to 1.5, the vertical acceleration
+	 * 			and initial horizontal velocity are set to 0. The maximum horizontal velocity is set to 4.
+	 * 			| super(positionX,positionY, horizontalVelocity, verticalVelocity,1.5,0,0,4,world,sprites, hitpoints)
 	 */
 	public Shark(int positionX, int positionY, double horizontalVelocity, double verticalVelocity,
 			World world,Sprite[] sprites, int hitpoints){
@@ -54,9 +54,10 @@ public class Shark extends LivingCreatures {
 	 * 			The position on the Y-axis for this new Shark.
 	 * @param 	sprites
 	 * 			The sprites for this new Shark.
-	 * @effect	The new Shark is initialized with the given position as its position,
-	 * 			the given sprites as its sprites and world as null
-	 * 			| this(positionX,positionY,sprites, null)
+	 * @effect	The new Shark is initialized with given position and sprite array.
+	 * 			The world is set to null, the hitpoints to 100 and
+	 * 			horizontal velocity and vertical velocity are set to 0.
+	 * 			| this(positionX,positionY,0,0,null,sprites,100)
 	 */
 	public Shark(int positionX, int positionY, Sprite[] sprites){
 		this(positionX,positionY,0,0,null,sprites,100);	
@@ -67,8 +68,8 @@ public class Shark extends LivingCreatures {
 	 * 
 	 * @param 	sprites
 	 * 			The sprites for this new Shark.
-	 * @effect	The new Shark is initialized with the given sprites as its sprites 
-	 * and as for positionX and positionY the value zero as its position, and world as null.
+	 * @effect	The new Shark is initialized with given sprites.
+	 * 			The position is set to (0,0).
 	 * 			| this(0,0,sprites, null)
 	 */
 	public Shark(Sprite[] sprites){
@@ -77,11 +78,18 @@ public class Shark extends LivingCreatures {
 	}
 	
 	/**
-	 * Register a removal from this Shark from a world. If the Shark is in a world.
-	 *
-	 * @post   This Shark is no longer in a world.
-	 *	     | ! new.isInWorld()
-	 * @post   The former world of this Shark, no longer contains this Shark
+	 * Terminates this Shark if it's still alive.
+	 * @post If the Shark isn't dying yet but meets the requirements to die
+	 * 		 |if isAlive() && (getHP() > 0) && (! getOutOfBounds())
+	 * 		 | new.getState == state.DYING
+	 * @post If the Shark is dying for longer then 0.6 seconds or out of the game boundaries he is terminated
+	 * 		 |if isDying() && Util.fuzzyGreaterThanOrEqualTo(getDeathTimer(), 0.6) || getOutOfBounds()
+	 * 		 | new.getWorld() == null
+	 * 		 | new.getState() == state.DEAD
+	 * 		 | new !in (old.getWorld().getSlimes())
+	 * @throws	IllegalStateException
+	 * 			This Shark is alive within the boundaries of the world and didnt win.
+	 * 			| (isAlive() && (getHP() > 0) && (! getOutOfBounds()) && (! hasWonGame())
 	 */
 	@Override
 	public void terminate() {
@@ -148,6 +156,10 @@ public class Shark extends LivingCreatures {
 		this.setHorizontalAcceleration(0);
 	}
 	
+	/**
+	 * TODO
+	 * @param	timeInterval
+	 */
 	@Override
 	public void advanceTime(double timeInterval) throws IllegalTimeIntervalException {
 		if (! isValidTimeInterval(timeInterval))
@@ -165,6 +177,10 @@ public class Shark extends LivingCreatures {
 		}
 	}
 	
+	/**
+	 * TODO
+	 * @param timeInterval
+	 */
 	public void advanceTimeAlive(double timeInterval) {
 		if (Util.fuzzyGreaterThanOrEqualTo(getRunTime(),getRandomTime())) {
 			this.setRunTime(0);
@@ -194,22 +210,51 @@ public class Shark extends LivingCreatures {
 		this.applyTerrainDmg(timeInterval);
 	}
 	
+	/**
+	 * Checks whether this shark can jump again.
+	 * @return	If it has at least been 4 horizontal movements since the last jump,
+	 * 			this shark can jump again.
+	 * 			| result ==
+	 * 			| 	(getJumpCounter() >= getRandomJumpCount())
+	 */
 	private boolean canJumpAgain() {
 		return (getJumpCounter() >= getRandomJumpCount());
 	}
 	
+	/**
+	 * Return the jump counter for this shark.
+	 */
 	private int getJumpCounter(){
 		return this.jumpCounter;
 	}
 	
+	/**
+	 * Variable registering the jump counter for this shark.
+	 */
 	private int jumpCounter = 4;
 	
+	/**
+	 * Sets the jump counter of this shark to the given count.
+	 * @param 	count
+	 * 			The count to be set as jump counter.
+	 * @post	If the count is smaller than 0, jump counter is set to 0
+	 * 			| if (count < 0)
+	 * 			|	then new.getJumpCounter == 0
+	 * 			Otherwise the jump counter is set to the given count
+	 * 			| if (count >= 0)
+	 * 			|	then new.getJumpcounter == count
+	 */
 	private void setJumpCounter(int count) {
 		if (count < 0)
 			count = 0;
 		this.jumpCounter = count;
 	}
 	
+	/**
+	 * Increases the jump counter by 1.
+	 * @effect	Sets the jump counter to the current jump counter added by 1.
+	 * 			| setJumpCounter(getJumpCounter() + 1)
+	 */
 	private void increaseJumpCounter() {
 		setJumpCounter(getJumpCounter()+1);
 	}
@@ -219,7 +264,11 @@ public class Shark extends LivingCreatures {
 	 */
 	private double getRandomTime() {
 		return this.randomTime;
-	}	
+	}
+	
+	/**
+	 * Variable registering the random time for the length of the movement of this shark.
+	 */
 	private double randomTime = (1 + (4-1) * new Random().nextDouble());
 	
 	/**
@@ -227,23 +276,41 @@ public class Shark extends LivingCreatures {
 	 * @post	The new random time for this shark is equal to
 	 * 			the generated time
 	 * 			| new.getRandomTime() == (1 + (4-1) * new Random().nextDouble());
+	 * @effect	The jump counter is increased.
+	 * 			| increaseJumpCounter()
 	 */
 	private void generateRandomTime() {
 		this.randomTime = (1 + (4-1) * new Random().nextDouble());
 		this.increaseJumpCounter();
 	}
 	
+	/**
+	 * Return the random jump count for this shark.
+	 */
 	private int getRandomJumpCount() {
 		return this.randomJumpCount;
 	}
 	
+	/**
+	 * Variable registering the random jump count for this shark.
+	 */
 	private int randomJumpCount = (4 + new Random().nextInt(3));
 	
+	/**
+	 * Sets the random jump count to a newly generated random jump count between 4 and 7.
+	 * @post	The new random jump count is set to a value between 4 and 7
+	 * 			| 4 <= new.getRandomJumpCount <= 7
+	 * @effect	The jump counter is reset to 0. 
+	 * 			|setJumpCounter(0)
+	 */
 	private void generateRandomJumpCount() {
 		this.randomJumpCount = (4 + new Random().nextInt(3));
 		setJumpCounter(0);
 	}
 	
+	/**
+	 * Return a newly generated random acceleration between -0.2 and 0.2.
+	 */
 	private double getRandomAcceleration() {
 		return (new Random().nextInt(4)-2) * (new Random().nextDouble());
 	}

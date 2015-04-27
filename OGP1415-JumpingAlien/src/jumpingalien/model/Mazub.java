@@ -133,6 +133,9 @@ public class Mazub extends LivingCreatures {
 	 * 			The new boolean that indicates wether or not this Mazub is ducking.
 	 * @post	The new ducking state of this Mazub is equal to the given flag
 	 * 			| new.getDucking == flag
+	 * @throws	IllegalStateException
+	 * 			Mazub tries to stand up but can't.
+	 * 			| ((flag == false) && (!canStandUp()))
 	 */
 	private void setDucking(boolean flag) throws IllegalStateException {
 		if ((flag == false) && (!canStandUp()))
@@ -141,6 +144,10 @@ public class Mazub extends LivingCreatures {
 			this.ducking = flag;
 	}
 	
+	/**
+	 * Checks whether this Mazub can stand up in its current position.
+	 * @return	False if the top border of this mazub collides with solid terrain, true otherwise.
+	 */
 	public boolean canStandUp(){
 		if ((world.getTileType((int)this.getXPosition()+1, (int)this.getYPosition() + getSize()[1] + world.getTileSize()) == 1) 
 				|| ((world.getTileType((int)(this.getXPosition()+1 + this.getSize()[0]),
@@ -152,12 +159,25 @@ public class Mazub extends LivingCreatures {
 		}
 	}
 	
+	/**
+	 * Return whether this mazub is trying to end his duck.
+	 */
 	private boolean getTryEndingDuck() {
 		return this.tryEndingDuck;
 	}
 	
+	/**
+	 * Variable registering whether this mazub is trying to end his duck.
+	 */
 	private boolean tryEndingDuck = false;
 	
+	/**
+	 * Sets whether this mazub tries to end his duck.
+	 * @param 	flag
+	 * 			The flag to be set.
+	 * @post	The new trying to end duck state of this mazub is equal to the given flag.
+	 * 			| new.getTryEndingDuck() == flag
+	 */
 	private void setTryEndingDuck(boolean flag) {
 		this.tryEndingDuck = flag;
 	}
@@ -203,11 +223,10 @@ public class Mazub extends LivingCreatures {
 	 * 			|	&& new.getMoving() == true && new.getRunTime() == 0
 	 */
 	public void startMove(double horizontalAcceleration){
-			assert isValidHorizontalAcceleration(horizontalAcceleration);
-			this.setHorizontalAcceleration(horizontalAcceleration);
-			this.setHorizontalVelocity(this.getInitialHorizontalVelocity());
-			this.setMoving(true);
-
+		assert isValidHorizontalAcceleration(horizontalAcceleration);
+		this.setHorizontalAcceleration(horizontalAcceleration);
+		this.setHorizontalVelocity(this.getInitialHorizontalVelocity());
+		this.setMoving(true);
 		this.setRunTime(0);
 	}
 		
@@ -262,30 +281,7 @@ public class Mazub extends LivingCreatures {
 
 	
 	/**
-	 * Advances the time with a given timeInterval and changes every time-related attribute of this Mazub
-	 * accordingly.
-	 * 
-	 * @param 	timeInterval
-	 * 			The time that elapses in this invocation of the method advanceTime.
-	 * @post	If this Mazub is moving horizontally then the new horizontal velocity is equal to the current horizontal velocity
-	 * 			added to the horizontal velocity calculated with the horizontal acceleration and timeInterval.
-	 *			| if (this.getMoving() == true)
-	 *			|	then new.getHorizontalVelocity() == this.getHorizontalVelocity() +  horizontalVelocityCalculated
-	 * @post	If this Mazub is moving vertically after the Y position is changed then the new vertical velocity is equal to
-	 * 			the current vertical velocity added to the vertical velocity calculated with the vertical acceleration and timeinteval.
-	 * 			| if (this.getMovingVertically() == true)
-	 * 			|	then new.getVerticalVelocity() == this.getVerticalVelocity + verticalVelocityCalculated
-	 * @post	The new runTime is equal to the current runTime added to the timeInterval.
-	 * 			|
-	 * @effect	The new X position of this Mazub is changed using timeInterval if this Mazub is moving horizontally.
-	 * 			| this.changeHorizontalPosition(timeInterval)
-	 * @effect	The new Y position of this Mazub is changed using timeInterval if this Mazub is moving vertically.
-	 * 			| this.changeVerticalPosition(timeInterval)
-	 * @throws	IllegalTimeIntervalException
-	 * 			The given time interval is not a valid time interval for this Mazub.
-	 * 			| (! isValidTimeInterval(timeInterval))
-	 * @note	In the execution of the method advanceTime the maximum horizontal velocity may be limited to 1 if
-	 * 			this Mazub is ducking. After advanceTime is done running it is set back to its original value.
+	 *TODO
 	 */
 	@Override
 	public void advanceTime(double timeInterval) throws IllegalTimeIntervalException {
@@ -308,7 +304,33 @@ public class Mazub extends LivingCreatures {
 			advanceTimeAlive(timeInterval - (timeInterval - dt_min));
 		}
 	}
-		
+	
+	/**
+	 * Advances the time with a given timeInterval and changes every time-related attribute of this Mazub
+	 * accordingly.
+	 * 
+	 * @param 	timeInterval
+	 * 			The time that elapses in this invocation of the method advanceTimeAlive.
+	 * @post	If this Mazub is moving horizontally then the new horizontal velocity is equal to the current horizontal velocity
+	 * 			added to the horizontal velocity calculated with the horizontal acceleration and timeInterval.
+	 *			| if (this.getMoving() == true)
+	 *			|	then new.getHorizontalVelocity() == this.getHorizontalVelocity() +  horizontalVelocityCalculated
+	 * @post	If this Mazub is moving vertically after the Y position is changed then the new vertical velocity is equal to
+	 * 			the current vertical velocity added to the vertical velocity calculated with the vertical acceleration and timeinteval.
+	 * 			| if (this.getMovingVertically() == true)
+	 * 			|	then new.getVerticalVelocity() == this.getVerticalVelocity + verticalVelocityCalculated
+	 * @post	The new runTime is equal to the current runTime added to the timeInterval.
+	 * 			|
+	 * @effect	The new X position of this Mazub is changed using timeInterval if this Mazub is moving horizontally.
+	 * 			| this.changeHorizontalPosition(timeInterval)
+	 * @effect	The new Y position of this Mazub is changed using timeInterval if this Mazub is moving vertically.
+	 * 			| this.changeVerticalPosition(timeInterval)
+	 * @throws	IllegalTimeIntervalException
+	 * 			The given time interval is not a valid time interval for this Mazub.
+	 * 			| (! isValidTimeInterval(timeInterval))
+	 * @note	In the execution of the method advanceTime the maximum horizontal velocity may be limited to 1 if
+	 * 			this Mazub is ducking. After advanceTime is done running it is set back to its original value.
+	 */
 	public void advanceTimeAlive(double timeInterval) {
 		double vHmax = this.getMaximumHorizontalVelocity();
 		if (this.getDucking() == true) {
@@ -502,31 +524,75 @@ public class Mazub extends LivingCreatures {
 		return 500;
 	}
 	
+	/**
+	 * Changes hp according to the amount of hitpoints distracted when hit.
+	 * @effect	Adds hitpoints with the hit amount.
+	 * 			| addHp(getHitAmount())
+	 */
 	public void hitByEnemy() {
 		this.addHP(getHitAmount());
 	}
 	
+	/**
+	 * Returns the amount of hitpoints to be healed.
+	 */
 	public int getHealAmount() {
 		return healAmount;
 	}
 	
-	private int healAmount = 50;
+	/**
+	 * Variable registering the amount of hitpoints to be healed.
+	 */
+	private final int healAmount = 50;
 	
+	/**
+	 * Return the amount of hitpoints to be substracted when hit.
+	 */
 	private int getHitAmount() {
 		return hitAmount;
 	}
 	
-	private int hitAmount = -50;
+	/**
+	 * Variable registering the amount of hitpoints to be substracted when hit.
+	 */
+	private final int hitAmount = -50;
 	
+	/**
+	 * Checks whether this Mazub has won the game.
+	 * @return	True if this mazub has won, false otherwise.
+	 * 			| result ==
+	 * 			|	this.getWorld().hasWonGame()
+	 */
 	public boolean hasWonGame() {
 		return this.getWorld().hasWonGame();
 	}
 	
+	/**
+	 * Checks whether this Mazub can have the given world as his world.
+	 * @return	True if the world is effective and the world can have this mazub
+	 * 			as his mazub.
+	 * 			| result ==
+	 * 			|	(world != null) && (world.canHaveAsMazub(this))
+	 */
 	@Override
 	public boolean canHaveAsWorld(World world) {
 		return (world != null) && (world.canHaveAsMazub(this));
 	}
 	
+	/**
+	 * Terminates this mazub if it's still alive.
+	 * @post 	If this Mazub isn't dying yet but meets the requirements to die, he is set to be dying.
+	 * 		 	|if isAlive() && (getHP() > 0) && (! getOutOfBounds())
+	 * 			| new.getState == state.DYING
+	 * @post 	If this Mazub is dying for longer then 0.6 seconds or out of the game boundaries he is terminated
+	 * 		 	|if isDying() && Util.fuzzyGreaterThanOrEqualTo(getDeathTimer(), 0.6) || getOutOfBounds()
+	 * 		 	| new.getWorld() == null
+	 * 		 	| new.getState() == state.DEAD
+	 * 		 	| new !in (old.getWorld().getSlimes())
+	 * @throws	IllegalStateException
+	 * 			This Mazub is alive within the boundaries of the world and didnt win.
+	 * 			| (isAlive() && (getHP() > 0) && (! getOutOfBounds()) && (! hasWonGame())
+	 */
 	public void terminate() {
 		if (!isDead()) {
 			if ((isAlive() && (getHP() > 0) && (! getOutOfBounds()) && (! hasWonGame()) && (!this.getWorld().isTerminating())))

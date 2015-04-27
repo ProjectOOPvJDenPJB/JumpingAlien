@@ -17,7 +17,6 @@ public class School {
 	 * Initializes a new school of slimes.
 	 */
 	public School(){
-		
 	}
 	
 	/**
@@ -66,6 +65,11 @@ public class School {
 		return new ArrayList<Slime>(elements);
 	}
 	
+	/**
+	 * Adds the given slime to this school.
+	 * @param 	slime
+	 * 			The slime to be added to this school.
+	 */
 	public void addSlime(Slime slime){
 		if (this.getAmountSlimes() < 10 && slime.isAlive()){
 			School oldSchool = slime.getSchool();
