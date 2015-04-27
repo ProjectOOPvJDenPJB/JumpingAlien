@@ -87,12 +87,16 @@ public class Interaction{
 	 */
 	public static boolean collidesWithTerrainLeftSide(LivingCreatures creature, int type) {
 		World world = creature.getWorld();
-		int[][] tiles =  world.getOccupiedTiles(
+		try{
+			int[][] tiles =  world.getOccupiedTiles(
 				(int)creature.getXPosition() + 1,
 				(int)creature.getYPosition() + 1, 
 				(int)creature.getXPosition(),
 				(int)creature.getYPosition() + creature.getSize()[1]);
 		return getCollidingTiles(tiles, world, type);
+		}catch(NullPointerException exc){
+			return false;
+		}
 	}
 	
 	/**
@@ -106,12 +110,16 @@ public class Interaction{
 	 */
 	public static boolean collidesWithTerrainRightSide(LivingCreatures creature, int type) {
 		World world = creature.getWorld();
-		int[][] tiles =  world.getOccupiedTiles(
+		try{
+			int[][] tiles =  world.getOccupiedTiles(
 				(int)creature.getXPosition() + creature.getSize()[0],
 				(int)creature.getYPosition() + 1,
 				(int)creature.getXPosition() + creature.getSize()[0],
 				(int)creature.getYPosition() + creature.getSize()[1]);
 		return getCollidingTiles(tiles, world, type);
+		}catch(NullPointerException exc){
+			return false;
+		}
 	}
 	
 	/**
@@ -125,12 +133,16 @@ public class Interaction{
 	 */
 	public static boolean collidesWithTerrainBottomSide(LivingCreatures creature, int type) {
 		World world = creature.getWorld();
-		int[][] tiles =  world.getOccupiedTiles(
+		try{
+			int[][] tiles =  world.getOccupiedTiles(
 				(int)creature.getXPosition() + 1,
 				(int)creature.getYPosition() + 1,
 				(int)creature.getXPosition() + creature.getSize()[0],
 				(int)creature.getYPosition() + 1);
 		return getCollidingTiles(tiles, world, type);
+		}catch(NullPointerException exc){
+			return false;
+		}
 	}
 	
 	/**
@@ -144,12 +156,16 @@ public class Interaction{
 	 */
 	public static boolean collidesWithTerrainTopSide(LivingCreatures creature, int type) {
 		World world = creature.getWorld();
-		int[][] tiles =  world.getOccupiedTiles(
+		try{
+			int[][] tiles =  world.getOccupiedTiles(
 				(int)creature.getXPosition() + 1,
 				(int)creature.getYPosition() + creature.getSize()[1],
 				(int)creature.getXPosition() + creature.getSize()[0],
 				(int)creature.getYPosition() + creature.getSize()[1]);
 		return getCollidingTiles(tiles, world, type);
+		}catch (NullPointerException exc){
+			return false;
+		}
 	}
 	
 	/**
@@ -242,24 +258,33 @@ public class Interaction{
 	 * 			block movement.
 	 */
 	public static boolean interactWithMovementBlockingCreature(LivingCreatures creature, World world){
-		for (Slime slime : world.getSlimes()) {
-			if (collidesWithCreature(creature,slime)){
-				return true;
+		try{
+			for (Slime slime : world.getSlimes()) {
+				if (collidesWithCreature(creature,slime)){
+					return true;
+				}
 			}
+		}catch(NullPointerException exc){
 		}
-		for (Shark shark : world.getSharks()) {
-			if (collidesWithCreature(creature,shark)){
-				return true;
+		try{
+			for (Shark shark : world.getSharks()) {
+				if (collidesWithCreature(creature,shark)){
+					return true;
+				}
 			}
+		}catch (NullPointerException exc){
 		}
-		Mazub mazub = world.getMazub();
-		if (mazub != null){
-			if (collidesWithCreature(creature,world.getMazub())){
-				return true;
+		try{
+			Mazub mazub = world.getMazub();
+			if (mazub != null){
+				if (collidesWithCreature(creature,world.getMazub())){
+					return true;
+				}
 			}
+		}catch (NullPointerException exc){
 		}
 		return false;
-		}
+	}
 
 	
 	/**

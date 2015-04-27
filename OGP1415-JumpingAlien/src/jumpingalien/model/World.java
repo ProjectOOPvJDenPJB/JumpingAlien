@@ -663,8 +663,8 @@ public class World {
 		if (isTerminated())
 			return object == null;
 		else
-			return (object != null) && (((LivingCreatures) object).canHaveAsWorld(this)) 
-					&& (hasValidAmountOfObjects(this));
+			return ((object != null) && (object instanceof LivingCreatures) 
+					&& (hasValidAmountOfObjects(this)));
 	}
 	
 	/**

@@ -14,12 +14,14 @@ import org.junit.Test;
 public class PlantTest {
 
 	private Sprite[] defaultSprites;
-	private World defaultWorld;
+	private World defaultWorld,bigWorld;
 	private Plant plant;
+
 	
 	@Before
 	public void setUp() {
 		this.defaultWorld = new World(10,10,10,10,10,9,9);
+		this.bigWorld = new World(10,100,100,100,100,500,500);
 		this.defaultSprites = spriteArrayForSize(2,2);
 		this.plant = new Plant(5,5,0.5,defaultSprites,defaultWorld,1);
 	}
@@ -99,6 +101,35 @@ public class PlantTest {
 		assertTrue(plant.getWorld() == null);
 	}
 	//TODO advancetime
+	
+	@Test
+	public void AdvanceTime_whileAlive(){
+		Plant plant = new Plant(10,10,0.5,defaultSprites,bigWorld,1);
+		plant.setDirection(-1);
+		for (int i = 1;i<4;i+=1){
+			plant.advanceTime(0.199);
+			System.out.println(i);
+			assertEquals(plant.getXPosition(),10 + 9.95*i,Util.DEFAULT_EPSILON);
+		}
+		//Na 3 keer is de XPositie = 10 + 9.95 * i = 39.85
+		plant.advanceTime(0.199);
+		assertEquals(plant.getDirection().getInt(),-1);
+		assertEquals(plant.getXPosition(),29.9,Util.DEFAULT_EPSILON);
+	}
+	
+	@Test
+	public void AdvanceTime_whileDying(){
+		Plant plant = new Plant(10,10,0.5,defaultSprites,bigWorld,1);
+		plant.addHP(-5);
+		//the plant is now dying.
+		assertTrue(plant.isDying());
+		for (int i = 1;i<5;i+=1){
+			plant.advanceTime(0.199);
+			assertTrue(plant.isDying());
+		}
+		plant.advanceTime(0.199);
+		assertTrue(plant.isDead());
+	}
 	
 	//@Test(expected = IllegalXPositionException.class)
 	//public void testSetXposition$IllegalCase() throws Exception{
@@ -222,29 +253,29 @@ public class PlantTest {
 	
 	@Test
 	public void changeHorizontalPosition(){
-		Plant plant = new Plant(0,0,spriteArrayForSize(2, 2));
-		plant.setHorizontalVelocity(5);
-		plant.setHorizontalAcceleration(2);
-		plant.setDirection(1);
-		plant.changeHorizontalPosition(0.1);
-		assertEquals(plant.getXPosition(),51,Util.DEFAULT_EPSILON);
+		Plant plant2 = new Plant(0,0,0.5,spriteArrayForSize(2, 2),bigWorld,1);
+		plant2.setHorizontalVelocity(5);
+		plant2.setHorizontalAcceleration(2);
+		plant2.setDirection(1);
+		plant2.changeHorizontalPosition(0.1);
+		assertEquals(plant2.getXPosition(),5,Util.DEFAULT_EPSILON);
 	}
 	
 	@Test
 	public void changeVerticalPosition(){
-		Plant plant = new Plant(0,0,spriteArrayForSize(2, 2));
+		Plant plant = new Plant(0,0,0.5,spriteArrayForSize(2, 2),bigWorld,1);
 		plant.setVerticalVelocity(5);
 		plant.setVerticalAcceleration(2);
 		plant.setDirection(1);
 		plant.changeVerticalPosition(0.1);
-		assertEquals(plant.getXPosition(),251,Util.DEFAULT_EPSILON);
+		assertEquals(plant.getXPosition(),0,Util.DEFAULT_EPSILON);
 		
 		Plant plant1 = new Plant(0,0,spriteArrayForSize(2, 2));
 		plant1.setVerticalVelocity(-5);
 		plant1.setVerticalAcceleration(-2);
 		plant1.setDirection(1);
 		plant1.changeVerticalPosition(0.1);
-		assertEquals(plant1.getXPosition(),149,Util.DEFAULT_EPSILON);
+		assertEquals(plant1.getXPosition(),0,Util.DEFAULT_EPSILON);
 	}
 	
 	@Test 

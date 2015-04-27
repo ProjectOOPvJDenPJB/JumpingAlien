@@ -1279,13 +1279,14 @@ public abstract class LivingCreatures {
 		if (this instanceof Shark) {
 			return this.getSubmerged();
 		}
-		if ((world.getTileType((int)this.getXPosition()+1, (int)this.getYPosition()) != 1) 
-				&& ((world.getTileType((int)(this.getXPosition() + this.getSize()[0]), (int)(this.getYPosition())) != 1))){
-			return false;
+		try{
+			if ((world.getTileType((int)this.getXPosition()+1, (int)this.getYPosition()) != 1) 
+					&& ((world.getTileType((int)(this.getXPosition() + this.getSize()[0]), (int)(this.getYPosition())) != 1))){
+				return false;
+			}
+		}catch (NullPointerException exc){
 		}
-		else {
-			return true;
-		}
+		return true;
 	}
 	
 	
