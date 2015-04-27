@@ -11,28 +11,25 @@ public class Plant extends LivingCreatures{
 	 * 			The position on the X-axis this new Plant.
 	 * @param 	positionY
 	 * 			The position on the Y-axis for this new Plant.
+	 * @param 	horizontalVelocity
+	 * 			The horizontal velocity for this new Plant.
 	 * @param 	sprites
 	 * 			The sprites for this new Plant.
 	 * @param   world
-	 * 			The world in which the Plant is located
-	 * @post	The position of this new Plant is the same as the given position.
-	 * 			| (new.getXPosition() == positionLeftX) && (new.getYPosition() == positionY)
-	 * @Post	The world in which the Plant is located is the same as the given world
-	 * 			| (new.getWorld() == world) && (new.isInWorld == True)
-	 * @throws	IllegalXPositionException
-	 * 			The given X position is not a valid X position for a Mazub.
-	 * 			| ! isValidXPosition(positionLeftX)
-	 * @throws	IllegalYPositionException
-	 * 			The given Y position is not a valid Y position for a Mazub.
-	 * 			| ! isValidYPosition(positionBottomY)
-	 * 
+	 * 			The world for this new Plant.
+	 * @param	hitpoints
+	 * 			The hitpoints for this new Plant.
+	 * @effect	The new plant is initialized as a LivingCreature with given position,
+	 * 			horizontal velocity, sprites, world and hitpoints.
+	 * 			The vertical velocity is set to 0 and the maximum horizontal velocity to 0.5.
+	 * 			| super(positionX,positionY, horizontalVelocity,0,0.5,world,sprites, hitpoints)
 	 */
 	public Plant(int positionX, int positionY, double horizontalVelocity, Sprite[] sprites, World world, int hitpoints){
 		super(positionX,positionY, horizontalVelocity,0,0.5,world,sprites, hitpoints);
 	}
 
 	/**
-	 * Initialize this new Plant with given position en sprites
+	 * Initialize this new Plant with given position en sprites.
 	 * 
 	 * @param 	positionX
 	 * 			The position on the X-axis this new Plant.
@@ -41,8 +38,8 @@ public class Plant extends LivingCreatures{
 	 * @param 	sprites
 	 * 			The sprites for this new Plant.
 	 * @effect	The new Plant is initialized with the given position as its position,
-	 * 			the given sprites as its sprites and world as null
-	 * 			| this(positionX,positionY,sprites, null)
+	 * 			the given sprites as its sprites, the world as null and hitpoints are set to 1.
+	 * 			| this(positionX,positionY,sprites, null, 1)
 	 */
 	
 	public Plant(int positionX, int positionY, Sprite[] sprites){
@@ -55,8 +52,8 @@ public class Plant extends LivingCreatures{
 	 * @param 	sprites
 	 * 			The sprites for this new Plant.
 	 * @effect	The new Plant is initialized with the given sprites as its sprites 
-	 * and as for positionX and positionY the value zero as its position, and world as null.
-	 * 			| this(0,0,sprites, null)
+	 * 			and (0,0) as its position.
+	 * 			| this(0,0,sprites)
 	 */
 	public Plant(Sprite[] sprites){
 		this(0,0,sprites);	

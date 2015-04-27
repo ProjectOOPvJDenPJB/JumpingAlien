@@ -1,20 +1,7 @@
 package jumpingalien.model;
 
-//import jumpingalien.model.LivingCreatures.State;
-import static jumpingalien.tests.util.TestUtils.spriteArrayForSize;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.util.Random;
 
-
-
-
-
-import org.junit.Test;
-
-//import jumpingalien.model.LivingCreatures.State;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
 /**
@@ -29,7 +16,8 @@ public class Shark extends LivingCreatures {
 	
 
 	/**
-	 * Initialize this new Shark with given position en sprites
+	 * Initialize this new Shark with given position, horizontal velocity, vertical velocity,
+	 * 	world, sprites and hitpoints.
 	 * 
 	 * @param 	positionX
 	 * 			The position on the X-axis this new Shark.
