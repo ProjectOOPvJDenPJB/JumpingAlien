@@ -784,14 +784,10 @@ public abstract class LivingCreatures {
 		return Util.fuzzyGreaterThanOrEqualTo(timeInterval, 0) && Util.fuzzyLessThanOrEqualTo(timeInterval, 0.2);
 	}
 	
-<<<<<<< HEAD
-	public static enum State {
-=======
 	/**
 	 * In-class enumeration of the different States of a living creature.
 	 */
 	protected static enum State {
->>>>>>> 61269982c407d9cbef3fdab7a5ee0a3ff1faba8e
 		ALIVE,DYING,DEAD;
 	}
 	
@@ -801,15 +797,11 @@ public abstract class LivingCreatures {
 	protected State getState() {
 		return this.state;
 	}
-	
-<<<<<<< HEAD
-	private State state;
-=======
+
 	/**
 	 * Variable registering the current state of this living creature.
 	 */
 	protected State state;
->>>>>>> 61269982c407d9cbef3fdab7a5ee0a3ff1faba8e
 	
 	/**
 	 * Sets the current state for the living creature the given state
@@ -829,7 +821,7 @@ public abstract class LivingCreatures {
 	 * 			| result ==
 	 * 			|	(this.getState() == DEAD)
  	 */
-	public boolean isDead() {
+	protected boolean isDead() {
 		return (this.getState() == State.DEAD);
 	}
 	
@@ -839,7 +831,7 @@ public abstract class LivingCreatures {
 	 * 			| result ==
 	 * 			|	(this.getState() == DYING)
 	 */
-	public boolean isDying() {
+	protected boolean isDying() {
 		return (this.getState() == State.DYING);
 	}
 	
@@ -849,7 +841,7 @@ public abstract class LivingCreatures {
 	 * 			| result ==
 	 * 			|	(this.getState() == ALIVE)
 	 */
-	public boolean isAlive() {
+	protected boolean isAlive() {
 		return (this.getState() == State.ALIVE);
 	}
 	
