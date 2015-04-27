@@ -341,12 +341,12 @@ private Mazub mazub;
 	
 	@Test
 	public void changeHorizontalPosition(){
-		Mazub mazub = new Mazub(0,0,spriteArrayForSize(2, 2));
-		mazub.setHorizontalVelocity(5);
+		Mazub mazub = new Mazub(10,10,spriteArrayForSize(2, 2));
+		mazub.setHorizontalVelocity(3);
 		mazub.setHorizontalAcceleration(2);
 		mazub.setDirection(1);
 		mazub.changeHorizontalPosition(0.1,2);
-		assertEquals(mazub.getXPosition(),51,Util.DEFAULT_EPSILON);
+		assertEquals(mazub.getXPosition(),40,Util.DEFAULT_EPSILON);
 	}
 	
 	@Test
@@ -356,14 +356,14 @@ private Mazub mazub;
 		mazub.setVerticalAcceleration(2);
 		mazub.setDirection(1);
 		mazub.changeVerticalPosition(0.1);
-		assertEquals(mazub.getXPosition(),251,Util.DEFAULT_EPSILON);
+		assertEquals(mazub.getXPosition(),0,Util.DEFAULT_EPSILON);
 		
 		Mazub mazub1 = new Mazub(0,0,spriteArrayForSize(2, 2));
 		mazub1.setVerticalVelocity(-5);
 		mazub1.setVerticalAcceleration(-2);
 		mazub1.setDirection(1);
 		mazub1.changeVerticalPosition(0.1);
-		assertEquals(mazub1.getXPosition(),149,Util.DEFAULT_EPSILON);
+		assertEquals(mazub1.getXPosition(),0,Util.DEFAULT_EPSILON);
 	}
 	
 	@Test 

@@ -149,17 +149,7 @@ public class SlimeTest {
 		assertTrue(slime.getXPosition() == 0);
 		assertTrue(slime.getHorizontalVelocity() == 0);
 	}
-	
-	@Test
-	public void testAdvanceTimeNormalCase(){
-		Slime slimy = new Slime(100,100,5,0,bigWorld,defaultSprites,school1);
-		slimy.startMoveOpposite();
-		slimy.startMoveOpposite();
-		for (int i = 0; i < 2; i+=1){
-			slime2.advanceTime(0.1);
-		}
-		//TODO
-	}
+		
 	
 	//@Test(expected = IllegalXPositionException.class)
 	//public void testSetXposition$IllegalCase() throws Exception{

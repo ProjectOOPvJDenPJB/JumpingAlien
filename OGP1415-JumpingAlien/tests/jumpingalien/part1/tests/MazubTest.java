@@ -242,7 +242,7 @@ public class MazubTest {
 		alien.setHorizontalVelocity(1);
 		alien.setHorizontalAcceleration(1);
 		
-		alien.changeHorizontalPosition(1);
+		alien.changeHorizontalPosition(1,1);
 		// newPosition = 0 + (100 * 1*1) + 50 * 1*1^2) = 150;
 		assertTrue(alien.getXPosition() == 150);
 	}
@@ -255,7 +255,7 @@ public class MazubTest {
 		alien.setHorizontalVelocity(3);
 		alien.setHorizontalAcceleration(1);
 		
-		alien.changeHorizontalPosition(1);
+		alien.changeHorizontalPosition(1,1);
 		System.out.println(alien.getXPosition());
 		System.out.println(alien.getHorizontalAcceleration());
 		// newPosition = 0 + (100 * 3*1) + 0) = 300;
@@ -270,7 +270,7 @@ public class MazubTest {
 		alien1.setHorizontalVelocity(1);
 		alien1.setHorizontalAcceleration(1);
 		
-		alien1.changeHorizontalPosition(1);
+		alien1.changeHorizontalPosition(1,1);
 		assertTrue(alien1.getXPosition() == 1024);
 		
 		
@@ -279,7 +279,7 @@ public class MazubTest {
 		alien2.setHorizontalVelocity(1);
 		alien2.setHorizontalAcceleration(1);
 		
-		alien2.changeHorizontalPosition(1);
+		alien2.changeHorizontalPosition(1,1);
 		assertTrue(alien2.getXPosition() == 0);
 	}
 	

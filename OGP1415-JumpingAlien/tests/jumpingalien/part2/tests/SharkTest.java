@@ -233,28 +233,26 @@ public class SharkTest {
 	@Test
 	public void changeHorizontalPosition(){
 		Shark shark = new Shark(0,0,spriteArrayForSize(2, 2));
-		shark.setHorizontalVelocity(5);
+		shark.setHorizontalVelocity(4);
 		shark.setHorizontalAcceleration(2);
 		shark.setDirection(1);
 		shark.changeHorizontalPosition(0.1,0);
-		assertEquals(shark.getXPosition(),51,Util.DEFAULT_EPSILON);
+		assertEquals(shark.getXPosition(),40,Util.DEFAULT_EPSILON);
 	}
 	
 	@Test
 	public void changeVerticalPosition(){
-		Shark shark = new Shark(0,0,spriteArrayForSize(2, 2));
-		shark.setVerticalVelocity(5);
-		shark.setVerticalAcceleration(2);
-		shark.setDirection(1);
+		Shark shark = new Shark(100,100,spriteArrayForSize(2, 2));
+		shark.startJump(5,2);
 		shark.changeVerticalPosition(0.1);
-		assertEquals(shark.getXPosition(),251,Util.DEFAULT_EPSILON);
+		assertEquals(shark.getXPosition(),100,Util.DEFAULT_EPSILON);
 		
 		Shark shark1 = new Shark(0,0,spriteArrayForSize(2, 2));
 		shark1.setVerticalVelocity(-5);
 		shark1.setVerticalAcceleration(-2);
 		shark1.setDirection(1);
 		shark1.changeVerticalPosition(0.1);
-		assertEquals(shark.getXPosition(),149,Util.DEFAULT_EPSILON);
+		assertEquals(shark.getXPosition(),100,Util.DEFAULT_EPSILON);
 	}
 	
 	@Test 
