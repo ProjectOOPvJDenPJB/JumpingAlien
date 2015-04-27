@@ -1,10 +1,18 @@
 package jumpingalien.model;
 
 //import jumpingalien.model.LivingCreatures.State;
+import static jumpingalien.tests.util.TestUtils.spriteArrayForSize;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Random;
 
 
 
+
+
+import org.junit.Test;
 
 //import jumpingalien.model.LivingCreatures.State;
 import jumpingalien.util.Sprite;
@@ -110,7 +118,7 @@ public class Shark extends LivingCreatures {
 	}
 
 	/**
-	 * returns the maximum hit points for this slime
+	 * returns the maximum hit points for this shark
 	 */
 	@Override
 	public int getMaxHP() {
@@ -118,7 +126,7 @@ public class Shark extends LivingCreatures {
 	}
 
 	/**
-	 * returns the minimum hit points for this Slime
+	 * returns the minimum hit points for this shark
 	 */
 	@Override
 	public int getMinHP() {

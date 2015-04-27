@@ -2,7 +2,11 @@ package jumpingalien.part2.tests;
 
 import static jumpingalien.tests.util.TestUtils.spriteArrayForSize;
 import static org.junit.Assert.*;
+
+import java.lang.Thread.State;
+
 import jumpingalien.model.Direction;
+import jumpingalien.model.LivingCreatures;
 import jumpingalien.model.Mazub;
 import jumpingalien.model.World;
 import jumpingalien.tests.util.TestUtils;
@@ -16,11 +20,13 @@ public class MazubTest2 {
 
 private Sprite[] defaultSprites;
 private World world;
+private Mazub mazub;
 	
 	@Before
 	public void setUp() {
 		this.defaultSprites = spriteArrayForSize(2,2);
 		this.world = new World(10,20,15,100,70,180,10);
+		this.mazub = new Mazub(5,10,defaultSprites,5,3,world,80);
 	}
 	
 	@Test
@@ -169,7 +175,7 @@ private World world;
 	}
 	
 	@Test
-	public void isValidSpriteArray_True() {
+	public void isValidSpriteArrayMazub_True() {
 		assertTrue(Mazub.isValidSpriteArray(spriteArrayForSize(2, 2)));
 		assertTrue(Mazub.isValidSpriteArray(spriteArrayForSize(2, 2, 10)));
 		assertTrue(Mazub.isValidSpriteArray(spriteArrayForSize(2, 2, 12)));
@@ -177,7 +183,7 @@ private World world;
 	}
 	
 	@Test
-	public void isValidSpriteArray_False() {
+	public void isValidSpriteArrayMazub_False() {
 		assertFalse(Mazub.isValidSpriteArray(spriteArrayForSize(2, 2, 0)));
 		assertFalse(Mazub.isValidSpriteArray(spriteArrayForSize(2, 2, 13)));
 		assertFalse(Mazub.isValidSpriteArray(spriteArrayForSize(2, 2, 8)));
@@ -201,6 +207,7 @@ private World world;
 	@Test(expected=IllegalStateException.class)
 	public void testTerminteWhenAliveAndWithinTheBounds() throws Exception{
 		Mazub alien = new Mazub(1, 2, defaultSprites, 5, 3, world, 100);
+		world.setMazub(alien);
 		assertTrue(alien.isAlive());
 		alien.terminate();
 		assertTrue(alien.isAlive());
@@ -215,4 +222,229 @@ private World world;
 		assertTrue(alien.getWorld() == null);
 	}
 
+	//TODO advanceTime
+	
+	//@Test(expected = IllegalXPositionException.class)
+	//public void testSetXposition$IllegalCase() throws Exception{
+	//	Mazub alien = new Mazub(spriteArrayForSize(2, 2));
+	//	alien.setXPosition(-5);
+	//	assertTrue(alien.getXPosition() == -5);
+	//}
+	@Test
+	public void testSetXposition$LegalCase() throws Exception{
+		Mazub alien = new Mazub(spriteArrayForSize(2, 2));
+		alien.setXPosition(5);
+		assertTrue(alien.getXPosition() == 5);
+	}
+
+
+	//@Test(expected = IllegalXPositionException.class)
+	//public void testSetXposition$IllegalCase() throws Exception{
+	//		Mazub alien = new Mazub(spriteArrayForSize(2, 2));
+	//		alien.setXPosition(-5);
+	//		assertTrue(alien.getXPosition() == -5);
+	//}	
+	@Test
+	public void testSetYposition$LegalCase() throws Exception{
+		Mazub alien = new Mazub(spriteArrayForSize(2, 2));
+		alien.setYPosition(5);
+		assertTrue(alien.getYPosition() == 5);
+	}
+	
+	@Test
+	public void testSetHorizontalVelocity() {
+		Mazub creature = new Mazub(spriteArrayForSize(2, 2));
+		double velocity;
+		
+		creature.setHorizontalVelocity(2);
+		velocity = creature.getHorizontalVelocity();
+		assertEquals(2.0,velocity,Util.DEFAULT_EPSILON);
+		
+		creature.setHorizontalVelocity(5);
+		velocity = creature.getHorizontalVelocity();
+		assertEquals(3.0,velocity,Util.DEFAULT_EPSILON);
+		
+		creature.setHorizontalVelocity(-5);
+		velocity = creature.getHorizontalVelocity();
+		assertEquals(0.0,velocity,Util.DEFAULT_EPSILON);
+	}
+	
+	@Test
+	public void testSetVerticalVelocity() {
+		Mazub creature = new Mazub(spriteArrayForSize(2, 2));
+		double velocity;
+		
+		creature.setVerticalVelocity(10);
+		velocity = creature.getVerticalVelocity();
+		//The maximum speed is limited by 8 [m/s]
+		assertEquals(10,velocity,Util.DEFAULT_EPSILON);
+		
+		creature.setVerticalVelocity(5);
+		velocity = creature.getVerticalVelocity();
+		assertEquals(5,velocity,Util.DEFAULT_EPSILON);
+	}
+	
+	@Test
+	public void hasAsWorld_True(){
+		assertTrue(mazub.hasAsWorld(world));
+	}
+	
+	@Test
+	public void hasAsWorld_False(){
+		mazub.setWorld(null);
+		assertFalse(mazub.hasAsWorld(world));
+	}
+	
+	@Test
+	public void canHaveAsWorld_True(){
+		assertTrue(mazub.canHaveAsWorld(world));
+	}
+	
+	@Test
+	public void canHaveAsWorld_False(){
+		assertFalse(mazub.canHaveAsWorld(null));
+	}
+	
+	@Test
+	public void isValidSpriteArray_True() {
+		assertTrue(LivingCreatures.isValidSpriteArray(spriteArrayForSize(2, 2),mazub));
+		assertTrue(LivingCreatures.isValidSpriteArray(spriteArrayForSize(2, 2, 10),mazub));
+		assertTrue(LivingCreatures.isValidSpriteArray(spriteArrayForSize(2, 2, 12),mazub));
+		assertTrue(LivingCreatures.isValidSpriteArray(spriteArrayForSize(2, 2, 32),mazub));
+	}
+	
+	@Test
+	public void isValidSpriteArray_False() {
+		assertFalse(LivingCreatures.isValidSpriteArray(spriteArrayForSize(2, 2, 0),mazub));
+		assertFalse(LivingCreatures.isValidSpriteArray(spriteArrayForSize(2, 2, 13),mazub));
+		assertFalse(LivingCreatures.isValidSpriteArray(spriteArrayForSize(2, 2, 8),mazub));
+	}
+	
+	@Test
+	public void setHP_NormalCase(){
+		mazub.setHP(mazub.getMinHP());
+		assertTrue(mazub.getHP() == mazub.getMinHP());
+		mazub.setHP(mazub.getMaxHP()/2);
+		assertTrue(mazub.getHP() == mazub.getMaxHP()/2);
+		mazub.setHP(mazub.getMaxHP());
+		assertTrue(mazub.getHP() == mazub.getMaxHP());
+	}
+	
+	@Test
+	public void setHP_SpecialCase(){
+		mazub.setHP(mazub.getMinHP() - 5);
+		assertEquals(mazub.getHP(), mazub.getMinHP());
+
+		mazub.setHP(mazub.getMaxHP()+5);
+		assertTrue(mazub.getHP() == mazub.getMaxHP());
+	}
+	
+	@Test
+	public void isDead_True(){
+		mazub.setState(Mazub.State.DEAD);
+		assertTrue(mazub.isDead());
+	}
+	
+	@Test
+	public void isDead_False(){
+		mazub.setState(Mazub.State.ALIVE);
+		assertFalse(mazub.isDead());
+		mazub.setState(Mazub.State.DYING);
+		assertFalse(mazub.isDead());
+	}
+	
+	@Test
+	public void isDying_True(){
+		mazub.setState(Mazub.State.DYING);
+		assertTrue(mazub.isDying());
+	}
+	
+	@Test
+	public void isDying_False(){
+		mazub.setState(Mazub.State.ALIVE);
+		assertFalse(mazub.isDying());
+		mazub.setState(Mazub.State.DEAD);
+		assertFalse(mazub.isDying());
+	}
+	
+	@Test
+	public void isAlive_True(){
+		mazub.setState(Mazub.State.ALIVE);
+		assertTrue(mazub.isAlive());
+	}
+	
+	@Test
+	public void isAlive_False(){
+		mazub.setState(State.Mazub.DYING);
+		assertFalse(mazub.isAlive());
+		mazub.setState(State.Mazub.DEAD);
+		assertFalse(mazub.isAlive());
+	}
+	
+	@Test
+	public void changeHorizontalPosition(){
+		Mazub mazub = new Mazub(0,0,spriteArrayForSize(2, 2));
+		mazub.setHorizontalVelocity(5);
+		mazub.setHorizontalAcceleration(2);
+		mazub.setDirection(1);
+		mazub.changeHorizontalPosition(0.1);
+		assertEquals(mazub.getXPosition(),51,Util.DEFAULT_EPSILON);
+	}
+	
+	@Test
+	public void changeVerticalPosition(){
+		Mazub mazub = new Mazub(0,0,spriteArrayForSize(2, 2));
+		mazub.setVerticalVelocity(5);
+		mazub.setVerticalAcceleration(2);
+		mazub.setDirection(1);
+		mazub.changeVerticalPosition(0.1);
+		assertEquals(mazub.getXPosition(),251,Util.DEFAULT_EPSILON);
+		
+		Mazub mazub = new Mazub(0,0,spriteArrayForSize(2, 2));
+		mazub.setVerticalVelocity(-5);
+		mazub.setVerticalAcceleration(-2);
+		mazub.setDirection(1);
+		mazub.changeVerticalPosition(0.1);
+		assertEquals(mazub.getXPosition(),149,Util.DEFAULT_EPSILON);
+	}
+	
+	@Test 
+	public void startJump_whileNotMovingVertical(){
+		mazub.startJump(7,-2);
+		assertEquals(mazub.getVerticalVelocity(),7,Util.DEFAULT_EPSILON);
+		assertEquals(mazub.getVerticalAcceleration(),-2,Util.DEFAULT_EPSILON);
+		assertTrue(mazub.getMovingVertical());
+	}
+	
+	@Test 
+	public void startJump_WhileMovingVertical(){
+		Mazub mazub = new Mazub(0,0,spriteArrayForSize(2, 2));
+		mazub.setVerticalVelocity(-5);
+		mazub.setVerticalAcceleration(-2);	
+		mazub.setMovingVertical(true);
+		mazub.startJump(5,9);
+		assertEquals(mazub.getVerticalVelocity(),-5,Util.DEFAULT_EPSILON);
+		assertEquals(mazub.getVerticalAcceleration(),-2,Util.DEFAULT_EPSILON);
+		assertTrue(mazub.getMovingVertical());
+	}
+	
+	@Test
+	public void endJump_ableToEndJump(){
+		Mazub mazub = new Mazub(0,0,spriteArrayForSize(2, 2));
+		mazub.setVerticalVelocity(5);
+		mazub.setVerticalAcceleration(-2);
+		mazub.endJump();
+		assertEquals(mazub.getVerticalVelocity(),0,Util.DEFAULT_EPSILON);
+		assertEquals(mazub.getVerticalAcceleration(),-2,Util.DEFAULT_EPSILON);
+	}
+	
+	@Test 
+	public void endJump_unableToEnd(){
+		Mazub mazub = new Mazub(0,0,spriteArrayForSize(2, 2));
+		mazub.setVerticalVelocity(-5);
+		mazub.setVerticalAcceleration(-2);	
+		mazub.endJump();
+		assertEquals(mazub.getVerticalVelocity(),-5,Util.DEFAULT_EPSILON);
+		assertEquals(mazub.getVerticalAcceleration(),-2,Util.DEFAULT_EPSILON);
+	}
 }
