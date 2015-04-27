@@ -575,13 +575,24 @@ public abstract class LivingCreatures {
 			hitpoints = HP;
 	}
 	
-	//TODO
+	/**
+	 * Terminates this living creature.
+	 */
 	public abstract void terminate();
 
+	/**
+	 * Return the maximum hitpoints this creature can have as an integer.
+	 */
 	public abstract int getMaxHP();
 	
+	/**
+	 * Return the minimum hitpoints this creature can have as an integer.
+	 */
 	public abstract int getMinHP();
 	
+	/**
+	 * Variable registering the minimum hitpoints of this living creature.
+	 */
 	public static final int MIN_HP = 0;
 	
 	/**
@@ -727,7 +738,10 @@ public abstract class LivingCreatures {
 		}
 	}
 
-	
+	/**
+	 * Advances the time and alters all time related aspects of this living creature
+	 * 	 according to the given time interval.
+	 */
 	public abstract void advanceTime(double dt);
 	
 	/**
@@ -770,17 +784,23 @@ public abstract class LivingCreatures {
 		return Util.fuzzyGreaterThanOrEqualTo(timeInterval, 0) && Util.fuzzyLessThanOrEqualTo(timeInterval, 0.2);
 	}
 	
+	/**
+	 * In-class enumeration of the different States of a living creature.
+	 */
 	protected static enum State {
 		ALIVE,DYING,DEAD;
 	}
 	
 	/**
-	 * @return the current state of this living creature
+	 * Return the current state of this living creature
 	 */
 	protected State getState() {
 		return this.state;
 	}
 	
+	/**
+	 * Variable registering the current state of this living creature.
+	 */
 	protected State state;
 	
 	/**
@@ -796,27 +816,37 @@ public abstract class LivingCreatures {
 	}
 	
 	/**
-	 * @return whether the living creature is dead or not
+	 * Check whether the living creature is dead or not.
+	 * @return	True of the state of this creature is DEAD.
+	 * 			| result ==
+	 * 			|	(this.getState() == DEAD)
  	 */
 	public boolean isDead() {
 		return (this.getState() == State.DEAD);
 	}
 	
 	/**
-	 * @return whether the living creatures is dying or not
+	 * Check whether the living creatures is dying or not.
+	 * @return	True of the state of this creature is DYING.
+	 * 			| result ==
+	 * 			|	(this.getState() == DYING)
 	 */
 	public boolean isDying() {
 		return (this.getState() == State.DYING);
 	}
 	
 	/**
-	 * @return whether the living creature is alive or not
+	 * Check whether the living creature is alive or not.
+	 * @return	True of the state of this creature is ALIVE.
+	 * 			| result ==
+	 * 			|	(this.getState() == ALIVE)
 	 */
 	public boolean isAlive() {
 		return (this.getState() == State.ALIVE);
 	}
 	
 	/**
+	 * TODO
 	 * @param 	timeInterval 
 	 * 			The time interval in which the position of this mazub has changed.
 	 * @post	The new X position of this Mazub is equal to the current X position added to the horizontal distance
@@ -851,6 +881,7 @@ public abstract class LivingCreatures {
 	
 	
 	 /**
+	  * TODO
 	  * @param 	timeInterval
 	  * 		The time interval in which the position of this mazub has changed.
 	  * @post	The new Y position of this Mazub is equal to the current Y position added to the vertical distance
@@ -888,6 +919,18 @@ public abstract class LivingCreatures {
 		}
 	}
 	
+	/**
+	 * Calculates the timeInterval needed for this living creature to travel just 1 pixel.
+	 * @param 	dt
+	 * 			The original timeInterval.
+	 * @return	The minimum of the time interval to travel 1 pixel horizontal and the time interval to
+	 * 				travel 1 pixel vertically.
+	 * 			| result == 
+	 * 			| 	min(
+	 * 			|		(0.01 / (this.getHorizontalVelocity() + this.getHorizontalAcceleration() * dt)),
+	 * 			|		abs(0.01 / (this.getVerticalVelocity() + this.getVerticalAcceleration() * dt))
+	 * 			|		)
+	 */
 	public double getSmallestDT(double dt) {
 		double horizontalDT = 
 				0.01 / (this.getHorizontalVelocity() + this.getHorizontalAcceleration() * dt);
@@ -922,21 +965,24 @@ public abstract class LivingCreatures {
 	 * 			| new.getMovingVertical == flag
 	 */
 	@Basic
-	public void setMovingVertical(boolean flag) throws IllegalStateException {
-//		if (this.getMovingVertical() == flag)
-//			throw new IllegalStateException();
+	public void setMovingVertical(boolean flag) {
 		this.movingVertical = flag;
 	}
 	
 	/**
 	 * Initializes vertical movment.
 	 * 
-	 * @post	If the current Y position of this Mazub is equal to zero then
-	 * 			the new vertical velocity is set to the initial vertical velocity, 
-	 * 			the new vertical acceleration is set to its default value
+	 * @param	velocity
+	 * 			The initial vertical velocity to start the jump with.
+	 * @param	acceleration
+	 * 			The vertical acceleration of this jump.
+	 * @post	If this creature is not moving vertical then
+	 * 			the new vertical velocity is set to the given velocity, 
+	 * 			the new vertical acceleration is set to the given acceleration
 	 * 			and the boolean movingVertical is set to true.
-	 * 			| if (this.getYPosition() == 0) 
-	 *			|	then new.getVerticalVelocity() == this.getInitialVerticalVelocity()
+	 * 			| if (! getMovingVertical()) 
+	 *			|	then new.getVerticalVelocity() == velocity
+	 *			|	&& new.getVerticalAcceleration() == acceleration
 	 *			|	&& new.getMovingVertical() == true
 	 */
 	public void startJump(double velocity,double acceleration){
@@ -961,6 +1007,15 @@ public abstract class LivingCreatures {
 		}
 	}
 	
+	/**
+	 * Initializes the falling motion of this living creature.
+	 * @param 	acceleration
+	 * 			The vertical acceleration with which  this living creature falls.
+	 * @post	The new vertical acceleration is set to the given acceleration and
+	 * 			the boolean movingVertical is set to true.
+	 * 			| new.getVerticalAcceleration() == acceleration
+	 *			|	&& new.getMovingVertical() == true
+	 */
 	public void startFall(double acceleration){
 		this.setVerticalAcceleration(acceleration);
 		this.setMovingVertical(true);
@@ -1041,6 +1096,16 @@ public abstract class LivingCreatures {
 		return Util.fuzzyGreaterThanOrEqualTo(size[0], 0) && Util.fuzzyGreaterThanOrEqualTo(size[1], 0);
 	}
 	
+	/**
+	 * Checks whether there is a part of the bottom border of this creature that is on top of a solid tile.
+	 * @return	If the bottom left pixel or the bottom right pixel of this creature is on top of a solid tile, true is returned.
+	 * 			If the creature is of type Shark, whether the shark is submerged or not is returned.
+	 * 			| if (this instanceof Shark)
+	 * 			|	then result == this.getSubmerged()
+	 * 			| if (this.getWorld().getTileType(getXPosition(),getYPosition()) == 1)
+	 * 			|	|| (this.getWorld().getTileType(getXPosition()+getSize()[0],getYPosition()) == 1)
+	 * 			|	then result == true
+	 */
 	public boolean collidesWithTerrainThroughBottomBorder(){
 		World world = this.getWorld();
 		if (this instanceof Shark) {
@@ -1055,6 +1120,14 @@ public abstract class LivingCreatures {
 		}
 	}
 	
+	
+	/**
+	 * Checks whether there is a part of the bottom border of this creature that is not on top of solid terrain.
+	 * @return	If the bottom left pixel or the bottom right pixel of this creature is not on top of a solid tile, true is returned.
+	 * 			| if (this.getWorld().getTileType(getXPosition(),getYPosition()-1) != 1)
+	 * 			|	|| (this.getWorld().getTileType(getXPosition()+getSize()[0],getYPosition()-1) != 1)
+	 * 			|	then result == true
+	 */
 	public boolean noTerrainUnderSidesOfObject(){
 		World world = this.getWorld();
 		if ((world.getTileType((int)this.getXPosition(), (int)this.getYPosition()-1) != 1) 
@@ -1066,6 +1139,13 @@ public abstract class LivingCreatures {
 		}
 	}
 	
+	/**
+	 * Checks whether this living creature is submerged in water.
+	 * @return	If the bottom and top border of this creature collide with water, then true is returned.
+	 * 			| result ==
+	 * 			|	(Interaction.collidesWithTerrainTopSide(this, 2)
+				|	&& Interaction.collidesWithTerrainBottomSide(this, 2)
+	 */
 	private boolean getSubmerged() {
 		return (Interaction.collidesWithTerrainTopSide(this, 2)
 				&& Interaction.collidesWithTerrainBottomSide(this, 2));
