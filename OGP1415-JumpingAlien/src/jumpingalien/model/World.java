@@ -243,7 +243,7 @@ public class World {
 	public boolean isPassable(int leftX,int bottomY){
 		int[] position = getTilePosition(leftX, bottomY);
 		return (this.tileTypes[position[0]][position[1]] != 1);
-	}
+	}	
 	
 	/**
 	 * Variable registering the different tileTypes for each tile in the this World.
@@ -523,6 +523,7 @@ public class World {
 	public void removePlant(Plant plant) {
 		assert this.hasAsPlant(plant) && (plant.hasAsWorld(this));
 		plants.remove(plant);
+		plant.setWorld(null);
 	}
 	
 	/**
@@ -578,6 +579,7 @@ public class World {
 	public void removeSlime(Slime slime) {
 		assert this.hasAsSlime(slime) && (slime.hasAsWorld(this));
 		slimes.remove(slime);
+		slime.setWorld(null);
 	}
 	
 	/**
@@ -630,6 +632,7 @@ public class World {
 	public void removeShark(Shark shark) {
 		assert this.hasAsShark(shark) && (shark.hasAsWorld(this));
 		sharks.remove(shark);
+		shark.setWorld(null);
 	}
 	
 	/**
@@ -805,11 +808,12 @@ public class World {
 			for (Shark shark : getSharks()) {
 				shark.terminate();
 			}
-			
+			this.getMazub().terminate();
 			this.setState(State.TERMINATED);
 				
 		}
 	}
+	
 	
 	/**
 	 * Checks whether the player (Mazub) has won the game.

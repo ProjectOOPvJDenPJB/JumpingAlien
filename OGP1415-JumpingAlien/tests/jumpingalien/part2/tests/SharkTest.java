@@ -29,7 +29,7 @@ public class SharkTest {
 		assertTrue(shark.getYPosition() == 10);
 		assertTrue(shark.getHorizontalVelocity() == 1);
 		assertTrue(shark.getVerticalVelocity() ==20);
-		assertTrue(shark.getHorizontalAcceleration()==0);
+		assertTrue(shark.getHorizontalAcceleration()==1.5);
 		assertTrue(shark.getVerticalAcceleration() == 0);
 		assertTrue(shark.getWorld() == defaultWorld);
 		assertTrue(shark.getHP() == 100);
