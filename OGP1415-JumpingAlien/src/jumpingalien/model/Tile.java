@@ -4,12 +4,50 @@ package jumpingalien.model;
 
 public class Tile {
 	
+	/**
+	 * Initializes a new tile with given position and tileType.
+	 * @param 	leftX
+	 * 			The X position of this tile.
+	 * @param 	bottomY
+	 * 			The Y position of this tile.
+	 * @param 	tileType
+	 * 			The tiletype of this tile.
+	 * @post	The position of this tile is set to the given position.
+	 * 			| new.getLeftX() == leftX
+	 * 			|	&& new.getBottomY() == bottomY
+	 * @post	The tileType of this tile is set to the given tileType
+	 * 			| new.getType() == tileType
+	 */
 	public Tile(int leftX, int bottomY, TileType tileType) {
 		this.leftX = leftX;
 		this.bottomY = bottomY;
 		this.type = tileType;
 	}
 	
+	/**
+	 * Initializes a new tile with given position and type in the form of an integer.
+	 * @param 	leftX
+	 * 			The X position of this tile.
+	 * @param 	bottomY
+	 * 			The Y position of this tile.
+	 * @param 	tileType
+	 * 			The tiletype of this tile.
+	 * @post	The position of this tile is set to the given position.
+	 * 			| new.getLeftX() == leftX
+	 * 			|	&& new.getBottomY() == bottomY
+	 * @post	If the given type is 1, the type of this tile is set to ground.
+	 * 			| if (tileType == 1)
+	 * 			|	then new.getType() == TileType.GROUND
+	 * @post	If the given type is 2, the type of this tile is set to water.
+	 * 			| if (tileType == 2)
+	 * 			|	then new.getType() == TileType.WATER
+	 * @post	If the given type is 3, the type of this tile is set to magma.
+	 * 			| if (tileType == 3)
+	 * 			|	then new.getType() == TileType.MAGMA
+	 * @post	If the given type not 1,2 or 3 then the type of this tile is set to air.
+	 * 			| if ((tileType !=1) && (tileType !=2) && (tileType !=3))
+	 * 			|	then new.getType() == TileType.AIR
+	 */
 	public Tile(int leftX, int bottomY, int tileType) {
 		this.leftX = leftX;
 		this.bottomY = bottomY;
@@ -28,6 +66,16 @@ public class Tile {
 		}
 	}
 	
+	/**
+	 * Initializes this tile with given position.
+	 * @param 	leftX
+	 * 			The X position of this tile.
+	 * @param 	bottomY
+	 * 			The Y position of this tile.
+	 * @effect	Initializes this tile with given position.
+	 * 			The type is set to air.
+	 * 			| this(leftX,bottomY,0)
+	 */
 	public Tile(int leftX, int bottomY) {
 		this(leftX,bottomY,0);
 	}
@@ -69,20 +117,4 @@ public class Tile {
 	public final String getPositionString() {
 		return ("("+getLeftX()+","+getBottomY()+")");
 	}
-	
-	public static enum State {
-		UNAFFECTED, OCCUPIED;
-	}
-	
-	public State getState() {
-		return this.state;
-	}
-	
-	private State state = State.UNAFFECTED;
-	
-	public void setState(State state) {
-		assert (state != null);
-		this.state = state;
-	}
-	
 }

@@ -77,8 +77,14 @@ public enum TileType {
 		}
 	};
 	
-	
+	/**
+	 * Return whether this tileType is passable.
+	 */
 	public abstract boolean getPassable();
+	
+	/**
+	 * Return the integer related to this tileType.
+	 */
 	public abstract int getInt();
 
 }
