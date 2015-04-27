@@ -21,32 +21,20 @@ public class Mazub extends LivingCreatures {
 	 * 			The position on the X-axis of the leftmost pixel for this new Mazub.
 	 * @param 	positionBottomY
 	 * 			The position on the Y-axis of the bottom pixel for this new Mazub.
+	 * @param 	sprites
+	 * 			The array of sprites for this new Mazub.
 	 * @param 	maximumHorizontalVelocity
 	 * 			The maximum horizontal velocity for this new Mazub.
 	 * @param 	initialHorizontalVelocity
 	 * 			The initial horizontal velocity for this new Mazub.
-	 * @param 	spriteArray
-	 * 			The array of sprites for this new Mazub.
-	 * @post	The position of this new Mazub is the same as the given position.
-	 * 			| (new.getXPosition() == positionLeftX) && (new.getYPosition() == positionBottomY)
-	 * @post	If the given spriteArray is valid, then the array of sprites for this new Mazub is the same as the given array of sprites.
-	 * 			| if (isValidSpriteArray(spriteArray))
-	 * 			| 	then new.getSpriteArray == spriteArray
-	 * @post	If the given maximum horizontal velocity is valid, then the maximum horizontal velocity of this new Mazub is the same
-	 * 			as the given maximum horizontal velocity.
-	 * 			| if (isValidMaximumHorizontalVelocity(maximumHorizontalVelocity, initialHorizontalVelocity)
-	 * 			|	then new.getMaximumHorizontalVelocity() == maximumHorizontalVelocity
-	 * @post	If the given initial horizontal velocity is valid, then the initial horizontal velocity of this new Mazub is the same
-	 * 			as the given initial horizontal velocity.
-	 * 			| if (isValidInitialVelocity(initialHorizontalVelocity, maximumHorizontalVelocity)
-	 * 			|	then new.getInitialVelocity() == initialHorizontalVelocity
-	 * @throws	IllegalXPositionException
-	 * 			The given X position is not a valid X position for a Mazub.
-	 * 			| ! isValidXPosition(positionLeftX)
-	 * @throws	IllegalYPositionException
-	 * 			The given Y position is not a valid Y position for a Mazub.
-	 * 			| ! isValidYPosition(positionBottomY)
-	 * 
+	 * @param	world
+	 * 			The world for this new Mazub.
+	 * @param	hitpoints
+	 * 			The hitpoints for this new Mazub.
+	 * @effect	The new Mazub is initialized as a LivingCreature with horizontalVelocity, verticalVelocity
+	 * 			horizontalAcceleration and verticalAcceleration set to 0.
+	 * 			| super(positionLeftX,positionBottomY,0,0,0,0,initialHorizontalVelocity,
+				|	maximumHorizontalVelocity,world,sprites,hitpoints)
 	 */
 	public Mazub(int positionLeftX,int positionBottomY,	Sprite[] sprites,
 			double maximumHorizontalVelocity,double initialHorizontalVelocity,
@@ -66,10 +54,11 @@ public class Mazub extends LivingCreatures {
 	 * 			The array of sprites for this new Mazub.
 	 * @effect	The new Mazub is initialized with the given position as its position,
 	 * 			the given spriteArray as its spriteArray, maximumHorizontalVelocity = 3
-	 * 			and initialHorizontalVelocity = 1.
-	 * 			| this(positionLeftX,positionBottomY,spriteArray, 3, 1)
+	 * 			and initialHorizontalVelocity = 1. The world is set to null and hitpoints
+	 * 			are set to 100.
+	 * 			| this(positionLeftX,positionBottomY,spriteArray, 3, 1, null, 100)
 	 */
-	public Mazub(int positionLeftX, int positionBottomY, Sprite[] spriteArray) throws IllegalXPositionException, IllegalYPositionException {
+	public Mazub(int positionLeftX, int positionBottomY, Sprite[] spriteArray) {
 		this(positionLeftX,positionBottomY,spriteArray, 3, 1,null,100);	
 	}
 	

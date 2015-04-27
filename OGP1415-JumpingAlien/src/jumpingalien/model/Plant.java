@@ -5,7 +5,7 @@ import jumpingalien.util.Util;
 public class Plant extends LivingCreatures{
 
 	/**
-	 * Initialize this new Plant with given position en sprites
+	 * Initialize this new Plant with given position, sprites, world and hitpoints.
 	 * 
 	 * @param 	positionX
 	 * 			The position on the X-axis this new Plant.

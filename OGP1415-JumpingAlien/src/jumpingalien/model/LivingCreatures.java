@@ -9,12 +9,72 @@ import be.kuleuven.cs.som.annotate.Raw;
 
 public abstract class LivingCreatures {
 
+/**
+ * Initialize this new living creature with given position, horizontal velocity, vertical velocity,
+ * 	horizontal acceleration, vertical acceleration, initial horizontal velocity,
+ * 	maximum horizontal velocity, world, sprites and hitpoints.
+ * 
+ * @param 	XPosition
+ * 			The position on the X-axis of the leftmost pixel for this new living creature.		
+ * @param 	YPosition
+ * 			The position on the Y-axis of the bottom pixel for this new living creature.
+ * @param 	horizontalVelocity
+ * 			The horizontal velocity for this new living creature.
+ * @param 	verticalVelocity
+ * 			The vertical velocity for this new living creature.
+ * @param 	horizontalAcceleration
+ * 			The horizontal acceleartion for this new living creature.
+ * @param 	verticalAcceleration
+ * 			The vertical acceleration for this new living creature.
+ * @param 	initialHorizontalVelocity
+ * 			The initial horizontal velocity for this new living creature.
+ * @param 	maximumHorizontalVelocity
+ * 			The maximum horizontal velocity for this new living creature.
+ * @param 	world
+ * 			The world for this new living creature.
+ * @param 	sprites
+ * 			The array of sprites for this new living creature.
+ * @param 	hitpoints
+ * 			The hitpoints for this new living creature.
+ * @pre		The given spirteArray must be a valid spriteArray.
+ * 			| isValidSpriteArray(sprites,this)
+ * @pre		The maximum horizontal velocity must be a valid one for this living creature.
+ * 			| isValidMaximumHorizontalVelocity(maximumHorizontalVelocity, initialHorizontalVelocity)
+ * @pre		The initial horizontal velocity must be a valid one for this living creature.
+ * 			| isValidInitialVelocity(initialHorizontalVelocity, maximumHorizontalVelocity)
+ * @post	The initial horizontal velocity of this living creature is set to the given
+ * 			initial horizontal velocity.
+ * 			| new.getInitialHorizontalVelocity() == initialHorizontalVelocity
+ * @post	The new sprite array for this living creature is set to the given sprite array.
+ * 			| new.getSpriteArray() == sprites
+ * @effect	The new world for this world is set to the given world.
+ * 			| this.setWorld(world)
+ * @effect	The new maximum horizontal velocity for this living creature
+ * 			is set to the given maximum horizontal velocity.
+ * 			| this.setMaximumHorizontalVelocity(maximumHorizontalVelocity)
+ * @effect	The horizontal velocity for this living creature is set to
+ * 			the given horizontal velocity
+ * 			| this.setHorizontalVelocity(horizontalVelocity);
+ * @effect	The new vertical velocity for this living creature is set to
+ * 			the given vertical velocity
+ * 			| this.setVerticalVelocity(verticalVelocity)
+ * @effect	The new hitpoints for this living creature are set to the given hitpoints
+ * 			| this.setHP(hitpoints)
+ * @effect	The new horizontal acceleration for this living creature is set to
+ * 			the given horizontal acceleration.
+ *			| this.setHorizontalAcceleration(horizontalAcceleration)
+ * @effect	The new vertical acceleration for this living creature is set to
+ * 			the given vertical acceleration.
+ * 			| this.setVerticalAcceleration(verticalAcceleration)
+ * @effect	The new position for this living creature is set to the given position.
+ * 			| this.setPosition(XPosition, YPosition)
+ */
 	protected LivingCreatures(int XPosition, int YPosition,double horizontalVelocity, 
 			double verticalVelocity, double horizontalAcceleration,double verticalAcceleration,
 			double initialHorizontalVelocity,
 			double maximumHorizontalVelocity, World world, Sprite[] sprites,int hitpoints){
 		this.setWorld(world);
-		LivingCreatures.isValidSpriteArray(sprites,this);
+		assert LivingCreatures.isValidSpriteArray(sprites,this);
 		assert isValidMaximumHorizontalVelocity(maximumHorizontalVelocity, initialHorizontalVelocity);
 		assert isValidInitialVelocity(initialHorizontalVelocity, maximumHorizontalVelocity);
 		this.initialHorizontalVelocity = initialHorizontalVelocity;
@@ -25,11 +85,38 @@ public abstract class LivingCreatures {
 		this.setHorizontalAcceleration(horizontalAcceleration);
 		this.setVerticalAcceleration(verticalAcceleration);
 		this.spriteArray = sprites;		
-		this.setHitTimer(0.6);
-		this.setState(State.ALIVE);
 		this.setPosition(XPosition, YPosition);
 	}
 	
+	/**
+	 * Initialize this new living creature with given position, horizontal velocity, vertical velocity,
+	 * 	horizontal acceleration, maximum horizontal velocity, world, sprites and hitpoints.
+	 * 
+	 * @param 	XPosition
+	 * 			The position on the X-axis of the leftmost pixel for this new living creature.		
+	 * @param 	YPosition
+	 * 			The position on the Y-axis of the bottom pixel for this new living creature.
+	 * @param 	horizontalVelocity
+	 * 			The horizontal velocity for this new living creature.
+	 * @param 	verticalVelocity
+	 * 			The vertical velocity for this new living creature.
+	 * @param 	horizontalAcceleration
+	 * 			The horizontal acceleartion for this new living creature.
+	 * @param 	maximumHorizontalVelocity
+	 * 			The maximum horizontal velocity for this new living creature.
+	 * @param 	world
+	 * 			The world for this new living creature.
+	 * @param 	sprites
+	 * 			The array of sprites for this new living creature.
+	 * @param 	hitpoints
+	 * 			The hitpoints for this new living creature.
+	 * @effect	The new LivingCreature is initialized with given position, horizontal velocity,
+	 * 			vertical velocity, horizontal acceleration, maximum horizontal velocity,
+	 * 			world, sprite array and hitpoints. The vertical acceleration and initial
+	 * 			horizontal velocity is set to 0.
+	 * 			| this(XPosition,YPosition,horizontalVelocity,verticalVelocity, horizontalAcceleration, 
+	 *			|	0, 0, maximumHorizontalVelocity, world, sprites, hitpoints)
+	 */
 	protected LivingCreatures(int XPosition, int YPosition, double horizontalVelocity, 
 			double verticalVelocity, double horizontalAcceleration,
 			double maximumHorizontalVelocity,
@@ -38,6 +125,32 @@ public abstract class LivingCreatures {
 				0, 0, maximumHorizontalVelocity, world, sprites, hitpoints);
 	}
 	
+	/**
+	 * Initialize this new living creature with given position, horizontal velocity, vertical velocity,
+	 * 	maximum horizontal velocity, world, sprites and hitpoints.
+	 * 
+	 * @param 	XPosition
+	 * 			The position on the X-axis of the leftmost pixel for this new living creature.		
+	 * @param 	YPosition
+	 * 			The position on the Y-axis of the bottom pixel for this new living creature.
+	 * @param 	horizontalVelocity
+	 * 			The horizontal velocity for this new living creature.
+	 * @param 	verticalVelocity
+	 * 			The vertical velocity for this new living creature.
+	 * @param 	maximumHorizontalVelocity
+	 * 			The maximum horizontal velocity for this new living creature.
+	 * @param 	world
+	 * 			The world for this new living creature.
+	 * @param 	sprites
+	 * 			The array of sprites for this new living creature.
+	 * @param 	hitpoints
+	 * 			The hitpoints for this new living creature.
+	 * @effect	The new LivingCreature is initialized with given position, horizontal velocity,
+	 * 			vertical velocity, maximum horizontal velocity,
+	 * 			world, sprite array and hitpoints. The horizontal acceleration is set to 0.
+	 * 			| this(XPosition,YPosition,horizontalVelocity,verticalVelocity, 0, maximumHorizontalVelocity,
+	 *			|	world, sprites, hitpoints)
+	 */
 	protected LivingCreatures(int XPosition, int YPosition, double horizontalVelocity, 
 			double verticalVelocity,
 			double maximumHorizontalVelocity, World world, Sprite[] sprites, int hitpoints){
@@ -45,14 +158,58 @@ public abstract class LivingCreatures {
 				world, sprites, hitpoints);
 	}
 	
+	/**
+	 * Initialize this new living creature with given position, world, sprites and hitpoints.
+	 * 
+	 * @param 	XPosition
+	 * 			The position on the X-axis of the leftmost pixel for this new living creature.		
+	 * @param 	YPosition
+	 * 			The position on the Y-axis of the bottom pixel for this new living creature.
+	 * @param 	world
+	 * 			The world for this new living creature.
+	 * @param 	sprites
+	 * 			The array of sprites for this new living creature.
+	 * @param 	hitpoints
+	 * 			The hitpoints for this new living creature.
+	 * @effect	The new LivingCreature is initialized with given position, world,
+	 * 			sprite array and hitpoints. The horizontal velocity and vertical velocity
+	 * 			are set to 0. The maximum horizontal velocity is set to 3.
+	 * 			| this(XPosition,YPosition,0,0, 3,world, sprites, hitpoints)
+	 */
 	protected LivingCreatures(int XPosition, int YPosition,World world, Sprite[] sprites, int hitpoints){
 		this(XPosition,YPosition,0,0, 3,world, sprites, hitpoints);
 	}
 	
+	/**
+	 * Initialize this new living creature with given position, sprites and hitpoints.
+	 * 
+	 * @param 	XPosition
+	 * 			The position on the X-axis of the leftmost pixel for this new living creature.		
+	 * @param 	YPosition
+	 * 			The position on the Y-axis of the bottom pixel for this new living creature.
+	 * @param 	sprites
+	 * 			The array of sprites for this new living creature.
+	 * @param 	hitpoints
+	 * 			The hitpoints for this new living creature.
+	 * @effect	The new LivingCreature is initialized with given position,
+	 * 			sprite array and hitpoints. The world is set to null.
+	 * 			| this(XPosition,YPosition, null, sprites, hitpoints)
+	 */
 	protected LivingCreatures(int XPosition, int Yposition,Sprite[] sprites, int hitpoints) {
 		this(XPosition,Yposition, null,sprites, hitpoints);
 	}
 	
+	/**
+	 * Initialize this new living creature with given sprites and hitpoints.
+	 * 
+	 * @param 	sprites
+	 * 			The array of sprites for this new living creature.
+	 * @param 	hitpoints
+	 * 			The hitpoints for this new living creature.
+	 * @effect	The new LivingCreature is initialized with given sprite array
+	 * 			and hitpionts. The position is set to (0,0)
+	 * 			| this(0,0,sprites, hitpoints)
+	 */
 	protected LivingCreatures(Sprite[] sprites, int hitpoints) {
 		this(0,0,sprites, hitpoints);
 	}
@@ -190,6 +347,7 @@ public abstract class LivingCreatures {
 	 * 			| if (horizontalVelocity > this.getMaximumHorizontalVelocity())
 	 * 			|	then new.getHorizontalVelocity() == this.getMaximumHorizontalVelocity()
 	 */
+	@Raw
 	public void setHorizontalVelocity(double horizontalVelocity) {
 		if (horizontalVelocity  < 0) {
 			this.horizontalVelocity = 0;
@@ -265,6 +423,7 @@ public abstract class LivingCreatures {
 	 * 			given vertical velocity.
 	 * 			| 	then new.verticalVelocity = verticalVelocity
 	 */
+	@Raw
 	public void setVerticalVelocity(double verticalVelocity){
 		assert isValidVerticalVelocity(verticalVelocity);
 		this.verticalVelocity = verticalVelocity;
@@ -304,6 +463,7 @@ public abstract class LivingCreatures {
 	 * 			given horizontal acceleration.
 	 * 			| 	then new.horizontalAcceleration = horizontalAcceleration
 	 */
+	@Raw
 	public void setHorizontalAcceleration(double horizontalAcceleration){
 		assert isValidHorizontalAcceleration(horizontalAcceleration);
 		this.horizontalAcceleration = horizontalAcceleration;
@@ -344,6 +504,7 @@ public abstract class LivingCreatures {
 	 * 			given vertical acceleration.
 	 * 			| 	then new.verticalAcceleration = verticalAcceleration
 	 */
+	@Raw
 	public void setVerticalAcceleration(double verticalAcceleration){
 		assert isValidVerticalAcceleration(verticalAcceleration);
 		this.verticalAcceleration = verticalAcceleration;
@@ -370,6 +531,7 @@ public abstract class LivingCreatures {
 	 * 			given world.
 	 * 			| new.getWorld() == world
 	 */
+	@Raw
 	public void setWorld(World world){
 		assert canHaveAsWorld(world);
 		this.world = world;
@@ -435,6 +597,7 @@ public abstract class LivingCreatures {
 	 * 			These spriteArrays must be of length 2.
 	 * 			| result == (spriteArray.length == 2)
 	 */
+	@Raw
 	public static boolean isValidSpriteArray(Sprite[] spriteArray,Object object) {
 		if (object instanceof Mazub)
 			return Mazub.isValidSpriteArray(spriteArray);
@@ -564,6 +727,7 @@ public abstract class LivingCreatures {
 	 * 			| if (HP <= getMaxHP()) && (HP > getMinHP())
 	 * 			|	then new.getHP() == HP
 	 */
+	@Raw
 	public void setHP(int HP) {
 		if (HP <= getMinHP()) {
 			hitpoints = getMinHP();
@@ -617,9 +781,11 @@ public abstract class LivingCreatures {
 	}
 	
 	/**
-	 * the time since the living creature was hit by an enemy
+	 * The time since the living creature was hit by an enemy
+	 * 	The initial value is set so the creature can immediatly interact
+	 * 	with other creatures.
 	 */
-	private double hitTimer;
+	private double hitTimer = 0.6;
 	
 	/**
 	 * sets the time since last hit by an enemy to the given time
@@ -800,8 +966,9 @@ public abstract class LivingCreatures {
 	
 	/**
 	 * Variable registering the current state of this living creature.
+	 * 	The default value is ALIVE
 	 */
-	protected State state;
+	protected State state = State.ALIVE;
 	
 	/**
 	 * Sets the current state for the living creature the given state
@@ -1059,6 +1226,7 @@ public abstract class LivingCreatures {
 	 * @post	The new maximum horizontal velocity of this Mazub is equal to the given maximum horizontal velocity.
 	 * 			| new.getMaximumHorizontalVelocity() == maximumHorizontalVelocity
 	 */
+	@Raw
 	protected void setMaximumHorizontalVelocity(double maximumHorizontalVelocity) {
 		assert isValidMaximumHorizontalVelocity(maximumHorizontalVelocity, this.getInitialHorizontalVelocity());
 		this.maximumHorizontalVelocity = maximumHorizontalVelocity;
