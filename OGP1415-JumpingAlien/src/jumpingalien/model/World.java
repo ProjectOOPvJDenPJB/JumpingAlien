@@ -2,7 +2,6 @@ package jumpingalien.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -406,7 +405,7 @@ public class World {
 	 * 			| if (getMazub().getYposition() < getVisibleWindowPosition().getYPosition() + 200)
 	 * 			|	then new.getVisibleWindowPosition.getYPosition == 
 	 * 			|		getMazub().getYPosition() - 200
-	 * @post	...
+	 * @post	... TODO
 	 * 			| if (getMazub().getYPosition() > (getVisibleWindowPosition().getYPosition()
 	 * 			|		+ getVisibleWindowHeight() - 200))
 	 * 			|	then new.getVisibleWindowPosition.getYPosition ==
@@ -429,8 +428,10 @@ public class World {
 		if (mazubPos.getYPosition() < windowPos.getYPosition() +200){
 			setWindowPosition(windowPos.getXPosition(), mazubPos.getYPosition() - 200);
 		}
-		else if (mazubPos.getYPosition() > (windowPos.getYPosition() + getVisibleWindowHeight() -200))
-			setWindowPosition(windowPos.getXPosition(), mazubPos.getYPosition() + 200);
+		else if (mazubPos.getYPosition() > (windowPos.getYPosition() + getVisibleWindowHeight()) -200)
+			setWindowPosition(windowPos.getXPosition(),
+					windowPos.getYPosition() + 200 -((windowPos.getYPosition())
+					+ getVisibleWindowHeight() - mazubPos.getYPosition()));
 	}
 	
 	/**
@@ -763,11 +764,12 @@ public class World {
 	 * @post	For every living creature in this world, advanceTime was executed.
 	 */
 	public void advanceTime(double dt) {
-		//System.out.println("MAZUB");
 		mazub.advanceTime(dt);
+		if (hasWonGame()) {
+			this.terminate();
+		}
 		updateWindowPosition();
 		for (Plant plant : this.getPlants()) {
-//			System.out.println("PLANT?");
 			plant.advanceTime(dt);
 		}
 		for (Slime slime : this.getSlimes()) {
@@ -815,12 +817,16 @@ public class World {
 	 * 			otherwise false is returned.
 	 */
 	public boolean hasWonGame() {
-		int[] mazubPos = getMazub().getPosition().getPosition();
-		int[] mazubTile = getTilePosition(mazubPos[0], mazubPos[1]);
-		if ((getTargetTileX() == mazubTile[0]) && (getTargetTileY() == mazubTile[1]))
-			return true;
-		else
-			return false;
+		int[][] tiles = getOccupiedTiles(
+				(int)getMazub().getXPosition(),
+				(int)getMazub().getYPosition(),
+				(int)getMazub().getXPosition() + getMazub().getSize()[0],
+				(int)getMazub().getYPosition() + getMazub().getSize()[1]);
+		for(int i = 0; i < tiles.length; i++) {
+			if ((getTargetTileX() == tiles[i][0]) && (getTargetTileY() == tiles[i][1]))
+				return true;
+		}
+		return false;
 	}
 	
 	//Dit moet eigenlijk nog met State.INITIALISED gedaan worden

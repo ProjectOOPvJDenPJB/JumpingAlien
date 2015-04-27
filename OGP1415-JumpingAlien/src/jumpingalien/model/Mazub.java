@@ -146,9 +146,31 @@ public class Mazub extends LivingCreatures {
 	 * 			| new.getDucking == flag
 	 */
 	private void setDucking(boolean flag) throws IllegalStateException {
-		if (this.getDucking() == flag)
+		if ((flag == false) && (!canStandUp()))
 			throw new IllegalStateException();
-		this.ducking = flag;
+		else
+			this.ducking = flag;
+	}
+	
+	public boolean canStandUp(){
+		if ((world.getTileType((int)this.getXPosition()+1, (int)this.getYPosition() + getSize()[1] + world.getTileSize()) == 1) 
+				|| ((world.getTileType((int)(this.getXPosition()+1 + this.getSize()[0]),
+						(int)(this.getYPosition()  + getSize()[1] + world.getTileSize())) == 1))){
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+	
+	private boolean getTryEndingDuck() {
+		return this.tryEndingDuck;
+	}
+	
+	private boolean tryEndingDuck = false;
+	
+	private void setTryEndingDuck(boolean flag) {
+		this.tryEndingDuck = flag;
 	}
 	
 	/**
@@ -231,7 +253,6 @@ public class Mazub extends LivingCreatures {
 			try {
 				this.setDucking(true);
 			} catch (IllegalStateException exc) {
-				//Nothing happens if the Mazub is in an Illegal State.
 			}
 	}
 	
@@ -244,8 +265,9 @@ public class Mazub extends LivingCreatures {
 	public void endDuck() {
 		try {
 			this.setDucking(false);
+			this.setTryEndingDuck(false);
 		} catch (IllegalStateException exc) {
-			//Nothing happens if the Mazub is in an Illegal State.
+			this.setTryEndingDuck(true);
 		}
 	}
 
@@ -310,6 +332,9 @@ public class Mazub extends LivingCreatures {
 		if (this.getMovingVertical() == true) {
 			changeVerticalPosition(timeInterval);
 		}
+		if ((this.getTryEndingDuck()) && (canStandUp())) {
+			endDuck();
+		}
 		Interaction.interactWithOtherCreatures(this);
 		this.setHorizontalVelocity(this.getHorizontalVelocity() + this.getHorizontalAcceleration()*timeInterval);
 		this.setVerticalVelocity(this.getVerticalVelocity() + this.getVerticalAcceleration()*timeInterval);
@@ -317,7 +342,6 @@ public class Mazub extends LivingCreatures {
 		this.setRunTime(this.getRunTime() + timeInterval);
 		this.setHitTimer(this.getHitTimer() + timeInterval);
 		this.applyTerrainDmg(timeInterval);
-		this.setMovementBlocked(false);
 	}
 
 			

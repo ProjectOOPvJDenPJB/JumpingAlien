@@ -1,73 +1,84 @@
 package jumpingalien.model;
 
-
-import java.util.Collection;
-import java.util.List;
-
 import jumpingalien.util.Util;
 
 public class Interaction{
 
-	public Interaction(){
-		
+	public Interaction(){	
 	}
 
 	public static boolean collidesWithCreature(LivingCreatures creature1, LivingCreatures creature2) {
-//		if ((creature1.getXPosition() + (creature1.getSize()[0] - 1) < creature2.getXPosition()) || 
-//				(creature2.getXPosition() + (creature2.getSize()[0] - 1) < creature1.getXPosition()) ||
-//				(creature1.getYPosition() + (creature1.getSize()[1] - 1) <creature2.getYPosition()) ||
-//				(creature2.getYPosition() + (creature2.getSize()[1] - 1) < creature1.getYPosition())) {
-//			return false;		
-//		}
-		if (  (((creature1.getXPosition() < creature2.getXPosition()) 
-				&& (creature2.getXPosition() < creature1.getXPosition() + creature1.getSize()[0])) 
-				||(  (creature1.getXPosition() < creature2.getXPosition()) 
-				&& (creature2.getXPosition() < creature1.getXPosition() + creature1.getSize()[0])))
-				
-				&& (((creature1.getYPosition() < creature2.getYPosition()) 
-			    && (creature1.getYPosition() + creature1.getSize()[1] > creature2.getYPosition())) || 
-				((creature2.getYPosition() < creature1.getYPosition()) && 
-				(creature2.getYPosition() + creature2.getSize()[1] > creature1.getYPosition())))){
-			return true;
+		if (creature1 == creature2)
+			return false;
+		if ((creature1.getXPosition() + (creature1.getSize()[0] - 1) < creature2.getXPosition()) || 
+				(creature2.getXPosition() + (creature2.getSize()[0] - 1) < creature1.getXPosition()) ||
+				(creature1.getYPosition() + (creature1.getSize()[1] - 1) < creature2.getYPosition()) ||
+				(creature2.getYPosition() + (creature2.getSize()[1] - 1) < creature1.getYPosition())) {
+			return false;
 		}
-		return false;
+		else
+			return true;
 	}
 	
-//	public static int collidesWithTerrain(LivingCreatures creature){
-//			for (int x = (int) creature.getXPosition(); x<= creature.getXPosition() + creature.getSize()[0] -2; x = x+1){
-//				for (int y = (int) creature.getYPosition(); y<= creature.getYPosition() + creature.getSize()[1] -2; y = y+1 ){
-//					World world = creature.getWorld();
-//					if (Util.fuzzyGreaterThanOrEqualTo(x, world.getPixelWidth()))
-//						x = world.getPixelWidth() -1;
-//					if (Util.fuzzyGreaterThanOrEqualTo(y, world.getPixelHeight()))
-//						y = world.getPixelHeight() -1;
-////					System.out.println(x+".."+y);
-//					int tileType = world.getTileType(x, y);
-//				    if (tileType == 3){
-//						return 3;
-//					}
-//				    else if ((tileType == 2) && (!(creature instanceof Shark))){
-//						return 2;
-//					}
-//				    else if ((tileType == 0) && (creature instanceof Shark)){
-//				    	return 0;
-//				    }
-//				}		
-//			}
-//			if (creature instanceof Shark){
-//				return 2;
-//			}else{
-//			return 0;
-//			}
 	/**
 	 * @return whether or not the living creature collides with the terrain
 	 */
 	public static boolean collidesWithTerrain(LivingCreatures creature, int type) {
+		return collidesWithTerrainHorizontal(creature, type)
+				|| collidesWithTerrainVertical(creature, type);
+	}
+	
+	public static boolean collidesWithTerrainVertical(LivingCreatures creature, int type) {
+		return collidesWithTerrainBottomSide(creature, type)
+				|| collidesWithTerrainTopSide(creature, type);
+	}
+	
+	public static boolean collidesWithTerrainHorizontal(LivingCreatures creature, int type) {
+		return collidesWithTerrainLeftSide(creature, type)
+				|| collidesWithTerrainRightSide(creature, type);
+	}
+	
+	public static boolean collidesWithTerrainLeftSide(LivingCreatures creature, int type) {
 		World world = creature.getWorld();
-		int[][] tiles =  world.getOccupiedTiles((int)creature.getXPosition(),(int)creature.getYPosition()+1,
-				(int)creature.getXPosition()+creature.getCurrentSprite().getWidth(),(int)creature.getYPosition()+
-				creature.getCurrentSprite().getHeight());
-
+		int[][] tiles =  world.getOccupiedTiles(
+				(int)creature.getXPosition() + 1,
+				(int)creature.getYPosition() + 1, 
+				(int)creature.getXPosition(),
+				(int)creature.getYPosition() + creature.getSize()[1]);
+		return getCollidingTiles(tiles, world, type);
+	}
+	
+	public static boolean collidesWithTerrainRightSide(LivingCreatures creature, int type) {
+		World world = creature.getWorld();
+		int[][] tiles =  world.getOccupiedTiles(
+				(int)creature.getXPosition() + creature.getSize()[0],
+				(int)creature.getYPosition() + 1,
+				(int)creature.getXPosition() + creature.getSize()[0],
+				(int)creature.getYPosition() + creature.getSize()[1]);
+		return getCollidingTiles(tiles, world, type);
+	}
+	
+	public static boolean collidesWithTerrainBottomSide(LivingCreatures creature, int type) {
+		World world = creature.getWorld();
+		int[][] tiles =  world.getOccupiedTiles(
+				(int)creature.getXPosition() + 1,
+				(int)creature.getYPosition() + 1,
+				(int)creature.getXPosition() + creature.getSize()[0],
+				(int)creature.getYPosition() + 1);
+		return getCollidingTiles(tiles, world, type);
+	}
+	
+	public static boolean collidesWithTerrainTopSide(LivingCreatures creature, int type) {
+		World world = creature.getWorld();
+		int[][] tiles =  world.getOccupiedTiles(
+				(int)creature.getXPosition() + 1,
+				(int)creature.getYPosition() + creature.getSize()[1],
+				(int)creature.getXPosition() + creature.getSize()[0],
+				(int)creature.getYPosition() + creature.getSize()[1]);
+		return getCollidingTiles(tiles, world, type);
+	}
+	
+	private static boolean getCollidingTiles(int[][] tiles, World world,int type) {
 		for(int i = 0; i < tiles.length; i++) {
 			int tileType = world.getTileType(tiles[i][0] * world.getTileSize(), tiles[i][1] * world.getTileSize());
 			    if (tileType == type)
@@ -75,8 +86,7 @@ public class Interaction{
 		}
 		return false;
 	}
-	
-	
+		
 	public static void interactWithOtherCreatures(LivingCreatures creature){
 		World world =creature.getWorld();
 		try{
@@ -105,7 +115,7 @@ public class Interaction{
 		}
 	}	
 	
-	public static boolean interactWithMovementBlockingCreature (LivingCreatures creature, World world){
+	public static boolean interactWithMovementBlockingCreature(LivingCreatures creature, World world){
 			for (Slime slime : world.getSlimes()) {
 				if (collidesWithCreature(creature,slime)){
 					return true;
@@ -130,18 +140,15 @@ public class Interaction{
 		if (creature instanceof Mazub){
 			Mazub mazub = (Mazub) creature;
 			if (mazub.getHP() < 500){
-				assert plant.isEatablePlant();
+				if (plant.isEatablePlant()) {
 				mazub.addHP(mazub.getHealAmount());
-				plant.addHP(-1);
-				plant.terminate();
+				plant.setHP(0);
+				}
 			}
 		}
 	}
 	
 	public static void interactWithSlime(LivingCreatures creature, Slime slime){
-		if (!(creature instanceof Plant)){
-			creature.setMovementBlocked(true);
-		}
 		if (!(creature instanceof Slime)){
 			if (Util.fuzzyGreaterThanOrEqualTo(creature.getHitTimer(),0.6)){
 				creature.addHP(-50);
@@ -150,7 +157,6 @@ public class Interaction{
 			if (Util.fuzzyGreaterThanOrEqualTo(slime.getHitTimer(),0.6)){
 				slime.addHP(-50);
 				slime.setHitTimer(0);
-				//terminate zit in setHP die in addHPzit
 			}
 		}
 		if(creature instanceof Slime){
@@ -188,19 +194,15 @@ public class Interaction{
 		}
 	}
 	
-	public static void interactWithShark(LivingCreatures creature, Shark shark){
-		if (!(creature instanceof Plant)){
-			creature.setMovementBlocked(true);
-		}		
+	public static void interactWithShark(LivingCreatures creature, Shark shark){	
 		if (!(creature instanceof Shark)){
-			if (Util.fuzzyLessThanOrEqualTo(creature.getHitTimer(),0.6)){
+			if (Util.fuzzyGreaterThanOrEqualTo(creature.getHitTimer(),0.6)){
 				creature.addHP(-50);
 				creature.setHitTimer(0);
 			}
-			if (Util.fuzzyLessThanOrEqualTo(shark.getHitTimer(),0.6)){
+			if (Util.fuzzyGreaterThanOrEqualTo(shark.getHitTimer(),0.6)){
 				shark.addHP(-50);
 				shark.setHitTimer(0);
-			//Terminate zit in setHp
 			}
 		}
 	}

@@ -97,8 +97,9 @@ public class Plant extends LivingCreatures{
 	 * @return true if the plant is eatable, else returns false
 	 */
 	public boolean isEatablePlant() {
-		if (isAlive())
+		if (isAlive()){
 			return true;
+		}
 		else
 			return false;
 	}

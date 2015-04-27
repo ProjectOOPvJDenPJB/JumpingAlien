@@ -5,6 +5,7 @@ import java.util.Random;
 
 
 
+
 //import jumpingalien.model.LivingCreatures.State;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
@@ -44,7 +45,7 @@ public class Shark extends LivingCreatures {
 	 */
 	public Shark(int positionX, int positionY, double horizontalVelocity, double verticalVelocity,
 			World world,Sprite[] sprites, int hitpoints){
-		super(positionX,positionY, horizontalVelocity, verticalVelocity,4,world,sprites, hitpoints);
+		super(positionX,positionY, horizontalVelocity, verticalVelocity,1.5,0,0,4,world,sprites, hitpoints);
 
 	}
 
@@ -170,13 +171,19 @@ public class Shark extends LivingCreatures {
 	
 	public void advanceTimeAlive(double timeInterval) {
 		if (Util.fuzzyGreaterThanOrEqualTo(getRunTime(),getRandomTime())) {
-			generateRandomTime();
 			this.setRunTime(0);
 			this.endJump();
+			this.setMovingVertical(false);
 			this.endMove();
-			this.startJump(2,-10);
+			if (this.canJumpAgain()) {
+				this.startJump(2, -10);
+				generateRandomJumpCount();
+			}
+			else {
+				this.startJump(0, getRandomAcceleration());
+				setMovingVertical(false);
+			}
 			this.startMove(this.getDirection().oppositeDirection());
-			this.setDirection(this.getDirection().oppositeDirection());
 			this.generateRandomTime();
 		}
 		else
@@ -189,6 +196,26 @@ public class Shark extends LivingCreatures {
 		this.setVerticalVelocity(this.getVerticalVelocity() + this.getVerticalAcceleration()*timeInterval);	
 		this.setHitTimer(this.getHitTimer() + timeInterval);
 		this.applyTerrainDmg(timeInterval);
+	}
+	
+	private boolean canJumpAgain() {
+		return (getJumpCounter() >= getRandomJumpCount());
+	}
+	
+	private int getJumpCounter(){
+		return this.jumpCounter;
+	}
+	
+	private int jumpCounter = 4;
+	
+	private void setJumpCounter(int count) {
+		if (count < 0)
+			count = 0;
+		this.jumpCounter = count;
+	}
+	
+	private void increaseJumpCounter() {
+		setJumpCounter(getJumpCounter()+1);
 	}
 	
 	/**
@@ -207,6 +234,22 @@ public class Shark extends LivingCreatures {
 	 */
 	private void generateRandomTime() {
 		this.randomTime = (1 + (4-1) * new Random().nextDouble());
+		this.increaseJumpCounter();
+	}
+	
+	private int getRandomJumpCount() {
+		return this.randomJumpCount;
+	}
+	
+	private int randomJumpCount = (4 + new Random().nextInt(3));
+	
+	private void generateRandomJumpCount() {
+		this.randomJumpCount = (4 + new Random().nextInt(3));
+		setJumpCounter(0);
+	}
+	
+	private double getRandomAcceleration() {
+		return (new Random().nextInt(4)-2) * (new Random().nextDouble());
 	}
 
-	}
+}

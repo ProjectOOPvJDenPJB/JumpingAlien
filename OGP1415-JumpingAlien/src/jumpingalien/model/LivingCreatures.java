@@ -831,14 +831,18 @@ public abstract class LivingCreatures {
 		double newPositionX = this.getXPosition() + this.getDirection().getInt() * (100 * this.getHorizontalVelocity()*timeInterval 
 				+ 50 * this.getHorizontalAcceleration()*timeInterval*timeInterval);
 		double oldPositionX = this.getXPosition();
-	//	if (this instanceof Mazub)
-		//	System.out.println(timeInterval + ".." + newPositionX +" .. " + oldPositionX);
 		setXPosition(newPositionX);
-		if (this.getMovementBlocked() || this.collidesWithSolidTerrain() 
-				|| Interaction.interactWithMovementBlockingCreature(this, this.getWorld())){
-			this.setMovementBlocked(true);
+		if (Interaction.collidesWithTerrainHorizontal(this, 1)){
 			setXPosition(oldPositionX);
-			//movement blocked wordt kort op true gezet als de beweging wordt geblokeerd, maar wordt elke keer gerefreshed.
+		}
+		if (Interaction.interactWithMovementBlockingCreature(this, this.getWorld())) {
+			Interaction.interactWithOtherCreatures(this);
+			setXPosition(oldPositionX);
+		}
+		if (this instanceof Slime) {
+			if (noTerrainUnderSidesOfObject()) {
+				setXPosition(oldPositionX);
+			}
 		}
 		if (!this.collidesWithTerrainThroughBottomBorder()){
 			this.startFall(-10);
@@ -854,26 +858,34 @@ public abstract class LivingCreatures {
 	  * 		new.getYPosition = this.getYPosition() + distanceCalculated
 	  */
 	public void changeVerticalPosition(double timeInterval) {
+		if ((this instanceof Shark) && (this.getMovingVertical())
+				&& (this.getVerticalVelocity() < 0)) {
+			if (Interaction.collidesWithTerrainTopSide(this, 2)
+					&& Interaction.collidesWithTerrainBottomSide(this, 2)) {
+				this.setVerticalAcceleration(0);
+				this.setVerticalVelocity(0);
+			}
+		}
 		double oldPositionY = this.getYPosition();
 		double newPositionY = this.getYPosition() 
 				+ 100 * this.getVerticalVelocity() * timeInterval
 				+ 50 * this.getVerticalAcceleration() * timeInterval * timeInterval;
 		setYPosition(newPositionY);
-		if (this.getMovementBlocked() || this.collidesWithSolidTerrain()
-				|| Interaction.interactWithMovementBlockingCreature(this, this.getWorld())){
-			if (this instanceof Mazub)
-				System.out.println(oldPositionY +" .. "+ newPositionY);
+		boolean creatureBlock = Interaction.interactWithMovementBlockingCreature(this, this.getWorld());
+		if (Interaction.collidesWithTerrainVertical(this, 1)
+				|| creatureBlock){
+			if (creatureBlock) {
+				Interaction.interactWithOtherCreatures(this);
+			}
 			setYPosition(oldPositionY);
 			this.endJump();
-			this.setMovementBlocked(true);
-			if (this.collidesWithTerrainThroughBottomBorder()){
-				System.out.println("YAY");
+			if (this.collidesWithTerrainThroughBottomBorder()
+					|| creatureBlock){
 				this.setMovingVertical(false);
 				this.setVerticalAcceleration(0);
 				this.setVerticalVelocity(0);
+			}
 		}
-		}
-		Interaction.interactWithOtherCreatures(this);
 	}
 	
 	public double getSmallestDT(double dt) {
@@ -1029,16 +1041,12 @@ public abstract class LivingCreatures {
 		return Util.fuzzyGreaterThanOrEqualTo(size[0], 0) && Util.fuzzyGreaterThanOrEqualTo(size[1], 0);
 	}
 	
-	/**
-	 * @return whether or not the living creature collides with the terrain
-	 */
-	public boolean collidesWithSolidTerrain() {	
-		return Interaction.collidesWithTerrain(this, 1);
-	}
-	
 	public boolean collidesWithTerrainThroughBottomBorder(){
 		World world = this.getWorld();
-		if ((world.getTileType((int)this.getXPosition(), (int)this.getYPosition()) != 1) 
+		if (this instanceof Shark) {
+			return this.getSubmerged();
+		}
+		if ((world.getTileType((int)this.getXPosition()+1, (int)this.getYPosition()) != 1) 
 				&& ((world.getTileType((int)(this.getXPosition() + this.getSize()[0]), (int)(this.getYPosition())) != 1))){
 			return false;
 		}
@@ -1047,24 +1055,20 @@ public abstract class LivingCreatures {
 		}
 	}
 	
-	/**
-	 * @return whether the movement for the living creature is blocked or not
-	 */
-	public boolean getMovementBlocked(){
-		return this.movementBlocked;
+	public boolean noTerrainUnderSidesOfObject(){
+		World world = this.getWorld();
+		if ((world.getTileType((int)this.getXPosition(), (int)this.getYPosition()-1) != 1) 
+				|| ((world.getTileType((int)(this.getXPosition() + this.getSize()[0]), (int)(this.getYPosition())-1) != 1))){
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 	
-	private boolean movementBlocked = false;
-		
-	/**
-	 * sets a boolean determing if the movement of this living creature is blocked
-	 * @param flag
-	 * 		  The given flag for the blocked movement
-	 * @post  The boolean movementBlocked is set to the given flag
-	 * 		  | new.movementBlocked = flag
-	 */
-	public void setMovementBlocked(boolean flag){
-		this.movementBlocked = flag;
+	private boolean getSubmerged() {
+		return (Interaction.collidesWithTerrainTopSide(this, 2)
+				&& Interaction.collidesWithTerrainBottomSide(this, 2));
 	}
 	
 	/**
@@ -1094,13 +1098,10 @@ public abstract class LivingCreatures {
 	 */
 	public void applyTerrainDmg(double timeInterval){
 		if (Interaction.collidesWithTerrain(this, 3)){
-			System.out.println("It Burns");
 			this.applyMagmaDamage(timeInterval);
 		}else if (Interaction.collidesWithTerrain(this, 2)){
 			if (!(this instanceof Shark)){
 			this.applyWaterDamage(timeInterval);
-			System.out.println("i'm drowning");
-
 			}else{
 				this.setTerrainTimer(0);
 			}

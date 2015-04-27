@@ -203,6 +203,9 @@ public class Slime extends LivingCreatures {
 		}
 		
 		if (isAlive()) {
+			if (!collidesWithTerrainThroughBottomBorder() && (!getMovingVertical())) {
+				this.startFall(-10);
+			}
 			double dt_min = getSmallestDT(timeInterval);
 			for (double dt = dt_min; dt <= timeInterval-dt_min; dt += dt_min){
 				advanceTimeAlive(dt_min);
@@ -214,18 +217,19 @@ public class Slime extends LivingCreatures {
 	
 	public void advanceTimeAlive(double timeInterval) {
 		
-		if (Util.fuzzyGreaterThanOrEqualTo(getRunTime(), getRandomTime())  || this.getMovementBlocked()) {
+		if (Util.fuzzyGreaterThanOrEqualTo(getRunTime(), getRandomTime())) {
 			startMoveOpposite();
 			setRandomTime();
 			setRunTime(0);
-			setMovementBlocked(false);
 		}
 		else
 			this.setRunTime(getRunTime() + timeInterval);
-
+		
+		this.changeVerticalPosition(timeInterval);
 		this.changeHorizontalPosition(timeInterval);
 		Interaction.interactWithOtherCreatures(this);
 		this.setHorizontalVelocity(this.getHorizontalVelocity() + this.getHorizontalAcceleration()*timeInterval);
+		this.setVerticalVelocity(this.getVerticalVelocity() + this.getVerticalAcceleration() * timeInterval);
 		this.setHitTimer(this.getHitTimer() + timeInterval);
 		this.applyTerrainDmg(timeInterval);
 	}

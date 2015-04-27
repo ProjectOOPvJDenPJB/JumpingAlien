@@ -223,7 +223,6 @@ public class Facade implements IFacadePart2  {
 	@Override
 	public void addShark(World world, Shark shark) {
 		if (!world.gameStarted()){
-			System.out.println("WTF");
 			world.addShark(shark);
 		}
 	}
@@ -247,8 +246,6 @@ public class Facade implements IFacadePart2  {
 	public void addSlime(World world, Slime slime) {
 		if (!world.gameStarted()){
 			world.addSlime(slime);
-			System.out.println(slime.getXPosition());
-
 		}
 	}
 
