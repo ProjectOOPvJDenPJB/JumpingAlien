@@ -1,8 +1,12 @@
 package jumpingalien.part3.programs.Expressions;
 
-public abstract class BooleanTrue extends Boolean {
+public class BooleanTrue extends BasicExpression<Boolean> {
 	
-	public boolean evaluate(){
+
+
+	@Override
+	public Boolean evaluate() {
 		return true;
 	}
+
 }

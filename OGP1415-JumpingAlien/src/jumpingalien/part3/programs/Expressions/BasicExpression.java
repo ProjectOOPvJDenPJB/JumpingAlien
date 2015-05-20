@@ -14,4 +14,5 @@ public abstract class BasicExpression<T> extends Expression<T>{
 	public final boolean hasAsSubExpression(Expression<T> expression) {
 		return expression == this;
 	}
+
 }

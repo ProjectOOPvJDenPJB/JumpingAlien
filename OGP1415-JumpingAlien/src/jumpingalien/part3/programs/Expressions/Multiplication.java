@@ -2,15 +2,18 @@ package jumpingalien.part3.programs.Expressions;
 
 import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandException;
 
-public abstract class Multiplication extends BinaryExpression<Double, Double>{
+public class Multiplication extends BinaryExpression<Double, Double>{
 
 	protected Multiplication(Expression<Double> left, Expression<Double> right)
-			throws IllegalOperandException<?> {
+			throws IllegalOperandException<?,?> {
 		super(left, right);
 	}
-	
-	public double evaluate(){
-		return evaluate(this.getLeftOperand()) * evaluate(this.getRightOperand());
+
+	@Override
+	public Double evaluate() {
+		return getLeftOperand().evaluate() * getRightOperand().evaluate();
 	}
+	
+
 
 }

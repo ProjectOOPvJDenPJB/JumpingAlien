@@ -26,12 +26,12 @@ public abstract class BinaryExpression<T,P> extends ComposedExpression<T> {
 	 *      |  || (! canHaveAsOperand(right))
 	 */
 	@Model
-	protected BinaryExpression(Expression<T> left, Expression<T> right)
-			throws IllegalOperandException<?> {
+	protected BinaryExpression(Expression<P> left, Expression<P> right)
+			throws IllegalOperandException<?,?> {
 		if (!canHaveAsOperand(left))
-			throw new IllegalOperandException<T>(this, left);
+			throw new IllegalOperandException<T,P>(this, left);
 		if (!canHaveAsOperand(right))
-			throw new IllegalOperandException<T>(this, right);
+			throw new IllegalOperandException<T,P>(this, right);
 		setOperandAt(1, left);
 		setOperandAt(2, right);
 	}
@@ -42,18 +42,53 @@ public abstract class BinaryExpression<T,P> extends ComposedExpression<T> {
 	 */
 	@Override
 	@Raw
-	protected void setOperandAt(int index, Expression<T> operand) {
+	protected void setOperandAt(int index, Expression<P> operand) {
 		if (index == 1)
 			this.leftOperand = operand;
 		else
 			this.rightOperand = operand;
 	}
+
+	/**
+	 * Return the number of operands involved in this binary expression.
+	 *
+	 * @return A binary expression always involves two operands.
+	 *       | result == 2
+	 */
+	@Override
+	@Basic
+	public final int getNbOperands() {
+		return 2;
+	}
 	
+	/**
+	 * Return the operand of this binary expression at the given index.
+	 * 
+	 * @return If the given index is 1, the left operand of this
+	 *         binary expression; otherwise the right operand of
+	 *         this binary expression.
+	 *       | if (index == 1)
+	 *       |   then result == getLeftOperand()
+	 *       |   else result == getRightOperand()
+	 */
+	@Override
+	@Raw
+	public final Expression<P> getOperandAt(int index)
+			throws IndexOutOfBoundsException {
+		if ((index != 1) && (index != 2))
+			throw new IndexOutOfBoundsException();
+		if (index == 1)
+			return getLeftOperand();
+		else
+			return getRightOperand();
+	}
+	
+
 	/**
 	 * Return the left operand of this binary expression.
 	 */
 	@Basic
-	public Expression<T> getLeftOperand() {
+	public Expression<P> getLeftOperand() {
 		return leftOperand;
 	}
 
@@ -64,13 +99,13 @@ public abstract class BinaryExpression<T,P> extends ComposedExpression<T> {
 	 * @note   This variable is not qualified final, such that operands
 	 *         can be changed in cloning unary expressions.
 	 */
-	private Expression<T> leftOperand;
+	private Expression<P> leftOperand;
 
 	/**
 	 * Return the right operand of this binary expression.
 	 */
 	@Basic
-	public Expression<T> getRightOperand() {
+	public Expression<P> getRightOperand() {
 		return rightOperand;
 	}
 
@@ -81,5 +116,5 @@ public abstract class BinaryExpression<T,P> extends ComposedExpression<T> {
 	 * @note   This variable is not qualified final, such that operands
 	 *         can be changed in cloning unary expressions.
 	 */
-	private Expression<T> rightOperand;
+	private Expression<P> rightOperand;
 }

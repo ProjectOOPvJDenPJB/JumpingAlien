@@ -2,16 +2,17 @@ package jumpingalien.part3.programs.Expressions;
 
 import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandException;
 
-public class Addition extends BinaryExpression<Double,Double>{
+public class NegateDoubleLiteral extends UnaryExpression<Double> {
 
-	public Addition(Expression<Double> left, Expression<Double> right)
+	public NegateDoubleLiteral(Expression<Double> operand)
 			throws IllegalOperandException<?,?> {
-		super(left, right);
+		super(operand);
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public Double evaluate() {
-		return getLeftOperand().evaluate() + getRightOperand().evaluate();
+		return -getOperand().evaluate();
 	}
 
 }

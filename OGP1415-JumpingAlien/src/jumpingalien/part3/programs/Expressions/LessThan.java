@@ -2,15 +2,16 @@ package jumpingalien.part3.programs.Expressions;
 
 import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandException;
 
-public abstract class LessThan extends Comparison<Double,Double> {
+public class LessThan extends Comparison<Boolean,Double> {
 	
 	protected LessThan(Expression<Double> left, Expression<Double> right)
-			throws IllegalOperandException<?> {
+			throws IllegalOperandException<?,?> {
 		super(left, right);
 	}
-	
-	public boolean evaluate(){
-		return evaluate(this.getLeftOperand()) < evaluate(this.getRightOperand());
+
+	@Override
+	public Boolean evaluate() {
+		return getLeftOperand().evaluate() < getRightOperand().evaluate();
 	}
-	
+		
 }

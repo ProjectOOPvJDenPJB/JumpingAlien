@@ -1,6 +1,12 @@
 package jumpingalien.part3.programs.Expressions;
 
-public abstract class Variable extends BasicExpression<Object>{
+public class Variable extends BasicExpression<Object>{
+	
+	public Variable(String name, Object value,Type type){
+		this.setName(name);
+		this.setValue(value);
+		this.setType(type);		
+	}
 	
 	public void setName(String name){
 		this.name = name;
@@ -22,11 +28,11 @@ public abstract class Variable extends BasicExpression<Object>{
 		return this.type;
 	}
 	
-	public void setValue(double value){
+	public void setValue(Object value){
 		this.value = value;
 	}
 	
-	public double value;
+	public Object value;
 	
 	public enum Type{
 		Boolean,
@@ -35,15 +41,10 @@ public abstract class Variable extends BasicExpression<Object>{
 		variable
 	}
 	
-	public void setVariable(String name, Double value,Type type){
-		this.setName(name);
-		this.setValue(value);
-		this.setType(type);		
-	}
-	
-	public double evaluate(){
+	public Object evaluate(){
 		return this.value;
 	}
 	// Wa moet men precies terug krijgen hier bij evaluate?
+	// Een variabele is geen double, maar kan ook gwn een object zijn ;), in orde gemaakt
 
 }

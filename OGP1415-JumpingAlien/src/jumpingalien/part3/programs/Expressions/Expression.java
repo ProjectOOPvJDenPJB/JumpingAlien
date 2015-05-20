@@ -25,6 +25,6 @@ public abstract class Expression<T> {
 	/**
 	 *Evaluate this program
 	 */
-	public abstract T evaluate(Expression<T> expression);
+	public abstract T evaluate();
 	//TODO Program
 }
