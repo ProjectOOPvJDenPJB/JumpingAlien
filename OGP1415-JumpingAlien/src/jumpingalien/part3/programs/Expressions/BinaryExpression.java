@@ -4,7 +4,7 @@ import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandExceptio
 import be.kuleuven.cs.som.annotate.*;
 
 
-public abstract class BinaryExpression<T> extends ComposedExpression<T> {
+public abstract class BinaryExpression<T,P> extends ComposedExpression<T> {
 
 	/**
 	 * Initialize this new binary expression with given operands.
