@@ -118,7 +118,7 @@ public class Mazub extends LivingCreatures {
 	/**
 	 * Return the boolean indicating whether the Mazub is ducking or not.
 	 */
-	private boolean getDucking() {
+	public boolean getDucking() {
 		return this.ducking;
 	}
 	
