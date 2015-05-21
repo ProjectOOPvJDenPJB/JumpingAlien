@@ -1,18 +1,19 @@
 package jumpingalien.part3.programs.Expressions;
 
 import jumpingalien.model.GameObject;
+import jumpingalien.model.Plant;
 import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandException;
 
-public class GetX extends UnaryExpression<Double, GameObject> {
+public class IsPlant extends UnaryExpression<Boolean, GameObject> {
 
-	protected GetX(Expression<GameObject> operand)
+	protected IsPlant(Expression<GameObject> operand)
 			throws IllegalOperandException<?, ?> {
 		super(operand);
 	}
 
 	@Override
-	public Double evaluate() {
-		return getOperand().evaluate().getXPosition();
+	public Boolean evaluate() {
+		return (getOperand().evaluate() instanceof Plant);
 	}
 
 }

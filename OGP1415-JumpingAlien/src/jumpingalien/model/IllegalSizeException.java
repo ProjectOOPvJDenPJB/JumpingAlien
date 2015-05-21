@@ -17,21 +17,21 @@ public class IllegalSizeException extends RuntimeException {
 	 * 			is equal to the given size.
 	 * 			| new.getSize == size
 	 */
-	public IllegalSizeException(int[] size) {
+	public IllegalSizeException(int size) {
 		this.size = size;
 	}
 	
 	/**
 	 * Return the size registered for the illegal size.
 	 */
-	public int[] getSize() {
+	public int getSize() {
 		return this.size;
 	}
 	
 	/**
 	 * Variable registering the size in this IllegalSizeException.
 	 */
-	private final int[] size;
+	private final int size;
 
 	/**
 	 * Serial Version ID, strongly advised by the Java API.

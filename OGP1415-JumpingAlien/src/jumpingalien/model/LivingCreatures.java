@@ -15,7 +15,7 @@ import be.kuleuven.cs.som.annotate.Raw;
  * 	& Pieterjan Beerden (Ingenieurswetenschappen: Elektrotechniek - Computerwetenschappen)
  * @version 0.1
  */
-public abstract class LivingCreatures {
+public abstract class LivingCreatures extends GameObject {
 
 /**
  * Initialize this new living creature with given position, horizontal velocity, vertical velocity,
@@ -1239,7 +1239,28 @@ public abstract class LivingCreatures {
 	}
 	
 	/**
-	 * Returns the size of a sprite of this Mazub.
+	 * Returns the width of this creature.
+	 */
+	public int getWidth() throws IllegalSizeException {
+		int size =  getCurrentSprite().getWidth();
+		if (! isValidSize(size))
+			throw new IllegalSizeException(size);
+		return size;
+	}
+	
+	/**
+	 * Returns the height of this creature.
+	 */
+	public int getHeight() throws IllegalSizeException {
+		int size =  getCurrentSprite().getHeight();
+		if (! isValidSize(size))
+			throw new IllegalSizeException(size);
+		return size;
+	}
+	
+	
+	/**
+	 * Returns the size of a sprite of this creature.
 	 * @param 	sprite
 	 * 			The sprite of which the size must be determined.
 	 * @return	Returns the size of the given sprite in an array of type int.
@@ -1250,24 +1271,26 @@ public abstract class LivingCreatures {
 	 */
 	public int[] getSize() throws IllegalSizeException {
 		int[] size = new int[2];
-		size[0] = getCurrentSprite().getWidth();
-		size[1] = getCurrentSprite().getHeight();
-		if (! isValidSize(size))
-			throw new IllegalSizeException(size);
+		try {
+			size[0] = getWidth();
+			size[1] = getHeight();
+		} catch (IllegalSizeException exc) {
+			throw exc;
+		}
 		return size;
 	}
-	
+		
 	/**
-	 * Checks whether the given size is a valid size for this Mazub.
+	 * Checks whether the given size is a valid size for this creature.
 	 * 
 	 * @param 	size
 	 * 			The size to be checked.
 	 * @return	True if and only if the size is greater or equal to 0.
 	 * 			| result ==
-	 * 			|	(size[0] > 0) && (size[1] > 0)
+	 * 			|	(size > 0)
 	 */
-	public static boolean isValidSize(int[] size) {
-		return Util.fuzzyGreaterThanOrEqualTo(size[0], 0) && Util.fuzzyGreaterThanOrEqualTo(size[1], 0);
+	public static boolean isValidSize(int size) {
+		return Util.fuzzyGreaterThanOrEqualTo(size, 0);
 	}
 	
 	/**

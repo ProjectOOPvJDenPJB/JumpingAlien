@@ -211,7 +211,7 @@ public class World {
 	@Raw
 	public void addTileType(int tileX, int tileY,int tileType) {
 		assert isValidTilePosition(tileX, tileY, getTileSize());
-		Tile tile = new Tile(tileX,tileY,tileType);
+		Tile tile = new Tile(tileX,tileY,tileType,this);
 		tileTypes[tileX][tileY] =  tileType;
 		tiles.add(tile);
 	}

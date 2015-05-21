@@ -1,18 +1,19 @@
 package jumpingalien.part3.programs.Expressions;
 
 import jumpingalien.model.GameObject;
+import jumpingalien.model.Shark;
 import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandException;
 
-public class GetX extends UnaryExpression<Double, GameObject> {
+public class IsShark extends UnaryExpression<Boolean, GameObject> {
 
-	protected GetX(Expression<GameObject> operand)
+	protected IsShark(Expression<GameObject> operand)
 			throws IllegalOperandException<?, ?> {
 		super(operand);
 	}
 
 	@Override
-	public Double evaluate() {
-		return getOperand().evaluate().getXPosition();
+	public Boolean evaluate() {
+		return (getOperand().evaluate() instanceof Shark);
 	}
 
 }
