@@ -2,18 +2,16 @@ package jumpingalien.part3.programs.Expressions;
 
 import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandException;
 
-public class NegateBoolean extends UnaryExpression<Boolean,Boolean> {
+public class SquareRoot extends UnaryExpression<Double,Double> {
 
-	protected NegateBoolean(Expression<Boolean> operand)
+	protected SquareRoot(Expression<Double> operand)
 			throws IllegalOperandException<?, ?> {
 		super(operand);
 	}
 
 	@Override
-	public Boolean evaluate() {
-		return !getOperand().evaluate();
+	public Double evaluate() {
+		return Math.sqrt(getOperand().evaluate());
 	}
-	
-	
 
 }

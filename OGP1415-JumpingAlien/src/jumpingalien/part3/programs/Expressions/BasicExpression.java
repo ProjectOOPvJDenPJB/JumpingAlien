@@ -11,7 +11,7 @@ public abstract class BasicExpression<T> extends Expression<T>{
 	 *        | result == (expression == this)
 	 */
 	@Override
-	public final boolean hasAsSubExpression(Expression<T> expression) {
+	public final boolean hasAsSubExpression(Expression<?> expression) {
 		return expression == this;
 	}
 

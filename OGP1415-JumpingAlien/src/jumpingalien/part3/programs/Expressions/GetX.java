@@ -1,11 +1,20 @@
 package jumpingalien.part3.programs.Expressions;
 
-public class GetX<Double> extends UnaryExpression<T> {
+import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandException;
+
+public class GetX extends UnaryExpression<Double, Object> {
+
+	protected GetX(Expression<Object> operand)
+			throws IllegalOperandException<?, ?> {
+		super(operand);
+	}
 
 	@Override
-	public Object evaluate() {
+	public Double evaluate() {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	
 
 }

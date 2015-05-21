@@ -4,7 +4,7 @@ import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandExceptio
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Model;
 
-public abstract class UnaryExpression<T> extends ComposedExpression<T> {
+public abstract class UnaryExpression<T,P> extends ComposedExpression<T,P> {
 	
 	/**
 	 * Initialize this new unary expression with given operand.
@@ -20,10 +20,10 @@ public abstract class UnaryExpression<T> extends ComposedExpression<T> {
 	 *       | ! canHaveAsOperand(operand)
 	 */
 	@Model
-	protected UnaryExpression(Expression<T> operand)
+	protected UnaryExpression(Expression<P> operand)
 			throws IllegalOperandException<?,?> {
 		if (!canHaveAsOperand(operand))
-			throw new IllegalOperandException<T,T>(this, operand);
+			throw new IllegalOperandException<T,P>(this, operand);
 		setOperandAt(1, operand);
 	}
 
@@ -46,7 +46,7 @@ public abstract class UnaryExpression<T> extends ComposedExpression<T> {
 	 *       | result == getOperand()
 	 */
 	@Override
-	public final Expression<T> getOperandAt(int index)
+	public final Expression<P> getOperandAt(int index)
 			throws IndexOutOfBoundsException {
 		if (index != 1)
 			throw new IndexOutOfBoundsException();
@@ -57,7 +57,7 @@ public abstract class UnaryExpression<T> extends ComposedExpression<T> {
 	 * Return the operand of this unary expression.
 	 */
 	@Basic
-	public Expression<T> getOperand() {
+	public Expression<P> getOperand() {
 		return operand;
 	}
 
@@ -66,7 +66,7 @@ public abstract class UnaryExpression<T> extends ComposedExpression<T> {
 	 * index to the given operand.
 	 */
 	@Override
-	protected void setOperandAt(int index, Expression<T> operand) {
+	protected void setOperandAt(int index, Expression<P> operand) {
 		this.operand = operand;
 	}
 
@@ -76,6 +76,6 @@ public abstract class UnaryExpression<T> extends ComposedExpression<T> {
 	 * @note    This variable is not qualified final, such that operands
 	 *          can be changed in cloning unary expressions.
 	 */
-	private Expression<T> operand;
+	private Expression<P> operand;
 
 }

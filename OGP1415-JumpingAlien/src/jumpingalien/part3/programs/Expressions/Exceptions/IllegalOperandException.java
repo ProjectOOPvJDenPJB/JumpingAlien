@@ -2,6 +2,7 @@ package jumpingalien.part3.programs.Expressions.Exceptions;
 
 import be.kuleuven.cs.som.annotate.*;
 import jumpingalien.part3.programs.Expressions.BinaryExpression;
+import jumpingalien.part3.programs.Expressions.ComposedExpression;
 import jumpingalien.part3.programs.Expressions.Expression;
  /**
  * A class for signaling illegal operands.
@@ -45,7 +46,7 @@ public class IllegalOperandException<T,P> extends RuntimeException {
 	 *          is the same as the given operand.
 	 *          | new.getOperand() == operands
 	 */
-	public IllegalOperandException(BinaryExpression<T,P> targetExpression,
+	public IllegalOperandException(ComposedExpression<T,P> targetExpression,
 			Expression<P> operand) {
 		this.targetExpression = targetExpression;
 		this.operand = operand;

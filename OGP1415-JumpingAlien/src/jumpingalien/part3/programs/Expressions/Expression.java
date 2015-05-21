@@ -20,7 +20,7 @@ public abstract class Expression<T> {
 	 *         level, the effect of the method is only defined in 2 cases. All
 	 *         other cases must be worked out at the lower levels of the hierarchy.
 	 */
-	public abstract boolean hasAsSubExpression(Expression<T> expression);
+	public abstract boolean hasAsSubExpression(Expression<?> expression);
 	
 	/**
 	 *Evaluate this program

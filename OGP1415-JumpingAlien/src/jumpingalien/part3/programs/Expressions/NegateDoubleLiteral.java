@@ -2,7 +2,7 @@ package jumpingalien.part3.programs.Expressions;
 
 import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandException;
 
-public class NegateDoubleLiteral extends UnaryExpression<Double> {
+public class NegateDoubleLiteral extends UnaryExpression<Double,Double> {
 
 	public NegateDoubleLiteral(Expression<Double> operand)
 			throws IllegalOperandException<?,?> {

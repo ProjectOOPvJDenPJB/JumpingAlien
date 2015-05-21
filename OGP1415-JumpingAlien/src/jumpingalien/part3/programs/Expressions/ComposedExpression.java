@@ -4,7 +4,7 @@ package jumpingalien.part3.programs.Expressions;
 import be.kuleuven.cs.som.annotate.*;
 
 
-public abstract class ComposedExpression<T> extends Expression<T>{
+public abstract class ComposedExpression<T,P> extends Expression<T>{
 	
 
 	/**
@@ -25,7 +25,7 @@ public abstract class ComposedExpression<T> extends Expression<T>{
 	 *       | (index < 1) || (index > getNbOperands())
 	 */
 	@Basic
-	public abstract Expression<T> getOperandAt(int index)
+	public abstract Expression<P> getOperandAt(int index)
 			throws IndexOutOfBoundsException;
 	
 	/**
@@ -41,7 +41,7 @@ public abstract class ComposedExpression<T> extends Expression<T>{
 	 *       |   ( (expression != null)
 	 *       |  && (! expression.hasAsSubExpression(this)) )
 	 */
-	public boolean canHaveAsOperand(Expression<T> expression) {
+	public boolean canHaveAsOperand(Expression<P> expression) {
 		return (expression != null) && (!expression.hasAsSubExpression(this));
 	}
 	
@@ -63,7 +63,7 @@ public abstract class ComposedExpression<T> extends Expression<T>{
 	 *         expression is the same as the given operand.
 	 *       | new.getOperandAt(index) == operand
 	 */
-	protected abstract void setOperandAt(int index, Expression<T> operand);
+	protected abstract void setOperandAt(int index, Expression<P> operand);
 	
 	/**
 	 * Check whether this composed expression has the given expression
@@ -79,7 +79,7 @@ public abstract class ComposedExpression<T> extends Expression<T>{
 	 *       |         getOperandAt(I).hasAsSubExpression(expression) )
 	 */
 	@Override
-	public boolean hasAsSubExpression(Expression<T> expression) {
+	public boolean hasAsSubExpression(Expression<?> expression) {
 		if (expression == this)
 			return true;
 		for (int pos = 1; pos <= getNbOperands(); pos++)
