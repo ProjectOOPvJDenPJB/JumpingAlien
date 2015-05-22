@@ -1,5 +1,7 @@
 package jumpingalien.part3.programs.Expressions;
 
+import jumpingalien.part3.programs.Type;
+
 public class Variable extends BasicExpression<Object>{
 	
 	public Variable(String name, Object value,Type type){
@@ -33,14 +35,7 @@ public class Variable extends BasicExpression<Object>{
 	}
 	
 	public Object value;
-	
-	public enum Type{
-		Boolean,
-		Double,
-		Expression,
-		variable
-	}
-	
+		
 	public Object evaluate(){
 		return this.value;
 	}
