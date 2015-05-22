@@ -398,21 +398,27 @@ public abstract class LivingCreatures extends GameObject {
 	private double initialHorizontalVelocity;
 
 	/**
-	 * Return the initial horizontal acceleration of this creature.
+	 *Set the initial horizontal acceleration of this creature.
 	 */
 	public void setInitialHorizontalVelocity(double velocity){
 		this.initialHorizontalVelocity = velocity;
 	}
 	
+	/**
+	 * Return the initial horizontal acceleration of this creature.
+	 */
 	public double getInitialHorizontalAcceleration(){
 		return this.initialHorizontalAcceleration;
 	}
 	
+	/**
+	 * Variable registering the initial Horizontal acceleration of this creature.
+	 */
 	private double initialHorizontalAcceleration;
 	
 	public void setInitialHorizontalAcceleration(double acceleration){
 		this.initialHorizontalAcceleration = acceleration;
-	}
+	}	
 	/**
 	 *  Return the vertical velocity of this creature.
 	 */
@@ -1159,6 +1165,40 @@ public abstract class LivingCreatures extends GameObject {
 	}
 	
 	/**
+	 * start a move to the given direction as the current movement of this LivingCreature
+	 * 
+	 * @post  The new direction is opposite to the current direction, 
+	 * 		  the horizontal velocity is reset to zero and the horizontal acceleration is set to 1.5.
+	 * 		 | new.getDirection() == direction
+	 * 		 | new.getHorizontalVelocity == this.getInitialHorizontalVelocity()
+	 * 		 | new.getHorizontalAcceleration == this.getInitialHorizontalAcceleration()
+	 */
+	public void startMove(double velocity,double horizontalAcceleration,Direction direction){
+		this.setHorizontalAcceleration(horizontalAcceleration);
+		this.setHorizontalVelocity(velocity);
+		this.setMoving(true);
+		this.setDirection(direction);
+		this.setRunTime(0);
+	}
+	
+	/**
+	 * start a move to the given direction as the current movement of this LivingCreature
+	 * 
+	 * @post  The new direction is opposite to the current direction, 
+	 * 		  the horizontal velocity is reset to zero and the horizontal acceleration is set to 1.5.
+	 * 		 | new.getDirection() == direction
+	 * 		 | new.getHorizontalVelocity == this.getInitialHorizontalVelocity()
+	 * 		 | new.getHorizontalAcceleration == this.getInitialHorizontalAcceleration()
+	 */
+	public void startMove(Direction direction){
+		this.setHorizontalAcceleration(this.getInitialHorizontalAcceleration());
+		this.setHorizontalVelocity(this.getInitialHorizontalVelocity());
+		this.setMoving(true);
+		this.setDirection(direction);
+		this.setRunTime(0);
+	}
+	
+	/**
 	 * Initializes vertical movment.
 	 * 
 	 * @param	velocity
@@ -1180,31 +1220,6 @@ public abstract class LivingCreatures extends GameObject {
 			this.setVerticalAcceleration(acceleration);
 			this.setMovingVertical(true);
 		}
-	}
-	
-	public void startMove(double velocity,double horizontalAcceleration,Direction direction){
-		this.setHorizontalAcceleration(horizontalAcceleration);
-		this.setHorizontalVelocity(velocity);
-		this.setMoving(true);
-		this.setDirection(direction);
-		this.setRunTime(0);
-	}
-	
-	/**
-	 * start a move to the given direction as the current movement of this shark
-	 * 
-	 * @post  The new direction is opposite to the current direction, 
-	 * 		  the horizontal velocity is reset to zero and the horizontal acceleration is set to 1.5.
-	 * 		 | new.getDirection() == direction
-	 * 		 | new.getHorizontalVelocity == this.getInitialHorizontalVelocity()
-	 * 		 | new.getHorizontalAcceleration == this.getInitialHorizontalAcceleration()
-	 */
-	public void startMove(Direction direction){
-		this.setHorizontalAcceleration(this.getInitialHorizontalAcceleration());
-		this.setHorizontalVelocity(this.getInitialHorizontalVelocity());
-		this.setMoving(true);
-		this.setDirection(direction);
-		this.setRunTime(0);
 	}
 	
 	/**

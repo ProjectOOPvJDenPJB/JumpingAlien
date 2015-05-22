@@ -103,19 +103,18 @@ public class Mazub extends LivingCreatures {
 		this.moving = flag;
 	}
 	
-			
-	/**
-	 * Return the initial vertical velocity of this Mazub.
-	 */
-	public int getInitialVerticalVelocity() {
+	public double getInitialVerticalVelocity(){
 		return this.initialVerticalVelocity;
 	}
 	
 	/**
 	 * Variable registering the initial vertical velocity of this Mazub.
 	 */
-	private final int initialVerticalVelocity = 8;
+	private final double initialVerticalVelocity = 8;
 	
+	public void startJump(){
+		startJump(initialVerticalVelocity,-10);
+	}
 	/**
 	 * Return the boolean indicating whether the Mazub is ducking or not.
 	 */

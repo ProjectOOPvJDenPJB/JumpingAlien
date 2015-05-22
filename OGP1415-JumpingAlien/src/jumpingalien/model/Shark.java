@@ -245,6 +245,12 @@ public class Shark extends LivingCreatures {
 	private boolean canJumpAgain() {
 		return (getJumpCounter() >= getRandomJumpCount());
 	}
+
+	public void startJump(){
+		if (this.canJumpAgain()){
+			startJump(2,getRandomAcceleration());
+		}
+	}
 	
 	/**
 	 * Return the jump counter for this shark.
