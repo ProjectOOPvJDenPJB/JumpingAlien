@@ -395,8 +395,24 @@ public abstract class LivingCreatures extends GameObject {
 	/**
 	 * Variable registering the initial horizontal velocity of this creature.
 	 */
-	private final double initialHorizontalVelocity;
+	private double initialHorizontalVelocity;
 
+	/**
+	 * Return the initial horizontal acceleration of this creature.
+	 */
+	public void setInitialHorizontalVelocity(double velocity){
+		this.initialHorizontalVelocity = velocity;
+	}
+	
+	public double getInitialHorizontalAcceleration(){
+		return this.initialHorizontalAcceleration;
+	}
+	
+	private double initialHorizontalAcceleration;
+	
+	public void setInitialHorizontalAcceleration(double acceleration){
+		this.initialHorizontalAcceleration = acceleration;
+	}
 	/**
 	 *  Return the vertical velocity of this creature.
 	 */
@@ -1164,6 +1180,67 @@ public abstract class LivingCreatures extends GameObject {
 			this.setVerticalAcceleration(acceleration);
 			this.setMovingVertical(true);
 		}
+	}
+	
+	public void startMove(double velocity,double horizontalAcceleration,Direction direction){
+		this.setHorizontalAcceleration(horizontalAcceleration);
+		this.setHorizontalVelocity(velocity);
+		this.setMoving(true);
+		this.setDirection(direction);
+		this.setRunTime(0);
+	}
+	
+	/**
+	 * start a move to the given direction as the current movement of this shark
+	 * 
+	 * @post  The new direction is opposite to the current direction, 
+	 * 		  the horizontal velocity is reset to zero and the horizontal acceleration is set to 1.5.
+	 * 		 | new.getDirection() == direction
+	 * 		 | new.getHorizontalVelocity == this.getInitialHorizontalVelocity()
+	 * 		 | new.getHorizontalAcceleration == this.getInitialHorizontalAcceleration()
+	 */
+	public void startMove(Direction direction){
+		this.setHorizontalAcceleration(this.getInitialHorizontalAcceleration());
+		this.setHorizontalVelocity(this.getInitialHorizontalVelocity());
+		this.setMoving(true);
+		this.setDirection(direction);
+		this.setRunTime(0);
+	}
+	
+	/**
+	 * Ends horizontal movement in the direction Mazub is facing.
+	 * 
+	 * @param	horizontalAcceleration
+	 * 			The new horizontal acceleration for this Mazub.
+	 * @pre		The given horizontal acceleration must be a valid horizontal acceleration.
+	 * 			| isValidHorizontalAcceleration(horizontalAcceleration)
+	 * @post	The new horizontal velocity of this Mazub is equal to zero,
+	 * 			the new horizontal acceleration is set to the given horizontalAcceleration,
+	 * 			the boolean moving is set to false and the runTime is set to zero.
+	 * 			| new.getHorizontalVelocity() == 0 && new.getMoving == false
+	 * 			|	&& new.getRunTime == 0
+	 */
+	public void endMove(double horizontalAcceleration) {
+		assert isValidHorizontalAcceleration(horizontalAcceleration);
+		this.setHorizontalVelocity(0);
+		this.setHorizontalAcceleration(horizontalAcceleration);
+		this.setMoving(false);
+		this.setRunTime(0);
+	}
+	
+	/**
+	 * Ends horizontal movement in the direction Mazub is facing.
+	 * @post	The new horizontal velocity of this Mazub is equal to zero,
+	 * 			the new horizontal acceleration is set to 0,
+	 * 			the boolean moving is set to false and the runTime is set to zero.
+	 * 			| new.getHorizontalVelocity() == 0 && new.getMoving == false
+	 * 			|	&& new.getRunTime == 0
+	 */
+	public void endMove() {
+		this.setHorizontalVelocity(0);
+		this.setHorizontalAcceleration(0);
+		this.setMoving(false);
+		this.setRunTime(0);
 	}
 	
 	/**

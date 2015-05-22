@@ -56,6 +56,8 @@ public class Slime extends LivingCreatures {
 		super(positionX,positionY,horizontalVelocity,verticalVelocity,horizontalAcceleration,2.5,
 				world,sprites,hitpoints);
 		school.addSlime(this);
+		this.setInitialHorizontalVelocity(0);
+		this.setInitialHorizontalAcceleration(0.7);
 	}
 	
 	/**
@@ -145,23 +147,6 @@ public class Slime extends LivingCreatures {
 		this(0,0,sprites,school);	
 
 	}
-	
-	/**
-	 * start a move the the opposite direction as the current movement of this slime
-	 * 
-	 * @post  The new direction is opposite to the current direction, the boolean moving is set to true,
-	 * 		  the horizontal velocity is reset to zero and the horizontal acceleration is set to 0.7.
-	 * 		 | new.getDirection() == old.getDirection().oppositeDirection()
-	 * 		 | new.getMoving() == true
-	 * 		 | new.getHorizontalVelocity == 0
-	 * 		 | new.getHorizontalAcceleration == 0.7
-	 */
-	public void startMoveOpposite(){
-		this.setDirection(getDirection().oppositeDirection());
-		this.setMoving(true);
-		this.setHorizontalVelocity(0);
-		this.setHorizontalAcceleration(0.7);
-		}
 	
 	/**
 	 * terminates this slime if it's still alive.
@@ -292,7 +277,7 @@ public class Slime extends LivingCreatures {
 	public void advanceTimeAlive(double timeInterval) {
 		
 		if (Util.fuzzyGreaterThanOrEqualTo(getRunTime(), getRandomTime())) {
-			startMoveOpposite();
+			startMove(this.getDirection().oppositeDirection());
 			setRandomTime();
 			setRunTime(0);
 		}

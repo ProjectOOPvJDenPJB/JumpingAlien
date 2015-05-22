@@ -35,6 +35,8 @@ public class Plant extends LivingCreatures{
 	 */
 	public Plant(int positionX, int positionY, double horizontalVelocity, Sprite[] sprites, World world, int hitpoints){
 		super(positionX,positionY, horizontalVelocity,0,0.5,world,sprites, hitpoints);
+		this.setInitialHorizontalVelocity(0.5);
+		this.setInitialHorizontalAcceleration(0);
 	}
 
 	/**

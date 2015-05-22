@@ -41,6 +41,7 @@ public class Mazub extends LivingCreatures {
 			World world, int hitpoints) {
 		super(positionLeftX,positionBottomY,0,0,0,0,initialHorizontalVelocity,
 				maximumHorizontalVelocity,world,sprites,hitpoints);
+		this.setInitialHorizontalAcceleration(0.9);
 	}
 	
 	/**
@@ -206,50 +207,6 @@ public class Mazub extends LivingCreatures {
 	private void setPreviousSprite(int sprite){
 		this.previousSprite = sprite;
 	}	
-	
-	/**
-	 * Initializes horizontal movement to the direction Mazub is facing.
-	 * 
-	 * @param	horizontalAcceleration
-	 * 			The new horizontal acceleration for this Mazub.
-	 * @pre		The given horizontal acceleration must be a valid horizontal acceleration.
-	 * 			| isValidHorizontalAcceleration(horizontalAcceleration)
-	 * @post	The new horizontal velocity of this Mazub is equal to the initial horizontal
-	 * 			velocity of this Mazub, the horizontal acceleration is set to
-	 * 			the standard horizontal acceleration of a Mazub, the boolean moving is set to true and the runTime
-	 * 			is set to zero.
-	 * 			| new.getHorizontalVelocity() == this.getInitialHorizontalVelocity()
-	 * 			|	&& new.getHorizontalAcceleration() == horizontalAcceleration
-	 * 			|	&& new.getMoving() == true && new.getRunTime() == 0
-	 */
-	public void startMove(double horizontalAcceleration){
-		assert isValidHorizontalAcceleration(horizontalAcceleration);
-		this.setHorizontalAcceleration(horizontalAcceleration);
-		this.setHorizontalVelocity(this.getInitialHorizontalVelocity());
-		this.setMoving(true);
-		this.setRunTime(0);
-	}
-		
-	/**
-	 * Ends horizontal movement in the direction Mazub is facing.
-	 * 
-	 * @param	horizontalAcceleration
-	 * 			The new horizontal acceleration for this Mazub.
-	 * @pre		The given horizontal acceleration must be a valid horizontal acceleration.
-	 * 			| isValidHorizontalAcceleration(horizontalAcceleration)
-	 * @post	The new horizontal velocity of this Mazub is equal to zero,
-	 * 			the new horizontal acceleration is set to the given horizontalAcceleration,
-	 * 			the boolean moving is set to false and the runTime is set to zero.
-	 * 			| new.getHorizontalVelocity() == 0 && new.getMoving == false
-	 * 			|	&& new.getRunTime == 0
-	 */
-	public void endMove(double horizontalAcceleration) {
-		assert isValidHorizontalAcceleration(horizontalAcceleration);
-		this.setHorizontalVelocity(0);
-		this.setHorizontalAcceleration(horizontalAcceleration);
-		this.setMoving(false);
-		this.setRunTime(0);
-	}
 		
 	/**
 	 * Initializes ducking.

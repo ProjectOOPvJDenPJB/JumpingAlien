@@ -50,7 +50,7 @@ public class Program {
 	}
 	
 	public void excecute() {
-		getMainStatement().execute();
+		getMainStatement().execute(this);
 		//TODO!!! Dit moet nog met excecution time etc
 	}
 

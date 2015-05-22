@@ -42,7 +42,8 @@ public class Shark extends LivingCreatures {
 	public Shark(int positionX, int positionY, double horizontalVelocity, double verticalVelocity,
 			World world,Sprite[] sprites, int hitpoints){
 		super(positionX,positionY, horizontalVelocity, verticalVelocity,1.5,0,0,4,world,sprites, hitpoints);
-
+		this.setInitialHorizontalVelocity(0);
+		this.setInitialHorizontalAcceleration(1.5);
 	}
 
 	/**
@@ -127,21 +128,6 @@ public class Shark extends LivingCreatures {
 	@Override
 	public int getMinHP() {
 		return 0;
-	}
-	
-	/**
-	 * start a move to the given direction as the current movement of this shark
-	 * 
-	 * @post  The new direction is opposite to the current direction, 
-	 * 		  the horizontal velocity is reset to zero and the horizontal acceleration is set to 1.5.
-	 * 		 | new.getDirection() == direction
-	 * 		 | new.getHorizontalVelocity == 0
-	 * 		 | new.getHorizontalAcceleration == 1.5
-	 */
-	public void startMove(Direction direction){
-			this.setDirection(direction);
-			this.setHorizontalVelocity(0);
-			this.setHorizontalAcceleration(1.5);
 	}
 	
 	/**
