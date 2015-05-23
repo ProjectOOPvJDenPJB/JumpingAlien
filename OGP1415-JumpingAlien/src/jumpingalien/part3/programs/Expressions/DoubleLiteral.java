@@ -1,6 +1,10 @@
 package jumpingalien.part3.programs.Expressions;
 
 public class DoubleLiteral extends BasicExpression<Double>{
+	
+	public DoubleLiteral(double value){
+		setValue(value);
+	}
 
 	public void setValue(double value){
 		this.value = value;

@@ -4,7 +4,7 @@ import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandExceptio
 
 public class Conjunction extends BinaryExpression<Boolean, Boolean> {
 
-	protected Conjunction(Expression<Boolean> left, Expression<Boolean> right)
+	public Conjunction(Expression<Boolean> left, Expression<Boolean> right)
 			throws IllegalOperandException<?,?> {
 		super(left, right);
 	}

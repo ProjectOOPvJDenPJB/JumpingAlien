@@ -3,6 +3,8 @@ package jumpingalien.part3.programs;
 import java.util.List;
 import java.util.Map;
 
+import jumpingalien.part3.programs.Expressions.Expression;
+
 /**
  * A interface for a factory to create a program, which consists of expressions,
  * statements and types.
@@ -54,40 +56,40 @@ public interface IProgramFactory<E, S, T, P> {
 			SourceLocation sourceLocation);
 
 	/** An expression that evaluates to the given numeric value */
-	E createDoubleConstant(double value, SourceLocation sourceLocation);
+	Expression<Double> createDoubleConstant(double value, SourceLocation sourceLocation);
 
 	/** An expression that evaluates to true */
-	E createTrue(SourceLocation sourceLocation);
+	Expression<Boolean> createTrue(SourceLocation sourceLocation);
 
 	/** An expression that evaluates to false */
-	E createFalse(SourceLocation sourceLocation);
+	Expression<Boolean> createFalse(SourceLocation sourceLocation);
 
 	/** An expression that evaluates to null */
-	E createNull(SourceLocation sourceLocation);
+	Expression<Object> createNull(SourceLocation sourceLocation);
 
 	/**
 	 * An expression that evaluates to the game object that is executing the
 	 * program
 	 */
-	E createSelf(SourceLocation sourceLocation);
+	Expression<Object> createSelf(SourceLocation sourceLocation);
 
 	/** An expression that evaluates to the given direction */
-	E createDirectionConstant(Direction value, SourceLocation sourceLocation);
+	Expression<jumpingalien.part3.programs.IProgramFactory.Direction> createDirectionConstant(Direction value, SourceLocation sourceLocation);
 
 	/** An expression that evaluates to the sum of the given expressions */
-	E createAddition(E left, E right, SourceLocation sourceLocation);
+	Expression<Double> createAddition(Expression<Double> left, Expression<Double> right, SourceLocation sourceLocation);
 
 	/** An expression that evaluates to the difference of the given expressions */
-	E createSubtraction(E left, E right, SourceLocation sourceLocation);
+	Expression<Double> createSubtraction(Expression<Double> left, Expression<Double> right, SourceLocation sourceLocation);
 
 	/** An expression that evaluates to the product of the given expressions */
-	E createMultiplication(E left, E right, SourceLocation sourceLocation);
+	Expression<Double> createMultiplication(Expression<Double> left, Expression<Double> right, SourceLocation sourceLocation);
 
 	/** An expression that evaluates to the division of the given expressions */
-	E createDivision(E left, E right, SourceLocation sourceLocation);
+	Expression<Double> createDivision(Expression<Double> left, Expression<Double> right, SourceLocation sourceLocation);
 
 	/** An expression that evaluates to the square root of the given expressions */
-	E createSqrt(E expr, SourceLocation sourceLocation);
+	Expression<Double> createSqrt(Expression<Double> expr, SourceLocation sourceLocation);
 
 	/**
 	 * An expression that evaluates to a random value between 0 (inclusive) and
@@ -96,10 +98,10 @@ public interface IProgramFactory<E, S, T, P> {
 	E createRandom(E maxValue, SourceLocation sourceLocation);
 
 	/** An expression that evaluates to the conjunction of the given expressions */
-	E createAnd(E left, E right, SourceLocation sourceLocation);
+	Expression<Boolean> createAnd(Expression<Boolean> left, Expression<Boolean> right, SourceLocation sourceLocation);
 
 	/** An expression that evaluates to the disjunction of the given expressions */
-	E createOr(E left, E right, SourceLocation sourceLocation);
+	Expression<Boolean> createOr(Expression<Boolean> left, Expression<Boolean> right, SourceLocation sourceLocation);
 
 	/** An expression that evaluates to the negation of the given expression */
 	E createNot(E expr, SourceLocation sourceLocation);

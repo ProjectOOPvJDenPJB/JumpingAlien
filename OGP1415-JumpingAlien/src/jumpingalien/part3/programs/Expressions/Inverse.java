@@ -4,7 +4,7 @@ import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandExceptio
 
 public class Inverse extends UnaryExpression<Double, Double> {
 
-	protected Inverse(Expression<Double> operand)
+	public Inverse(Expression<Double> operand)
 			throws IllegalOperandException<?, ?> {
 		super(operand);
 	}

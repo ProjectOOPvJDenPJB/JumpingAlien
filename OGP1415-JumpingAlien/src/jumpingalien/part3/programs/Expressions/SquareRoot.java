@@ -4,7 +4,7 @@ import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandExceptio
 
 public class SquareRoot extends UnaryExpression<Double,Double> {
 
-	protected SquareRoot(Expression<Double> operand)
+	public SquareRoot(Expression<Double> operand)
 			throws IllegalOperandException<?, ?> {
 		super(operand);
 	}

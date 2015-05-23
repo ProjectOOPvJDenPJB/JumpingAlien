@@ -715,6 +715,59 @@ public class World {
 		return ((alien != null) && (alien instanceof Mazub) && (getMazub() == null));
 	}
 	
+	
+	
+	
+	
+	/**
+	 * Return the Mazub currently in this world.
+	 */
+	public Mazub getBuzam() {
+		return this.buzam;
+	}
+	
+	/**
+	 * Variable registering the Mazub in this world.
+	 * 	The default value is null.
+	 */
+	private Buzam buzam = null;
+		
+	/**
+	 * Sets the given Mazub in this world.
+	 * @param 	alien
+	 * @pre		...
+	 * 			| canHaveAsMazub(alien)
+	 * @post	...
+	 * 			| new.getMazub() == alien
+	 * @post	...
+	 * 			| alien.getWorld() == this
+	 */
+	public void setBuzam(Buzam alien) {
+		assert canHaveAsBuzam(alien);
+		this.buzam = alien;
+		buzam.setWorld(this);
+	}
+	
+	/**
+	 * Checks whether this world can have the given Mazub as its Mazub.
+	 * @param 	alien
+	 * @return 	...
+	 *			| if (this.isTerminated())
+	 *			|	return alien == null;
+	 *			| else
+	 * 			|	 return ((alien != null) && 
+	 * 			|		((alien.canHaveAsWorld(this) &&
+	 * 			|		(getMazub() == null)
+	 */
+	public boolean canHaveAsBuzam(Buzam alien) {
+		if (isTerminated())
+			return alien == null;
+		return ((alien != null) && (alien instanceof Buzam));
+	}
+	
+	
+	
+	
 	/**
 	 * Check whether this world is terminated.
 	 */

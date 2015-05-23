@@ -6,6 +6,8 @@ package jumpingalien.part3.programs;
 import java.util.List;
 import java.util.Map;
 
+import jumpingalien.part3.programs.Expressions.*; //Because we need it all
+
 /**
  * @author Joren
  *
@@ -20,71 +22,71 @@ public class ProgramFactory<E, S, T, P> implements IProgramFactory<E, S, T, P> {
 	}
 
 	@Override
-	public E createDoubleConstant(double value, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+	public Expression<Double> createDoubleConstant(double value, SourceLocation sourceLocation) {
+		// TODO iets met sourceLocation
+		return new DoubleLiteral(value);
 	}
 
 	@Override
-	public E createTrue(SourceLocation sourceLocation) {
+	public Expression<Boolean> createTrue(SourceLocation sourceLocation) {
 		// TODO Auto-generated method stub
-		return null;
+		return new BooleanTrue();
 	}
 
 	@Override
-	public E createFalse(SourceLocation sourceLocation) {
+	public Expression<Boolean> createFalse(SourceLocation sourceLocation) {
 		// TODO Auto-generated method stub
-		return null;
+		return new BooleanFalse();
 	}
 
 	@Override
-	public E createNull(SourceLocation sourceLocation) {
+	public Expression<Object> createNull(SourceLocation sourceLocation) {
 		// TODO Auto-generated method stub
-		return null;
+		return new ObjectNull();
 	}
 
 	@Override
-	public E createSelf(SourceLocation sourceLocation) {
+	public Expression<Object> createSelf(SourceLocation sourceLocation) {
 		// TODO Auto-generated method stub
-		return null;
+		return new ObjectSelf();
 	}
 
 	@Override
-	public E createDirectionConstant(
+	public Expression<jumpingalien.part3.programs.IProgramFactory.Direction> createDirectionConstant(
 			jumpingalien.part3.programs.IProgramFactory.Direction value,
 			SourceLocation sourceLocation) {
 		// TODO Auto-generated method stub
-		return null;
+		return new DirectionExpression(value); 
 	}
 
 	@Override
-	public E createAddition(E left, E right, SourceLocation sourceLocation) {
+	public Expression<Double> createAddition(Expression<Double> left, Expression<Double> right, SourceLocation sourceLocation) {
 		// TODO Auto-generated method stub
-		return null;
+		return new Addition(left,right);
 	}
 
 	@Override
-	public E createSubtraction(E left, E right, SourceLocation sourceLocation) {
+	public Expression<Double> createSubtraction(Expression<Double> left, Expression<Double> right, SourceLocation sourceLocation) {
 		// TODO Auto-generated method stub
-		return null;
+		return new Addition(left,new NegateDoubleLiteral(right));
 	}
 
 	@Override
-	public E createMultiplication(E left, E right, SourceLocation sourceLocation) {
+	public Expression<Double> createMultiplication(Expression<Double> left, Expression<Double> right, SourceLocation sourceLocation) {
 		// TODO Auto-generated method stub
-		return null;
+		return new Multiplication(left,right);
 	}
 
 	@Override
-	public E createDivision(E left, E right, SourceLocation sourceLocation) {
+	public Expression<Double> createDivision(Expression<Double> left, Expression<Double> right, SourceLocation sourceLocation) {
 		// TODO Auto-generated method stub
-		return null;
+		return new Multiplication(left,new Inverse(right));
 	}
 
 	@Override
-	public E createSqrt(E expr, SourceLocation sourceLocation) {
+	public Expression<Double> createSqrt(Expression<Double> expr, SourceLocation sourceLocation) {
 		// TODO Auto-generated method stub
-		return null;
+		return new SquareRoot(expr);
 	}
 
 	@Override
@@ -94,13 +96,13 @@ public class ProgramFactory<E, S, T, P> implements IProgramFactory<E, S, T, P> {
 	}
 
 	@Override
-	public E createAnd(E left, E right, SourceLocation sourceLocation) {
+	public Expression<Boolean> createAnd(Expression<Boolean> left, Expression<Boolean> right, SourceLocation sourceLocation) {
 		// TODO Auto-generated method stub
-		return null;
+		return new Conjunction(left,right);
 	}
 
 	@Override
-	public E createOr(E left, E right, SourceLocation sourceLocation) {
+	public Expression<Boolean> createOr(Expression<Boolean> left, Expression<Boolean> right, SourceLocation sourceLocation) {
 		// TODO Auto-generated method stub
 		return null;
 	}

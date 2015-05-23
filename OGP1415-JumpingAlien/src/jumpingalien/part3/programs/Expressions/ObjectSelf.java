@@ -1,7 +1,8 @@
 package jumpingalien.part3.programs.Expressions;
 
-public abstract class ObjectSelf extends BasicExpression<Object>{
+public class ObjectSelf extends BasicExpression<Object>{
 	
+		@Override
 		public Object evaluate(){
 			return this;
 		}
