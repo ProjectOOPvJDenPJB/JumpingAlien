@@ -23,8 +23,7 @@ public abstract class Expression<T> {
 	public abstract boolean hasAsSubExpression(Expression<?> expression);
 	
 	/**
-	 *Evaluate this program
+	 *Evaluate this Expression.
 	 */
 	public abstract T evaluate();
-	//TODO Program
 }
