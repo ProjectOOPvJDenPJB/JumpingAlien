@@ -2,9 +2,9 @@ package jumpingalien.part3.programs.Expressions;
 
 import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandException;
 
-public  class Equals<T, P> extends Comparison<Boolean, Double> {
+public class Equals extends Comparison<Boolean, Double> {
 	
-	protected Equals(Expression<Double> left, Expression<Double> right)
+	public Equals(Expression<Double> left, Expression<Double> right)
 			throws IllegalOperandException<?, ?> {
 		super(left, right);
 	}

@@ -4,7 +4,7 @@ import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandExceptio
 
 public class NegateBoolean extends UnaryExpression<Boolean,Boolean> {
 
-	protected NegateBoolean(Expression<Boolean> operand)
+	public NegateBoolean(Expression<Boolean> operand)
 			throws IllegalOperandException<?, ?> {
 		super(operand);
 	}

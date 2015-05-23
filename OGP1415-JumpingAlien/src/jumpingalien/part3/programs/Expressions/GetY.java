@@ -5,7 +5,7 @@ import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandExceptio
 
 public class GetY extends UnaryExpression<Double,GameObject> {
 
-	protected GetY(Expression<GameObject> operand)
+	public GetY(Expression<GameObject> operand)
 			throws IllegalOperandException<?, ?> {
 		super(operand);
 	}

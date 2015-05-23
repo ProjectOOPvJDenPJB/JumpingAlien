@@ -3,6 +3,8 @@ package jumpingalien.part3.programs;
 import java.util.List;
 import java.util.Map;
 
+import jumpingalien.model.GameObject;
+import jumpingalien.model.LivingCreatures;
 import jumpingalien.part3.programs.Expressions.Expression;
 
 /**
@@ -104,73 +106,73 @@ public interface IProgramFactory<E, S, T, P> {
 	Expression<Boolean> createOr(Expression<Boolean> left, Expression<Boolean> right, SourceLocation sourceLocation);
 
 	/** An expression that evaluates to the negation of the given expression */
-	E createNot(E expr, SourceLocation sourceLocation);
+	Expression<Boolean> createNot(Expression<Boolean> expr, SourceLocation sourceLocation);
 
 	/**
 	 * An expression that evaluates to true if the value of the left expression
 	 * is less than the value of the right expression
 	 */
-	E createLessThan(E left, E right, SourceLocation sourceLocation);
+	Expression<Boolean> createLessThan(Expression<Double> left, Expression<Double> right, SourceLocation sourceLocation);
 
 	/**
 	 * An expression that evaluates to true if the value of the left expression
 	 * is less than or equal to the value of the right expression
 	 */
-	E createLessThanOrEqualTo(E left, E right, SourceLocation sourceLocation);
+	Expression<Boolean> createLessThanOrEqualTo(Expression<Double> left, Expression<Double> right, SourceLocation sourceLocation);
 
 	/**
 	 * An expression that evaluates to true if the value of the left expression
 	 * is greater than the value of the right expression
 	 */
-	E createGreaterThan(E left, E right, SourceLocation sourceLocation);
+	Expression<Boolean> createGreaterThan(Expression<Double> left, Expression<Double> right, SourceLocation sourceLocation);
 
 	/**
 	 * An expression that evaluates to true if the value of the left expression
 	 * is greater than or equal to the value of the right expression
 	 */
-	E createGreaterThanOrEqualTo(E left, E right, SourceLocation sourceLocation);
+	Expression<Boolean> createGreaterThanOrEqualTo(Expression<Double> left, Expression<Double> right, SourceLocation sourceLocation);
 
 	/**
 	 * An expression that evaluates to true if the value of the left expression
 	 * equals the value of the right expression
 	 */
-	E createEquals(E left, E right, SourceLocation sourceLocation);
+	Expression<Boolean> createEquals(Expression<Double> left, Expression<Double> right, SourceLocation sourceLocation);
 
 	/**
 	 * An expression that evaluates to true if the value of the left expression
 	 * does not equal the value of the right expression
 	 */
-	E createNotEquals(E left, E right, SourceLocation sourceLocation);
+	Expression<Boolean> createNotEquals(Expression<Double> left, Expression<Double> right, SourceLocation sourceLocation);
 
 	/**
 	 * An expression that evaluates to the x-value of the object obtained from
 	 * the given expression
 	 */
-	E createGetX(E expr, SourceLocation sourceLocation);
+	Expression<Double> createGetX(Expression<GameObject> expr, SourceLocation sourceLocation);
 
 	/**
 	 * An expression that evaluates to the y-value of the object obtained from
 	 * the given expression
 	 */
-	E createGetY(E expr, SourceLocation sourceLocation);
+	Expression<Double> createGetY(Expression<GameObject> expr, SourceLocation sourceLocation);
 
 	/**
 	 * An expression that evaluates to the width of the object obtained from the
 	 * given expression
 	 */
-	E createGetWidth(E expr, SourceLocation sourceLocation);
+	Expression<Integer> createGetWidth(Expression<GameObject> expr, SourceLocation sourceLocation);
 
 	/**
 	 * An expression that evaluates to the height of the object obtained from
 	 * the given expression
 	 */
-	E createGetHeight(E expr, SourceLocation sourceLocation);
+	Expression<Integer> createGetHeight(Expression<GameObject> expr, SourceLocation sourceLocation);
 
 	/**
 	 * An expression that evaluates to the number of hitpoints of the object
 	 * obtained from the given expression
 	 */
-	E createGetHitPoints(E expr, SourceLocation sourceLocation);
+	Expression<Integer> createGetHitPoints(Expression<LivingCreatures> expr, SourceLocation sourceLocation);
 
 	/**
 	 * An expression that evaluates to the tile in which the pixel with

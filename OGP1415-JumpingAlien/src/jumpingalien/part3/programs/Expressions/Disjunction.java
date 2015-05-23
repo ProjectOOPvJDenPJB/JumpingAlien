@@ -4,7 +4,7 @@ import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandExceptio
 
 public  class Disjunction extends BinaryExpression<Boolean, Boolean> {
 
-	protected Disjunction(Expression<Boolean> left, Expression<Boolean> right)
+	public Disjunction(Expression<Boolean> left, Expression<Boolean> right)
 			throws IllegalOperandException<?,?> {
 		super(left, right);
 	}

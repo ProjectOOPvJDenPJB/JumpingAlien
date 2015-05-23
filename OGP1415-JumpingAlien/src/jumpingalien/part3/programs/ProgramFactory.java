@@ -6,6 +6,8 @@ package jumpingalien.part3.programs;
 import java.util.List;
 import java.util.Map;
 
+import jumpingalien.model.GameObject;
+import jumpingalien.model.LivingCreatures;
 import jumpingalien.part3.programs.Expressions.*; //Because we need it all
 
 /**
@@ -108,77 +110,78 @@ public class ProgramFactory<E, S, T, P> implements IProgramFactory<E, S, T, P> {
 	}
 
 	@Override
-	public E createNot(E expr, SourceLocation sourceLocation) {
+	public Expression<Boolean> createNot(Expression<Boolean> expr, SourceLocation sourceLocation) {
 		// TODO Auto-generated method stub
-		return null;
+		return new NegateBoolean(expr);
 	}
 
 	@Override
-	public E createLessThan(E left, E right, SourceLocation sourceLocation) {
+	public Expression<Boolean> createLessThan(Expression<Double> left, Expression<Double> right, SourceLocation sourceLocation) {
 		// TODO Auto-generated method stub
-		return null;
+		return new LessThan(left,right);
 	}
 
 	@Override
-	public E createLessThanOrEqualTo(E left, E right,
+	public Expression<Boolean> createLessThanOrEqualTo(Expression<Double> left, Expression<Double> right,
 			SourceLocation sourceLocation) {
 		// TODO Auto-generated method stub
-		return null;
+		return new Disjunction(new LessThan(left,right),new Equals(left,right));
 	}
 
 	@Override
-	public E createGreaterThan(E left, E right, SourceLocation sourceLocation) {
+	public Expression<Boolean> createGreaterThan(Expression<Double> left, Expression<Double> right, SourceLocation sourceLocation) {
 		// TODO Auto-generated method stub
-		return null;
+		return new LessThan(right,left);
 	}
 
 	@Override
-	public E createGreaterThanOrEqualTo(E left, E right,
+	public Expression<Boolean> createGreaterThanOrEqualTo(Expression<Double> left, Expression<Double> right,
 			SourceLocation sourceLocation) {
 		// TODO Auto-generated method stub
-		return null;
+		return new Disjunction(new LessThan(right,left),new Equals(left,right));
 	}
 
 	@Override
-	public E createEquals(E left, E right, SourceLocation sourceLocation) {
+	public Expression<Boolean> createEquals(Expression<Double> left, Expression<Double> right, SourceLocation sourceLocation) {
 		// TODO Auto-generated method stub
-		return null;
+		//Ik ga hier gewoon verder op onze huidige implementatie van 
+		return new Equals(left,right);
 	}
 
 	@Override
-	public E createNotEquals(E left, E right, SourceLocation sourceLocation) {
+	public Expression<Boolean> createNotEquals(Expression<Double> left, Expression<Double> right, SourceLocation sourceLocation) {
 		// TODO Auto-generated method stub
-		return null;
+		return new NegateBoolean(new Equals(left,right));
 	}
 
 	@Override
-	public E createGetX(E expr, SourceLocation sourceLocation) {
+	public Expression<Double> createGetX(Expression<GameObject> expr, SourceLocation sourceLocation) {
 		// TODO Auto-generated method stub
-		return null;
+		return new GetX(expr);
 	}
 
 	@Override
-	public E createGetY(E expr, SourceLocation sourceLocation) {
+	public Expression<Double> createGetY(Expression<GameObject> expr, SourceLocation sourceLocation) {
 		// TODO Auto-generated method stub
-		return null;
+		return new GetY(expr);
 	}
 
 	@Override
-	public E createGetWidth(E expr, SourceLocation sourceLocation) {
+	public Expression<Integer> createGetWidth(Expression<GameObject> expr, SourceLocation sourceLocation) {
 		// TODO Auto-generated method stub
-		return null;
+		return new GetWidth(expr);
 	}
 
 	@Override
-	public E createGetHeight(E expr, SourceLocation sourceLocation) {
+	public Expression<Integer> createGetHeight(Expression<GameObject> expr, SourceLocation sourceLocation) {
 		// TODO Auto-generated method stub
-		return null;
+		return new GetHeight(expr);
 	}
 
 	@Override
-	public E createGetHitPoints(E expr, SourceLocation sourceLocation) {
+	public Expression<Integer> createGetHitPoints(Expression<LivingCreatures> expr, SourceLocation sourceLocation) {
 		// TODO Auto-generated method stub
-		return null;
+		return new GetHP(expr);
 	}
 
 	@Override
