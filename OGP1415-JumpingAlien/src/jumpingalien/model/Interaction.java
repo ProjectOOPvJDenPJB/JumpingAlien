@@ -249,18 +249,41 @@ public class Interaction{
 		try{
 			Mazub mazub = world.getMazub();
 				if (collidesWithCreature(creature,mazub)){
-					if (creature instanceof Slime){
-						interactWithSlime((LivingCreatures)mazub, (Slime)creature);
-					}
-					else if (creature instanceof Shark){
-						interactWithShark((LivingCreatures)mazub, (Shark)creature);
-					}else{
-							interactWithPlant((LivingCreatures)mazub, (Plant)creature);
-						}
+						interactWithMazub(creature, mazub);
 					}
 		}catch(NullPointerException exc){
 		}
+		try {
+			Buzam buzam = world.getBuzam();
+			if (collidesWithCreature(creature, buzam)) {
+				interactWithMazub(creature, buzam);
+			}
+		} catch(NullPointerException exc) {
+		}
 	}
+	
+	private static void interactWithMazub(LivingCreatures creature, Mazub mazub) {
+		if (creature instanceof Slime){
+			interactWithSlime((LivingCreatures)mazub, (Slime)creature);
+		}
+		else if (creature instanceof Shark){
+			interactWithShark((LivingCreatures)mazub, (Shark)creature);
+		}
+		else if (creature instanceof Buzam) {
+			if (Util.fuzzyGreaterThanOrEqualTo(creature.getHitTimer(),0.6)){
+				creature.addHP(-50);
+				creature.setHitTimer(0);
+			}
+			if (Util.fuzzyGreaterThanOrEqualTo(mazub.getHitTimer(),0.6)){
+				mazub.addHP(-50);
+				mazub.setHitTimer(0);
+			}
+		}
+		else{
+				interactWithPlant((LivingCreatures)mazub, (Plant)creature);
+		}
+	}
+		
 	
 	/**
 	 * Checks whether or not the given creature has its movement blocked through collision 

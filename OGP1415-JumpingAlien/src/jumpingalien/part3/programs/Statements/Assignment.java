@@ -29,7 +29,7 @@ public class Assignment extends BasicStatement {
 
 	@Override
 	public void execute(jumpingalien.part3.programs.Program program) {
-		
+		program.setVariableValue(getVarName(), getExpression().evaluate());
 	}
 	
 	@Override

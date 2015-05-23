@@ -65,7 +65,7 @@ public class Facade implements IFacade {
 
 	public void startMoveLeft(Mazub alien) {
 		alien.setDirection(Direction.LEFT);
-		alien.startMove(0.9);
+		alien.startMove(Direction.LEFT);
 	}
 
 	public void endMoveLeft(Mazub alien) {
@@ -76,7 +76,7 @@ public class Facade implements IFacade {
 
 	public void startMoveRight(Mazub alien) {
 		alien.setDirection(Direction.RIGHT);
-		alien.startMove(0.9);
+		alien.startMove(Direction.RIGHT);
 	}
 
 	public void endMoveRight(Mazub alien) {

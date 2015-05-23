@@ -722,7 +722,7 @@ public class World {
 	/**
 	 * Return the Mazub currently in this world.
 	 */
-	public Mazub getBuzam() {
+	public Buzam getBuzam() {
 		return this.buzam;
 	}
 	
