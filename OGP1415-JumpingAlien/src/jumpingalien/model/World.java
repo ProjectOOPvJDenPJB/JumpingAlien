@@ -252,13 +252,14 @@ public class World {
 	 */
 	private int[][] tileTypes;
 	
-	
-	private final Set<Tile> tiles = new HashSet<Tile>();
-
 	public Collection<Tile> getTiles(){
 		Collection<Tile> elements = tiles;
 		return new ArrayList<Tile>(elements);
 	}
+	
+	private final Set<Tile> tiles = new HashSet<Tile>();
+	
+	
 	/**
 	 * Return the positions of tiles occupied by the given region.
 	 * @param 	leftX
@@ -461,6 +462,17 @@ public class World {
 	 */
 	public int getAmountOfObjects() {
 		return getSlimes().size() + getPlants().size() + getSharks().size() + 1;
+	}
+	
+	public Collection<GameObject> getAllObjects() {
+		Collection<GameObject> objects = new HashSet<GameObject>();
+		objects.addAll(getPlants());
+		objects.addAll(getSharks());
+		objects.addAll(getSlimes());
+		objects.addAll(getTiles());
+		objects.add(getMazub());
+		objects.add(getBuzam());
+		return objects;
 	}
 	
 	/**

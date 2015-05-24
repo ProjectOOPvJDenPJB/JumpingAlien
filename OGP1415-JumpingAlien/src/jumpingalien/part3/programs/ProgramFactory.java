@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import jumpingalien.model.GameObject;
-import jumpingalien.model.LivingCreatures;
 import jumpingalien.model.Program;
 import jumpingalien.model.Tile;
 import jumpingalien.part3.programs.Expressions.*; //Because we need it all
@@ -19,7 +18,6 @@ import jumpingalien.part3.programs.Statements.*;
  */
 @SuppressWarnings("rawtypes")
 public class ProgramFactory implements IProgramFactory<Expression<?>, Statement, Type, Program> {
-	//dit geeft een fout om dat nog niet alle methodes juist zijn geïmplementeerd, 
 
 	@Override
 	public Expression<?> createReadVariable(String variableName, Type variableType,

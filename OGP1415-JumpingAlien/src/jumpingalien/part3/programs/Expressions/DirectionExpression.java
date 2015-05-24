@@ -3,7 +3,7 @@ package jumpingalien.part3.programs.Expressions;
 import jumpingalien.model.Program;
 import jumpingalien.part3.programs.IProgramFactory.Direction;
 
-public class DirectionExpression extends BasicExpression<jumpingalien.part3.programs.IProgramFactory.Direction> {
+public class DirectionExpression extends BasicExpression<Direction> {
 	
 	/**
 	 * Initializes this direction expression.
@@ -11,7 +11,7 @@ public class DirectionExpression extends BasicExpression<jumpingalien.part3.prog
 	 * @param 	direction
 	 * 			The direction to set this direction expression to.
 	 */
-	public DirectionExpression(jumpingalien.part3.programs.IProgramFactory.Direction direction){
+	public DirectionExpression(Direction direction){
 		this.setDirection(direction);
 	}
 	
@@ -21,19 +21,19 @@ public class DirectionExpression extends BasicExpression<jumpingalien.part3.prog
 	 * @param	direction
 	 * 			The direction to be set.
 	 */
-	public void setDirection(jumpingalien.part3.programs.IProgramFactory.Direction direction){
+	public void setDirection(Direction direction){
 		this.direction = direction;
 	}
 	
 	/**
 	 * Variable registering the direction of this direction expression.
 	 */
-	private jumpingalien.part3.programs.IProgramFactory.Direction direction;
+	private Direction direction;
 	
 	/**
 	 * Returns the direction of this direction expression.
 	 */
-	public jumpingalien.part3.programs.IProgramFactory.Direction getDirection(){
+	public Direction getDirection(){
 		return this.direction;
 	}
 	
@@ -44,7 +44,7 @@ public class DirectionExpression extends BasicExpression<jumpingalien.part3.prog
 	 * 			|	this.getDirection()
 	 */
 	@Override
-	public jumpingalien.part3.programs.IProgramFactory.Direction evaluate(Program program) {
+	public Direction evaluate(Program program) {
 		return this.direction;
 	}
 	
@@ -63,8 +63,8 @@ public class DirectionExpression extends BasicExpression<jumpingalien.part3.prog
 	 * 			| if (this.getDirection() == LEFT)
 	 * 			|	then result == RIGHT
 	 */
-	public jumpingalien.part3.programs.IProgramFactory.Direction getOpposite() {
-		jumpingalien.part3.programs.IProgramFactory.Direction direction = this.getDirection();
+	public Direction getOpposite() {
+		Direction direction = this.getDirection();
 		if (direction == Direction.UP){
 			return Direction.DOWN;
 		}else if (direction == Direction.DOWN){
@@ -73,6 +73,19 @@ public class DirectionExpression extends BasicExpression<jumpingalien.part3.prog
 			return Direction.LEFT;
 		}else{
 			return Direction.RIGHT;
+		}
+	}
+	
+	public jumpingalien.model.Direction evaluateForCreature() {
+		Direction direction = this.getDirection();
+		if (direction == Direction.UP){
+			return jumpingalien.model.Direction.UP;
+		}else if (direction == Direction.DOWN){
+			return jumpingalien.model.Direction.DOWN;
+		}else if (direction == Direction.RIGHT){
+			return jumpingalien.model.Direction.RIGHT;
+		}else{
+			return jumpingalien.model.Direction.LEFT;
 		}
 	}
 }

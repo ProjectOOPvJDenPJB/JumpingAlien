@@ -5,7 +5,7 @@ import jumpingalien.part3.programs.Type;
 
 public class Variable extends BasicExpression<Object>{
 	
-	public Variable(String name, Object value,Type type){
+	public Variable(String name,Type type, Object value){
 		this.setName(name);
 		this.setValue(value);
 		this.setType(type);		

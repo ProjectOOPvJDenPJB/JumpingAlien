@@ -41,6 +41,35 @@ public enum Direction {
 		public final int getInt() {
 			return 1;
 		}
+	}, 
+	
+	UP {
+		
+		/**
+		 * Return the integer associated with the UP direction.
+		 * 
+		 * @return	The positive integer 2
+		 * 			| result == 2
+		 */
+		@Override
+		public int getInt() {
+			return 2;
+		}
+	}, 
+	
+	DOWN {
+		
+		/**
+		 * Return the integer associated with the UP direction.
+		 * 
+		 * @return	The positive integer -2
+		 * 			| result == -2
+		 */
+		@Override
+		public int getInt() {
+			// TODO Auto-generated method stub
+			return -2;
+		}
 	};
 	
 	/**
