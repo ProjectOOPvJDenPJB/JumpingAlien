@@ -1,14 +1,13 @@
 package jumpingalien.part3.programs.Expressions.Exceptions;
 
 import be.kuleuven.cs.som.annotate.*;
-import jumpingalien.part3.programs.Expressions.BinaryExpression;
 import jumpingalien.part3.programs.Expressions.ComposedExpression;
 import jumpingalien.part3.programs.Expressions.Expression;
  /**
  * A class for signaling illegal operands.
  * 
  */
-public class IllegalOperandException<T,P> extends RuntimeException {
+public class IllegalOperandException extends RuntimeException {
 	
 	/**
 	 * Initialize this new illegal operand exception with given target expression
@@ -25,8 +24,8 @@ public class IllegalOperandException<T,P> extends RuntimeException {
 	 *          is the same as the given operand.
 	 *          | new.getOperand() == operands
 	 */
-	public IllegalOperandException(Expression<T> targetExpression,
-			Expression<T> operand) {
+	public IllegalOperandException(Expression<?> targetExpression,
+			Expression<?> operand) {
 		this.targetExpression = targetExpression;
 		this.operand = operand;
 	}
@@ -46,14 +45,14 @@ public class IllegalOperandException<T,P> extends RuntimeException {
 	 *          is the same as the given operand.
 	 *          | new.getOperand() == operands
 	 */
-	public IllegalOperandException(ComposedExpression<T,P> targetExpression,
-			Expression<P> operand) {
+	public IllegalOperandException(ComposedExpression<?,?> targetExpression,
+			Expression<?> operand) {
 		this.targetExpression = targetExpression;
 		this.operand = operand;
 	}
 	
-	public IllegalOperandException(Expression<T> targetExpression,
-			Expression<T> operand, String message) {
+	public IllegalOperandException(Expression<?> targetExpression,
+			Expression<?> operand, String message) {
 		this(targetExpression, operand);
 		System.out.println(message);
 	}
