@@ -3,10 +3,6 @@ package jumpingalien.part3.programs;
 import java.util.List;
 import java.util.Map;
 
-import jumpingalien.model.GameObject;
-import jumpingalien.model.LivingCreatures;
-import jumpingalien.part3.programs.Expressions.Expression;
-
 /**
  * A interface for a factory to create a program, which consists of expressions,
  * statements and types.
@@ -58,40 +54,40 @@ public interface IProgramFactory<E, S, T, P> {
 			SourceLocation sourceLocation);
 
 	/** An expression that evaluates to the given numeric value */
-	Expression<Double> createDoubleConstant(double value, SourceLocation sourceLocation);
+	E createDoubleConstant(double value, SourceLocation sourceLocation);
 
 	/** An expression that evaluates to true */
-	Expression<Boolean> createTrue(SourceLocation sourceLocation);
+	E createTrue(SourceLocation sourceLocation);
 
 	/** An expression that evaluates to false */
-	Expression<Boolean> createFalse(SourceLocation sourceLocation);
+	E createFalse(SourceLocation sourceLocation);
 
 	/** An expression that evaluates to null */
-	Expression<Object> createNull(SourceLocation sourceLocation);
+	E createNull(SourceLocation sourceLocation);
 
 	/**
 	 * An expression that evaluates to the game object that is executing the
 	 * program
 	 */
-	Expression<Object> createSelf(SourceLocation sourceLocation);
+	E createSelf(SourceLocation sourceLocation);
 
 	/** An expression that evaluates to the given direction */
-	Expression<jumpingalien.part3.programs.IProgramFactory.Direction> createDirectionConstant(Direction value, SourceLocation sourceLocation);
+	E createDirectionConstant(Direction value, SourceLocation sourceLocation);
 
 	/** An expression that evaluates to the sum of the given expressions */
-	Expression<Double> createAddition(Expression<Double> left, Expression<Double> right, SourceLocation sourceLocation);
+	E createAddition(E left, E right, SourceLocation sourceLocation);
 
 	/** An expression that evaluates to the difference of the given expressions */
-	Expression<Double> createSubtraction(Expression<Double> left, Expression<Double> right, SourceLocation sourceLocation);
+	E createSubtraction(E left, E right, SourceLocation sourceLocation);
 
 	/** An expression that evaluates to the product of the given expressions */
-	Expression<Double> createMultiplication(Expression<Double> left, Expression<Double> right, SourceLocation sourceLocation);
+	E createMultiplication(E left, E right, SourceLocation sourceLocation);
 
 	/** An expression that evaluates to the division of the given expressions */
-	Expression<Double> createDivision(Expression<Double> left, Expression<Double> right, SourceLocation sourceLocation);
+	E createDivision(E left, E right, SourceLocation sourceLocation);
 
 	/** An expression that evaluates to the square root of the given expressions */
-	Expression<Double> createSqrt(Expression<Double> expr, SourceLocation sourceLocation);
+	E createSqrt(E expr, SourceLocation sourceLocation);
 
 	/**
 	 * An expression that evaluates to a random value between 0 (inclusive) and
@@ -100,79 +96,79 @@ public interface IProgramFactory<E, S, T, P> {
 	E createRandom(E maxValue, SourceLocation sourceLocation);
 
 	/** An expression that evaluates to the conjunction of the given expressions */
-	Expression<Boolean> createAnd(Expression<Boolean> left, Expression<Boolean> right, SourceLocation sourceLocation);
+	E createAnd(E left, E right, SourceLocation sourceLocation);
 
 	/** An expression that evaluates to the disjunction of the given expressions */
-	Expression<Boolean> createOr(Expression<Boolean> left, Expression<Boolean> right, SourceLocation sourceLocation);
+	E createOr(E left, E right, SourceLocation sourceLocation);
 
 	/** An expression that evaluates to the negation of the given expression */
-	Expression<Boolean> createNot(Expression<Boolean> expr, SourceLocation sourceLocation);
+	E createNot(E expr, SourceLocation sourceLocation);
 
 	/**
 	 * An expression that evaluates to true if the value of the left expression
 	 * is less than the value of the right expression
 	 */
-	Expression<Boolean> createLessThan(Expression<Double> left, Expression<Double> right, SourceLocation sourceLocation);
+	E createLessThan(E left, E right, SourceLocation sourceLocation);
 
 	/**
 	 * An expression that evaluates to true if the value of the left expression
 	 * is less than or equal to the value of the right expression
 	 */
-	Expression<Boolean> createLessThanOrEqualTo(Expression<Double> left, Expression<Double> right, SourceLocation sourceLocation);
+	E createLessThanOrEqualTo(E left, E right, SourceLocation sourceLocation);
 
 	/**
 	 * An expression that evaluates to true if the value of the left expression
 	 * is greater than the value of the right expression
 	 */
-	Expression<Boolean> createGreaterThan(Expression<Double> left, Expression<Double> right, SourceLocation sourceLocation);
+	E createGreaterThan(E left, E right, SourceLocation sourceLocation);
 
 	/**
 	 * An expression that evaluates to true if the value of the left expression
 	 * is greater than or equal to the value of the right expression
 	 */
-	Expression<Boolean> createGreaterThanOrEqualTo(Expression<Double> left, Expression<Double> right, SourceLocation sourceLocation);
+	E createGreaterThanOrEqualTo(E left, E right, SourceLocation sourceLocation);
 
 	/**
 	 * An expression that evaluates to true if the value of the left expression
 	 * equals the value of the right expression
 	 */
-	Expression<Boolean> createEquals(Expression<Double> left, Expression<Double> right, SourceLocation sourceLocation);
+	E createEquals(E left, E right, SourceLocation sourceLocation);
 
 	/**
 	 * An expression that evaluates to true if the value of the left expression
 	 * does not equal the value of the right expression
 	 */
-	Expression<Boolean> createNotEquals(Expression<Double> left, Expression<Double> right, SourceLocation sourceLocation);
+	E createNotEquals(E left, E right, SourceLocation sourceLocation);
 
 	/**
 	 * An expression that evaluates to the x-value of the object obtained from
 	 * the given expression
 	 */
-	Expression<Double> createGetX(Expression<GameObject> expr, SourceLocation sourceLocation);
+	E createGetX(E expr, SourceLocation sourceLocation);
 
 	/**
 	 * An expression that evaluates to the y-value of the object obtained from
 	 * the given expression
 	 */
-	Expression<Double> createGetY(Expression<GameObject> expr, SourceLocation sourceLocation);
+	E createGetY(E expr, SourceLocation sourceLocation);
 
 	/**
 	 * An expression that evaluates to the width of the object obtained from the
 	 * given expression
 	 */
-	Expression<Integer> createGetWidth(Expression<GameObject> expr, SourceLocation sourceLocation);
+	E createGetWidth(E expr, SourceLocation sourceLocation);
 
 	/**
 	 * An expression that evaluates to the height of the object obtained from
 	 * the given expression
 	 */
-	Expression<Integer> createGetHeight(Expression<GameObject> expr, SourceLocation sourceLocation);
+	E createGetHeight(E expr, SourceLocation sourceLocation);
 
 	/**
 	 * An expression that evaluates to the number of hitpoints of the object
 	 * obtained from the given expression
 	 */
-	Expression<Integer> createGetHitPoints(Expression<LivingCreatures> expr, SourceLocation sourceLocation);
+	E createGetHitPoints(E expr, SourceLocation sourceLocation);
 
 	/**
 	 * An expression that evaluates to the tile in which the pixel with

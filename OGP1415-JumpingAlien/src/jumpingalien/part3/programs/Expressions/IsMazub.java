@@ -6,7 +6,7 @@ import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandExceptio
 
 public class IsMazub extends UnaryExpression<Boolean, GameObject> {
 
-	protected IsMazub(Expression<GameObject> operand)
+	public IsMazub(Expression<GameObject> operand)
 			throws IllegalOperandException<?, ?> {
 		super(operand);
 	}

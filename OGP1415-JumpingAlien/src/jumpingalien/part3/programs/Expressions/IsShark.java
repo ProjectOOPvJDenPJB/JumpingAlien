@@ -6,7 +6,7 @@ import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandExceptio
 
 public class IsShark extends UnaryExpression<Boolean, GameObject> {
 
-	protected IsShark(Expression<GameObject> operand)
+	public IsShark(Expression<GameObject> operand)
 			throws IllegalOperandException<?, ?> {
 		super(operand);
 	}

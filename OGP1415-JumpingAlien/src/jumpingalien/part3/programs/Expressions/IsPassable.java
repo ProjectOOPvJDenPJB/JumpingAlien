@@ -5,7 +5,7 @@ import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandExceptio
 
 public class IsPassable extends UnaryExpression<Boolean, Tile> {
 
-	protected IsPassable(Expression<Tile> operand)
+	public IsPassable(Expression<Tile> operand)
 			throws IllegalOperandException<?, ?> {
 		super(operand);
 	}

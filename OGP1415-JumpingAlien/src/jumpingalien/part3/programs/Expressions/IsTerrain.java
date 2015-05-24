@@ -6,7 +6,7 @@ import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandExceptio
 
 public class IsTerrain extends UnaryExpression<Boolean, Tile> {
 
-	protected IsTerrain(Expression<Tile> operand)
+	public IsTerrain(Expression<Tile> operand)
 			throws IllegalOperandException<?, ?> {
 		super(operand);
 	}

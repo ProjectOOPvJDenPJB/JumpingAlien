@@ -6,7 +6,7 @@ import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandExceptio
 
 public class IsPlant extends UnaryExpression<Boolean, GameObject> {
 
-	protected IsPlant(Expression<GameObject> operand)
+	public IsPlant(Expression<GameObject> operand)
 			throws IllegalOperandException<?, ?> {
 		super(operand);
 	}

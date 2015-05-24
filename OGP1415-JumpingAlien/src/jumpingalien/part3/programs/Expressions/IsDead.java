@@ -5,7 +5,7 @@ import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandExceptio
 
 public class IsDead extends UnaryExpression<Boolean, LivingCreatures> {
 
-	protected IsDead(Expression<LivingCreatures> operand)
+	public IsDead(Expression<LivingCreatures> operand)
 			throws IllegalOperandException<?, ?> {
 		super(operand);
 	}

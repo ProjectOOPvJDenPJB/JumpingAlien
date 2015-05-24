@@ -5,7 +5,7 @@ import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandExceptio
 
 public class IsDucking extends UnaryExpression<Boolean, Mazub> {
 
-	protected IsDucking(Expression<Mazub> operand)
+	public IsDucking(Expression<Mazub> operand)
 			throws IllegalOperandException<?, ?> {
 		super(operand);
 	}
