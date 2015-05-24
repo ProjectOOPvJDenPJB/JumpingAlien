@@ -27,11 +27,11 @@ public abstract class BinaryExpression<T,P> extends ComposedExpression<T,P> {
 	 */
 	@Model
 	protected BinaryExpression(Expression<P> left, Expression<P> right)
-			throws IllegalOperandException<?,?> {
+			throws IllegalOperandException {
 		if (!canHaveAsOperand(left))
-			throw new IllegalOperandException<T,P>(this, left);
+			throw new IllegalOperandException(this, left);
 		if (!canHaveAsOperand(right))
-			throw new IllegalOperandException<T,P>(this, right);
+			throw new IllegalOperandException(this, right);
 		setOperandAt(1, left);
 		setOperandAt(2, right);
 	}

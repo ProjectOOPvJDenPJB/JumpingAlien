@@ -7,7 +7,7 @@ import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandExceptio
 public class GetWidth extends UnaryExpression<Integer, GameObject> {
 
 	public GetWidth(Expression<GameObject> operand)
-			throws IllegalOperandException<?, ?> {
+			throws IllegalOperandException {
 		super(operand);
 	}
 

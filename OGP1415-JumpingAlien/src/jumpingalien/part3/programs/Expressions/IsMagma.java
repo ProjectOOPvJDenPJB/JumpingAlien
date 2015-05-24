@@ -8,7 +8,7 @@ import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandExceptio
 public class IsMagma extends UnaryExpression<Boolean, Tile> {
 
 	public IsMagma(Expression<Tile> operand)
-			throws IllegalOperandException<?, ?> {
+			throws IllegalOperandException {
 		super(operand);
 	}
 

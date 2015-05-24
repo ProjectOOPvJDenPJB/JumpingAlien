@@ -17,7 +17,7 @@ public class Conjunction extends BinaryExpression<Boolean, Boolean> {
 	 * 			| super(left,right)
 	 */
 	public Conjunction(Expression<Boolean> left, Expression<Boolean> right)
-			throws IllegalOperandException<?,?> {
+			throws IllegalOperandException {
 		super(left, right);
 	}
 	

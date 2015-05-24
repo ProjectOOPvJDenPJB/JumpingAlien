@@ -17,7 +17,7 @@ public  class Disjunction extends BinaryExpression<Boolean, Boolean> {
 	 * 			| super(left,right)
 	 */
 	public Disjunction(Expression<Boolean> left, Expression<Boolean> right)
-			throws IllegalOperandException<?,?> {
+			throws IllegalOperandException {
 		super(left, right);
 	}
 

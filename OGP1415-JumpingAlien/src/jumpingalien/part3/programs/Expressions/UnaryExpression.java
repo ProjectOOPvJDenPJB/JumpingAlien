@@ -21,9 +21,9 @@ public abstract class UnaryExpression<T,P> extends ComposedExpression<T,P> {
 	 */
 	@Model
 	protected UnaryExpression(Expression<P> operand)
-			throws IllegalOperandException<?,?> {
+			throws IllegalOperandException {
 		if (!canHaveAsOperand(operand))
-			throw new IllegalOperandException<T,P>(this, operand);
+			throw new IllegalOperandException(this, operand);
 		setOperandAt(1, operand);
 	}
 

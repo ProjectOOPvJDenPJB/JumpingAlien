@@ -17,7 +17,7 @@ public class Equals extends Comparison<Boolean, Double> {
 	 * 			| super(left,right)
 	 */
 	public Equals(Expression<Double> left, Expression<Double> right)
-			throws IllegalOperandException<?, ?> {
+			throws IllegalOperandException {
 		super(left, right);
 	}
 	

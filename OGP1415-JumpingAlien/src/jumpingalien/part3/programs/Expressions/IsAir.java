@@ -8,7 +8,7 @@ import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandExceptio
 public class IsAir extends UnaryExpression<Boolean, Tile> {
 
 	public IsAir(Expression<Tile> operand)
-			throws IllegalOperandException<?, ?> {
+			throws IllegalOperandException {
 		super(operand);
 	}
 

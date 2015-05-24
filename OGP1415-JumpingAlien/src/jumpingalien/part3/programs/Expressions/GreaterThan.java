@@ -6,7 +6,7 @@ import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandExceptio
 public class GreaterThan extends Comparison<Boolean, Double> {
 
 	protected GreaterThan(Expression<Double> left, Expression<Double> right)
-			throws IllegalOperandException<?, ?> {
+			throws IllegalOperandException {
 		super(left, right);
 	}
 

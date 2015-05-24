@@ -17,7 +17,7 @@ public class Addition extends BinaryExpression<Double,Double>{
 	 * 			| super(left,right)
 	 */
 	public Addition(Expression<Double> left, Expression<Double> right)
-			throws IllegalOperandException<?,?> {
+			throws IllegalOperandException {
 		super(left, right);
 	}
 	

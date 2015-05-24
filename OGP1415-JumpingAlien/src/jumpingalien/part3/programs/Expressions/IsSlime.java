@@ -8,7 +8,7 @@ import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandExceptio
 public class IsSlime extends UnaryExpression<Boolean, GameObject> {
 
 	public IsSlime(Expression<GameObject> operand)
-			throws IllegalOperandException<?, ?> {
+			throws IllegalOperandException {
 		super(operand);
 	}
 

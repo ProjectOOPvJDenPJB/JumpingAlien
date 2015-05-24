@@ -6,7 +6,7 @@ import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandExceptio
 public class Multiplication extends BinaryExpression<Double, Double>{
 
 	public Multiplication(Expression<Double> left, Expression<Double> right)
-			throws IllegalOperandException<?,?> {
+			throws IllegalOperandException {
 		super(left, right);
 	}
 

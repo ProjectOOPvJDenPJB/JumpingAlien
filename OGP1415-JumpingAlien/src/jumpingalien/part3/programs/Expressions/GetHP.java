@@ -7,7 +7,7 @@ import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandExceptio
 public class GetHP extends UnaryExpression<Integer, LivingCreatures> {
 
 	public GetHP(Expression<LivingCreatures> operand)
-			throws IllegalOperandException<?, ?> {
+			throws IllegalOperandException {
 		super(operand);
 	}
 

@@ -16,7 +16,7 @@ public abstract class Comparison<T,P> extends BinaryExpression<T,P>{
 	 * 			| super(left,right)
 	 */
 	protected Comparison(Expression<P> left, Expression<P> right)
-			throws IllegalOperandException<?,?> {
+			throws IllegalOperandException {
 		super(left, right);
 	}
 

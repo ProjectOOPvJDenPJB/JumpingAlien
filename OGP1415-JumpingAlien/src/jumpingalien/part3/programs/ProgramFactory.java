@@ -17,6 +17,7 @@ import jumpingalien.part3.programs.Statements.*;
  * @author Joren
  *
  */
+@SuppressWarnings("rawtypes")
 public class ProgramFactory implements IProgramFactory<Expression<?>, Statement, Type, Program> {
 	//dit geeft een fout om dat nog niet alle methodes juist zijn geïmplementeerd, 
 
@@ -248,31 +249,31 @@ public class ProgramFactory implements IProgramFactory<Expression<?>, Statement,
 	}
 
 	@Override
-	public S createWhile(E condition, S body, SourceLocation sourceLocation) {
+	public Statement createWhile(Expression condition, Statement body, SourceLocation sourceLocation) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public S createForEach(
+	public Statement createForEach(
 			String variableName,
 			jumpingalien.part3.programs.IProgramFactory.Kind variableKind,
-			E where,
-			E sort,
+			Expression where,
+			Expression sort,
 			jumpingalien.part3.programs.IProgramFactory.SortDirection sortDirection,
-			S body, SourceLocation sourceLocation) {
+			Statement body, SourceLocation sourceLocation) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public S createBreak(SourceLocation sourceLocation) {
+	public Statement createBreak(SourceLocation sourceLocation) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public S createIf(E condition, S ifBody, S elseBody,
+	public Statement createIf(Expression condition, Statement ifBody, Statement elseBody,
 			SourceLocation sourceLocation) {
 		// TODO Auto-generated method stub
 		return null;
@@ -304,7 +305,7 @@ public class ProgramFactory implements IProgramFactory<Expression<?>, Statement,
 	}
 
 	@Override
-	public S createStartDuck(SourceLocation sourceLocation) {
+	public Statement createStartDuck(SourceLocation sourceLocation) {
 		// TODO Auto-generated method stub
 		return null;
 	}

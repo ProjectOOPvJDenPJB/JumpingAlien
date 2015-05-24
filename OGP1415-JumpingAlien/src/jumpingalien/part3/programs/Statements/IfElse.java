@@ -42,7 +42,7 @@ public class IfElse extends ComposedStatement{
 	
 	@Override
 	public void execute(Program program) {
-		if (getIfExpression().evaluate()){
+		if (getIfExpression().evaluate(program)){
 			getIfStatement().execute(program);
 		}else{
 			getElseStatement().execute(program);
