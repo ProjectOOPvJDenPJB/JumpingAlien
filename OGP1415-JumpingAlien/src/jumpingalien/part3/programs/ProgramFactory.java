@@ -85,7 +85,7 @@ public class ProgramFactory implements IProgramFactory<Expression<?>, Statement,
 
 	@Override
 	public Expression<?> createRandom(Expression maxValue, SourceLocation sourceLocation) {
-		return null;
+		return new createRandom(maxValue);
 	}
 
 	@Override
@@ -95,7 +95,7 @@ public class ProgramFactory implements IProgramFactory<Expression<?>, Statement,
 
 	@Override
 	public Expression<Boolean> createOr(Expression left, Expression right, SourceLocation sourceLocation) {
-		return null;
+		return new Disjunction(left,right);
 	}
 
 	@Override
@@ -127,7 +127,6 @@ public class ProgramFactory implements IProgramFactory<Expression<?>, Statement,
 
 	@Override
 	public Expression<Boolean> createEquals(Expression left, Expression right, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
 		//Ik ga hier gewoon verder op onze huidige implementatie van 
 		return new Equals(left,right);
 	}
@@ -199,7 +198,6 @@ public class ProgramFactory implements IProgramFactory<Expression<?>, Statement,
 
 	@Override
 	public Expression<Boolean> createIsTerrain(Expression expr, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
 		return new IsTerrain(expr);
 	}
 
@@ -215,7 +213,6 @@ public class ProgramFactory implements IProgramFactory<Expression<?>, Statement,
 
 	@Override
 	public Expression<Boolean> createIsMagma(Expression expr, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
 		return new IsMagma(expr);
 	}
 
@@ -226,7 +223,6 @@ public class ProgramFactory implements IProgramFactory<Expression<?>, Statement,
 
 	@Override
 	public Expression<Boolean> createIsMoving(Expression expr, Expression direction, SourceLocation sourceLocation) {
-		//TODO klopt niet in de class is moving, direction is nodig als argument
 		return new IsMoving(expr);
 	}
 
@@ -248,12 +244,12 @@ public class ProgramFactory implements IProgramFactory<Expression<?>, Statement,
 
 	@Override
 	public Statement createWhile(Expression condition, Statement body, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new While(condition,body);
 	}
 
 	@Override
 	public Statement createForEach(
+			//TODO
 			String variableName,
 			jumpingalien.part3.programs.IProgramFactory.Kind variableKind,
 			Expression where,
@@ -266,15 +262,13 @@ public class ProgramFactory implements IProgramFactory<Expression<?>, Statement,
 
 	@Override
 	public Statement createBreak(SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Break();
 	}
 
 	@Override
 	public Statement createIf(Expression condition, Statement ifBody, Statement elseBody,
 			SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new IfElse(condition,ifBody,elseBody);
 	}
 
 	@Override
@@ -304,8 +298,7 @@ public class ProgramFactory implements IProgramFactory<Expression<?>, Statement,
 
 	@Override
 	public Statement createStartDuck(SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new StartDuck();
 	}
 
 	@Override
@@ -321,6 +314,7 @@ public class ProgramFactory implements IProgramFactory<Expression<?>, Statement,
 
 	@Override
 	public Statement createSkip(SourceLocation sourceLocation) {
+		//TODO
 		return new Skip();
 	}
 

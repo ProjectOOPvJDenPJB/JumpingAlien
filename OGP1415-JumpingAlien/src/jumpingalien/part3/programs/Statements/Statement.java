@@ -21,10 +21,24 @@ public abstract class Statement {
 	 */
 	public abstract boolean hasSubStatement(Statement statement);
 	
+	private final double executionTime = 0.001;
+	
+	public double getExecutionTime(){
+		return this.executionTime;
+	}
+	
+	protected boolean getBreakLoop(){
+		return breakLoop;
+	}
+	
+	private boolean breakLoop = false;
+	
+	protected void setBreakLoop(Boolean flag){
+		this.breakLoop = flag;
+	}
+	
 	/**
 	 *Evaluate this program
 	 */
 	public abstract void execute(jumpingalien.model.Program program);
-	//TODO Program
-
 }

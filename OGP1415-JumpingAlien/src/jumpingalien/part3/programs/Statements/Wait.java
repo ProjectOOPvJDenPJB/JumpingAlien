@@ -25,10 +25,10 @@ public class Wait extends BasicStatement {
 	
 	public void decreaseDuration(Expression<Double> duration, Program program) {
 		if (! isValidDuration(getDuration(program) - duration.evaluate(program)))
-			duration = new DoubleLiteral(0);
+			this.setDuration(new DoubleLiteral(0),program);
 		else
 			duration = new DoubleLiteral(getDuration(program) - duration.evaluate(program));
-		this.duration = duration;
+		this.setDuration(duration,program);
 	}
 	
 	public static boolean isValidDuration(double duration) {
@@ -39,7 +39,9 @@ public class Wait extends BasicStatement {
 
 	@Override
 	public void execute(Program program) {
-		//Does nothing
+		if (this.getDuration(program)<0){
+			this.decreaseDuration(new DoubleLiteral(this.getExecutionTime()), program);
+		}
 	}
 
 }

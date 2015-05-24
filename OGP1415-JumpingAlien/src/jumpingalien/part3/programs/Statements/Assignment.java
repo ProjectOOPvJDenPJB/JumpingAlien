@@ -31,7 +31,7 @@ public class Assignment extends BasicStatement {
 	private final Expression<?> expression;
 
 	@Override
-	public void execute(jumpingalien.model.Program program) {
+	public void execute(Program program) {
 		program.setVariableValue(getVarName(), getExpression().evaluate(program));
 	}
 	

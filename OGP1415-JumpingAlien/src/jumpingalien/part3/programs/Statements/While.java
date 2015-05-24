@@ -4,27 +4,36 @@ import jumpingalien.part3.programs.Expressions.Expression;
 
 
 public class While extends ComposedStatement{
+	
+	public While(Expression<Boolean> condition,Statement actions){
+		this.loopCondition = condition;
+		this.actions = actions;
+	}
+	
+	
+	public Expression<Boolean> getLoopCondition(){
+		return this.loopCondition;
+	}
+	
+	private final Expression<Boolean> loopCondition;
+	
+	public Statement getActions(){
+		return this.actions;
+	}
+	
+	private final Statement actions;
+	
+	
 
 	@Override
 	public boolean hasSubStatement(Statement statement) {
 		return true;
 	}
 	
-	public Expression<Boolean> getExpression(){
-		return this.expression;
-	}
-
-	private Expression<Boolean> expression;
-	
-	public void setExpression(Expression<Boolean> expression){
-		this.expression = expression;
-	}
-	
-	
 	@Override
 	public void execute(Program program) {
-		if (this.getExpression().evaluate(program)){
-			execute(program);
+		while (this.getLoopCondition().evaluate(program) && !getBreakLoop()){
+			getActions().execute(program);
 		}	
 	}
 }

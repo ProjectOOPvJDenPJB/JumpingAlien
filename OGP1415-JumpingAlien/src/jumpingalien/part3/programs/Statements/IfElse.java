@@ -4,6 +4,12 @@ import jumpingalien.model.Program;
 import jumpingalien.part3.programs.Expressions.Expression;
 
 public class IfElse extends ComposedStatement{
+	
+	public IfElse(Expression<Boolean> condition,Statement actionsIfTrue, Statement actionsIfFalse){
+		this.ifExpression = condition;
+		this.ifStatement = actionsIfTrue;
+		this.elseStatement = actionsIfFalse;
+	}
 
 	@Override
 	public boolean hasSubStatement(Statement statement) {
@@ -14,31 +20,19 @@ public class IfElse extends ComposedStatement{
 		return this.ifExpression;
 	}
 	
-	private Expression<Boolean> ifExpression;
-	
-	public void setIfExpression(Expression<Boolean> expression){
-		this.ifExpression = expression;
-	}
+	private final Expression<Boolean> ifExpression;
 	
 	public Statement getElseStatement(){
 		return this.elseStatement;
 	}
 	
-	private Statement elseStatement;
-	
-	public void setElseStatement(Statement statement){
-		this.elseStatement = statement;
-	}
+	private final Statement elseStatement;
 	
 	public Statement getIfStatement(){
 		return this.ifStatement;
 	}
 
-	private Statement ifStatement;
-	
-	public void setIfStatement(Statement statement){
-		this.ifStatement = statement;
-	}
+	private final Statement ifStatement;
 	
 	@Override
 	public void execute(Program program) {
