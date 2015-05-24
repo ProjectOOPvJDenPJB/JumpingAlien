@@ -1,5 +1,6 @@
 package jumpingalien.part3.programs.Expressions;
 
+import jumpingalien.model.Program;
 import jumpingalien.model.Tile;
 import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandException;
 
@@ -11,8 +12,8 @@ public class IsPassable extends UnaryExpression<Boolean, Tile> {
 	}
 
 	@Override
-	public Boolean evaluate() {
-		return getOperand().evaluate().getType().getPassable();
+	public Boolean evaluate(Program program) {
+		return getOperand().evaluate(program).getType().getPassable();
 	}
 
 }

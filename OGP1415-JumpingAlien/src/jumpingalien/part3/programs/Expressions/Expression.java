@@ -25,5 +25,5 @@ public abstract class Expression<T> {
 	/**
 	 *Evaluate this Expression.
 	 */
-	public abstract T evaluate();
+	public abstract T evaluate(jumpingalien.model.Program program);
 }

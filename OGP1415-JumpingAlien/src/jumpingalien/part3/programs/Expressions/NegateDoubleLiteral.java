@@ -1,5 +1,6 @@
 package jumpingalien.part3.programs.Expressions;
 
+import jumpingalien.model.Program;
 import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandException;
 
 public class NegateDoubleLiteral extends UnaryExpression<Double,Double> {
@@ -11,8 +12,8 @@ public class NegateDoubleLiteral extends UnaryExpression<Double,Double> {
 	}
 
 	@Override
-	public Double evaluate() {
-		return -getOperand().evaluate();
+	public Double evaluate(Program program) {
+		return -getOperand().evaluate(program);
 	}
 
 }

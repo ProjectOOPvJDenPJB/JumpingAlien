@@ -1,5 +1,6 @@
 package jumpingalien.part3.programs.Expressions;
 
+import jumpingalien.model.Program;
 import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandException;
 
 public class NegateBoolean extends UnaryExpression<Boolean,Boolean> {
@@ -10,8 +11,8 @@ public class NegateBoolean extends UnaryExpression<Boolean,Boolean> {
 	}
 
 	@Override
-	public Boolean evaluate() {
-		return !getOperand().evaluate();
+	public Boolean evaluate(Program program) {
+		return !getOperand().evaluate(program);
 	}
 	
 	

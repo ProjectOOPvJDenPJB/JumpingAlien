@@ -1,5 +1,6 @@
 package jumpingalien.part3.programs.Expressions;
 
+import jumpingalien.model.Program;
 import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandException;
 
 public class Addition extends BinaryExpression<Double,Double>{
@@ -30,8 +31,8 @@ public class Addition extends BinaryExpression<Double,Double>{
 	 * 			|	getRightOperand().evaluate()
 	 */
 	@Override
-	public Double evaluate() {
-		return getLeftOperand().evaluate() + getRightOperand().evaluate();
+	public Double evaluate(Program program) {
+		return getLeftOperand().evaluate(program) + getRightOperand().evaluate(program);
 	}
 
 }

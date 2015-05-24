@@ -1,6 +1,7 @@
 package jumpingalien.part3.programs.Expressions;
 
 import jumpingalien.model.Mazub;
+import jumpingalien.model.Program;
 import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandException;
 
 public class IsDucking extends UnaryExpression<Boolean, Mazub> {
@@ -11,8 +12,8 @@ public class IsDucking extends UnaryExpression<Boolean, Mazub> {
 	}
 
 	@Override
-	public Boolean evaluate() {
-		return getOperand().evaluate().getDucking();
+	public Boolean evaluate(Program program) {
+		return getOperand().evaluate(program).getDucking();
 	}
 
 }

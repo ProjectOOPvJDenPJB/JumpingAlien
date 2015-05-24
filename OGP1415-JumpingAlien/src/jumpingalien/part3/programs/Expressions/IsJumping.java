@@ -2,6 +2,7 @@ package jumpingalien.part3.programs.Expressions;
 
 import jumpingalien.model.LivingCreatures;
 import jumpingalien.model.Mazub;
+import jumpingalien.model.Program;
 import jumpingalien.model.Shark;
 import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandException;
 
@@ -13,8 +14,8 @@ public class IsJumping extends UnaryExpression<Boolean, LivingCreatures> {
 	}
 
 	@Override
-	public Boolean evaluate() {
-		LivingCreatures evaluatedOperand = getOperand().evaluate();
+	public Boolean evaluate(Program program) {
+		LivingCreatures evaluatedOperand = getOperand().evaluate(program);
 		if (!((evaluatedOperand instanceof Mazub)|| (evaluatedOperand instanceof Shark)))
 			throw new IllegalArgumentException("Cannot retrieve jumping state of Livingcreatures who are not Mazub or Sharks.");
 		// We define jumping as upwards movement, thus the vertical velocity must be higher than 0.

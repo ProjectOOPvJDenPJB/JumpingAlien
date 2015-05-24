@@ -1,5 +1,6 @@
 package jumpingalien.part3.programs.Expressions;
 
+import jumpingalien.model.Program;
 import jumpingalien.part3.programs.Type;
 
 public class Variable extends BasicExpression<Object>{
@@ -36,10 +37,9 @@ public class Variable extends BasicExpression<Object>{
 	
 	public Object value;
 		
-	public Object evaluate(){
+	@Override
+	public Object evaluate(Program program) {
 		return this.value;
 	}
-	// Wa moet men precies terug krijgen hier bij evaluate?
-	// Een variabele is geen double, maar kan ook gwn een object zijn ;), in orde gemaakt
 
 }

@@ -1,5 +1,7 @@
 package jumpingalien.part3.programs.Expressions;
 
+import jumpingalien.model.Program;
+
 public class BooleanTrue extends BasicExpression<Boolean> {
 	
 	/**
@@ -8,7 +10,7 @@ public class BooleanTrue extends BasicExpression<Boolean> {
 	 * 			| result == true
 	 */
 	@Override
-	public Boolean evaluate() {
+	public Boolean evaluate(Program program) {
 		return true;
 	}
 

@@ -2,6 +2,7 @@ package jumpingalien.part3.programs.Expressions;
 
 import jumpingalien.model.GameObject;
 import jumpingalien.model.Plant;
+import jumpingalien.model.Program;
 import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandException;
 
 public class IsPlant extends UnaryExpression<Boolean, GameObject> {
@@ -12,8 +13,8 @@ public class IsPlant extends UnaryExpression<Boolean, GameObject> {
 	}
 
 	@Override
-	public Boolean evaluate() {
-		return (getOperand().evaluate() instanceof Plant);
+	public Boolean evaluate(Program program) {
+		return (getOperand().evaluate(program) instanceof Plant);
 	}
 
 }

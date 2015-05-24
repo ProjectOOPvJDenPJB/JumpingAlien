@@ -1,5 +1,6 @@
 package jumpingalien.part3.programs.Expressions;
 
+import jumpingalien.model.Program;
 import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandException;
 
 public class SquareRoot extends UnaryExpression<Double,Double> {
@@ -10,8 +11,8 @@ public class SquareRoot extends UnaryExpression<Double,Double> {
 	}
 
 	@Override
-	public Double evaluate() {
-		return Math.sqrt(getOperand().evaluate());
+	public Double evaluate(Program program) {
+		return Math.sqrt(getOperand().evaluate(program));
 	}
 
 }

@@ -1,6 +1,7 @@
 package jumpingalien.part3.programs.Expressions;
 
 import jumpingalien.model.GameObject;
+import jumpingalien.model.Program;
 import jumpingalien.model.Shark;
 import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandException;
 
@@ -12,8 +13,8 @@ public class IsShark extends UnaryExpression<Boolean, GameObject> {
 	}
 
 	@Override
-	public Boolean evaluate() {
-		return (getOperand().evaluate() instanceof Shark);
+	public Boolean evaluate(Program program) {
+		return (getOperand().evaluate(program) instanceof Shark);
 	}
 
 }

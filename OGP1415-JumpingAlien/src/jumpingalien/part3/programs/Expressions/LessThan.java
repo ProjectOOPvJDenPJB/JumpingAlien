@@ -1,5 +1,6 @@
 package jumpingalien.part3.programs.Expressions;
 
+import jumpingalien.model.Program;
 import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandException;
 
 public class LessThan extends Comparison<Boolean,Double> {
@@ -10,8 +11,8 @@ public class LessThan extends Comparison<Boolean,Double> {
 	}
 
 	@Override
-	public Boolean evaluate() {
-		return getLeftOperand().evaluate() < getRightOperand().evaluate();
+	public Boolean evaluate(Program program) {
+		return getLeftOperand().evaluate(program) < getRightOperand().evaluate(program);
 	}
 		
 }

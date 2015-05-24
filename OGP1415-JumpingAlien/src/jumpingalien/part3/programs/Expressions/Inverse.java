@@ -1,5 +1,6 @@
 package jumpingalien.part3.programs.Expressions;
 
+import jumpingalien.model.Program;
 import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandException;
 
 public class Inverse extends UnaryExpression<Double, Double> {
@@ -10,8 +11,8 @@ public class Inverse extends UnaryExpression<Double, Double> {
 	}
 
 	@Override
-	public Double evaluate() {
-		return 1/ (getOperand().evaluate());
+	public Double evaluate(Program program) {
+		return 1/ (getOperand().evaluate(program));
 	}
 
 }

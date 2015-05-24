@@ -1,6 +1,7 @@
 package jumpingalien.part3.programs.Expressions;
 
 import jumpingalien.model.GameObject;
+import jumpingalien.model.Program;
 import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandException;
 
 public class GetX extends UnaryExpression<Double, GameObject> {
@@ -11,8 +12,8 @@ public class GetX extends UnaryExpression<Double, GameObject> {
 	}
 
 	@Override
-	public Double evaluate() {
-		return getOperand().evaluate().getXPosition();
+	public Double evaluate(Program program) {
+		return getOperand().evaluate(program).getXPosition();
 	}
 
 }

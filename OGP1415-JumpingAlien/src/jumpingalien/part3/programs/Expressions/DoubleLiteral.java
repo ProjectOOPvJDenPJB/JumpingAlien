@@ -1,5 +1,7 @@
 package jumpingalien.part3.programs.Expressions;
 
+import jumpingalien.model.Program;
+
 public class DoubleLiteral extends BasicExpression<Double>{
 	
 	/**
@@ -46,7 +48,7 @@ public class DoubleLiteral extends BasicExpression<Double>{
 	 * 			| result == this.getValue()
 	 */
 	@Override
-	public Double evaluate() {
+	public Double evaluate(Program program) {
 		return getValue();
 	}
 	
@@ -66,5 +68,5 @@ public class DoubleLiteral extends BasicExpression<Double>{
 		return (other instanceof DoubleLiteral)
 				&& (getValue() == ((DoubleLiteral) other).getValue());
 	}
-	
+		
 }
