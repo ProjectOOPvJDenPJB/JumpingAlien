@@ -4,8 +4,8 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+import jumpingalien.model.Program;
 import jumpingalien.part3.programs.IProgramFactory.Kind;
-import jumpingalien.part3.programs.Program;
 import jumpingalien.part3.programs.Expressions.Expression;
 
 public class ForEach extends ComposedStatement{

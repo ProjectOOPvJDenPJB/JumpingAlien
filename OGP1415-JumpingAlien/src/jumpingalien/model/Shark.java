@@ -45,6 +45,28 @@ public class Shark extends LivingCreatures {
 		this.setInitialHorizontalVelocity(0);
 		this.setInitialHorizontalAcceleration(1.5);
 	}
+	
+	/**
+	 * Initialize this new Shark with given position en sprites
+	 * 
+	 * @param 	positionX
+	 * 			The position on the X-axis this new Shark.
+	 * @param 	positionY
+	 * 			The position on the Y-axis for this new Shark.
+	 * @param 	sprites
+	 * 			The sprites for this new Shark.
+	 * @param   program	
+	 * 			The given program for this new Shark
+	 * @effect	The new Shark is initialized with given position and sprite array.
+	 * 			The world is set to null, the hitpoints to 100 and
+	 * 			horizontal velocity and vertical velocity are set to 0.
+	 * 			| this(positionX,positionY,0,0,null,sprites,100)
+	 * @post	The program for this new Shark is equal to the given program
+	 */
+	public Shark(int positionX, int positionY, Sprite[] sprites,Program program){
+		this(positionX,positionY,0,0,null,sprites,100);	
+		this.setProgram(program);
+	}
 
 	/**
 	 * Initialize this new Shark with given position en sprites

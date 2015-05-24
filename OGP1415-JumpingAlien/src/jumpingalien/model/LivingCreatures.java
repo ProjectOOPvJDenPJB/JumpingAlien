@@ -1485,5 +1485,15 @@ public abstract class LivingCreatures extends GameObject {
 		}
 	}
 	
+	public Program getProgram(){
+		return this.program;
+	}
+	
+	private Program program;
+	
+	public void setProgram(Program program){
+		this.program = program;
+	}
+	
 }
 

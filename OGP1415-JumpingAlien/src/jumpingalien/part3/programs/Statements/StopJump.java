@@ -2,7 +2,7 @@
 package jumpingalien.part3.programs.Statements;
 
 import jumpingalien.model.LivingCreatures;
-import jumpingalien.part3.programs.Program;
+import jumpingalien.model.Program;
 
 public class StopJump extends BasicStatement{
 

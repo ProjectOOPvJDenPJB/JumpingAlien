@@ -1,4 +1,4 @@
-import jumpingalien.part3.programs.Program;
+import jumpingalien.model.Program;
 import jumpingalien.part3.programs.Expressions.Expression;
 import jumpingalien.part3.programs.Statements.ComposedStatement;
 import jumpingalien.part3.programs.Statements.Statement;

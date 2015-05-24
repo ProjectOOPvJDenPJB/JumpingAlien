@@ -124,6 +124,29 @@ public class Slime extends LivingCreatures {
 	 * 			The sprites for this new Slime.
 	 * @param	school
 	 * 			The school for this new Slime.
+	 * @param	program
+	 * 			The program for this new SLime.
+	 * @effect	The new Slime is initialized with given position, sprites and school.
+	 * 			The horizontal and vertical velocity are set to 0.
+	 * 			| this(positionX,positionY,0,0,sprites, school)
+	 * @post	The program for this new slime is equal to the given program.
+	 */
+	public Slime(int positionX, int positionY, Sprite[] sprites, School school,Program program){
+		this(positionX,positionY,0,0,sprites, school);	
+		this.setProgram(program);
+	}
+	
+	/**
+	 * Initialize this new Slime with given position, sprites and school.
+	 * 
+	 * @param 	positionX
+	 * 			The position on the X-axis this new Slime.
+	 * @param 	positionY
+	 * 			The position on the Y-axis for this new Slime.
+	 * @param 	sprites
+	 * 			The sprites for this new Slime.
+	 * @param	school
+	 * 			The school for this new Slime.
 	 * @effect	The new Slime is initialized with given position, sprites and school.
 	 * 			The horizontal and vertical velocity are set to 0.
 	 * 			| this(positionX,positionY,0,0,sprites, school)

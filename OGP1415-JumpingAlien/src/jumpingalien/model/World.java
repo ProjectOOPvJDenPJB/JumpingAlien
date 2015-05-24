@@ -712,7 +712,7 @@ public class World {
 	public boolean canHaveAsMazub(Mazub alien) {
 		if (isTerminated())
 			return alien == null;
-		return ((alien != null) && (alien instanceof Mazub) && (getMazub() == null));
+		return ((alien != null) && (alien instanceof Mazub));
 	}
 	
 	

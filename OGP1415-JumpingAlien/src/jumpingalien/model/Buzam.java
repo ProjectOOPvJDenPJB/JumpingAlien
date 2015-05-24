@@ -42,6 +42,29 @@ public class Buzam extends Mazub {
 	 * 			The position on the Y-axis of the bottom pixel for this new Buzam.
 	 * @param 	spriteArray
 	 * 			The array of sprites for this new Buzam.
+	 * @param 	program
+	 * 			The given program for this new buzam
+	 * @effect	The new Buzam is initialized with the given position as its position,
+	 * 			the given spriteArray as its spriteArray, maximumHorizontalVelocity = 3
+	 * 			and initialHorizontalVelocity = 1. The world is set to null and hitpoints
+	 * 			are set to 500.
+	 * 			| this(positionLeftX,positionBottomY,spriteArray, 3, 1, null, 500)
+	 * @post	The program for this new buzam is equal to the given program
+	 */
+	public Buzam(int positionLeftX, int positionBottomY, Sprite[] sprites,Program program) {
+		this(positionLeftX,positionBottomY,sprites,3,1,null,500);
+		this.setProgram(program);
+	}
+	
+	/**
+	 * Initialize this new Buzam with given position and sprites.
+	 * 
+	 * @param 	positionLeftX
+	 * 			The position on the X-axis of the leftmost pixel for this new Buzam.
+	 * @param 	positionBottomY
+	 * 			The position on the Y-axis of the bottom pixel for this new Buzam.
+	 * @param 	spriteArray
+	 * 			The array of sprites for this new Buzam.
 	 * @effect	The new Buzam is initialized with the given position as its position,
 	 * 			the given spriteArray as its spriteArray, maximumHorizontalVelocity = 3
 	 * 			and initialHorizontalVelocity = 1. The world is set to null and hitpoints

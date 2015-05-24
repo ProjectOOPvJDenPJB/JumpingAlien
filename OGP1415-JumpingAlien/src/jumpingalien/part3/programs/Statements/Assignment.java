@@ -28,7 +28,7 @@ public class Assignment extends BasicStatement {
 	private Expression<?> expression;
 
 	@Override
-	public void execute(jumpingalien.part3.programs.Program program) {
+	public void execute(jumpingalien.model.Program program) {
 		program.setVariableValue(getVarName(), getExpression().evaluate());
 	}
 	

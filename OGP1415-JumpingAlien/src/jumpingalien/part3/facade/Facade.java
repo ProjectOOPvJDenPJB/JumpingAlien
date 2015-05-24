@@ -3,6 +3,11 @@ package jumpingalien.part3.facade;
 import java.util.Collection;
 
 import jumpingalien.model.Buzam;
+import jumpingalien.model.Direction;
+import jumpingalien.model.IllegalSizeException;
+import jumpingalien.model.IllegalTimeIntervalException;
+import jumpingalien.model.IllegalXPositionException;
+import jumpingalien.model.IllegalYPositionException;
 import jumpingalien.model.Mazub;
 import jumpingalien.model.Plant;
 import jumpingalien.model.Program;
@@ -18,323 +23,304 @@ public class Facade implements IFacadePart3 {
 
 	@Override
 	public int getNbHitPoints(Mazub alien) {
-		// TODO Auto-generated method stub
-		return 0;
+		return alien.getHP();
 	}
 
 	@Override
 	public World createWorld(int tileSize, int nbTilesX, int nbTilesY,
 			int visibleWindowWidth, int visibleWindowHeight, int targetTileX,
 			int targetTileY) {
-		// TODO Auto-generated method stub
-		return null;
+		return new World(tileSize,nbTilesX,nbTilesY,visibleWindowWidth,visibleWindowHeight,
+				targetTileX,targetTileY);
 	}
 
 	@Override
 	public int[] getWorldSizeInPixels(World world) {
-		// TODO Auto-generated method stub
-		return null;
+		return new int[]{world.getPixelWidth(),world.getPixelHeight()};
 	}
 
 	@Override
 	public int getTileLength(World world) {
-		// TODO Auto-generated method stub
-		return 0;
+		return world.getTileSize();
 	}
 
 	@Override
 	public void startGame(World world) {
-		// TODO Auto-generated method stub
-
+		world.setGameStarted(true);
 	}
 
 	@Override
 	public boolean isGameOver(World world) {
-		// TODO Auto-generated method stub
-		return false;
+		return world.isTerminated();
 	}
 
 	@Override
 	public boolean didPlayerWin(World world) {
-		// TODO Auto-generated method stub
-		return false;
+		return world.hasWonGame();
 	}
-
+	
 	@Override
 	public void advanceTime(World world, double dt) {
-		// TODO Auto-generated method stub
-
+		try {
+			world.advanceTime(dt);
+		} catch (IllegalTimeIntervalException exc) {
+			throw new jumpingalien.util.ModelException("Illegal time interval", exc);
+		}
 	}
+	//TODO wss moeten we een aparte advance time maken voor met een programma te werken
 
 	@Override
 	public int[] getVisibleWindow(World world) {
-		// TODO Auto-generated method stub
-		return null;
+		return world.getVisibleWindowPositionArray();
 	}
 
 	@Override
 	public int[] getBottomLeftPixelOfTile(World world, int tileX, int tileY) {
-		// TODO Auto-generated method stub
-		return null;
+		return world.getBottomLeftPixelOfTile(tileX, tileY);
 	}
 
 	@Override
 	public int[][] getTilePositionsIn(World world, int pixelLeft,
 			int pixelBottom, int pixelRight, int pixelTop) {
-		// TODO Auto-generated method stub
-		return null;
+		return world.getOccupiedTiles(pixelLeft, pixelBottom, pixelRight, pixelTop);
 	}
 
 	@Override
 	public int getGeologicalFeature(World world, int pixelX, int pixelY)
 			throws ModelException {
-		// TODO Auto-generated method stub
-		return 0;
+		try {
+			return world.getTileType(pixelX, pixelY);
+		} catch (IllegalXPositionException | IllegalYPositionException e) {
+			throw new ModelException("Coordinates out of bounds.", e);
+		}
 	}
 
 	@Override
 	public void setGeologicalFeature(World world, int tileX, int tileY,
 			int tileType) {
-		// TODO Auto-generated method stub
-
+		if (!world.gameStarted()){
+			world.addTileType(tileX,tileY,tileType);
+		}
 	}
 
 	@Override
 	public void setMazub(World world, Mazub alien) {
-		// TODO Auto-generated method stub
-
+		world.setMazub(alien);
 	}
 
 	@Override
 	public boolean isImmune(Mazub alien) {
-		// TODO Auto-generated method stub
+		if (alien.getHitTimer() < 0.6){
+			return true;
+		}else{
 		return false;
+		}
 	}
 
 	@Override
 	public Plant createPlant(int x, int y, Sprite[] sprites) {
-		// TODO Auto-generated method stub
-		return null;
+			return new Plant(x, y, sprites);
 	}
 
 	@Override
 	public void addPlant(World world, Plant plant) {
-		// TODO Auto-generated method stub
-
+		if (!world.gameStarted()){
+			world.addPlant(plant);
+		}
 	}
 
 	@Override
 	public Collection<Plant> getPlants(World world) {
-		// TODO Auto-generated method stub
-		return null;
+		return world.getPlants();
 	}
 
 	@Override
 	public int[] getLocation(Plant plant) {
-		// TODO Auto-generated method stub
-		return null;
+		return plant.getPosition().getPosition();
 	}
 
 	@Override
 	public Sprite getCurrentSprite(Plant plant) {
-		// TODO Auto-generated method stub
-		return null;
+		return plant.getCurrentSprite();
 	}
 
 	@Override
 	public Shark createShark(int x, int y, Sprite[] sprites) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Shark(x, y, sprites);
 	}
 
 	@Override
 	public void addShark(World world, Shark shark) {
-		// TODO Auto-generated method stub
-
+		if (!world.gameStarted()){
+			world.addShark(shark);
+		}
 	}
 
 	@Override
 	public Collection<Shark> getSharks(World world) {
-		// TODO Auto-generated method stub
-		return null;
+		return world.getSharks();
 	}
 
 	@Override
 	public int[] getLocation(Shark shark) {
-		// TODO Auto-generated method stub
-		return null;
+		return shark.getPosition().getPosition();
 	}
 
 	@Override
 	public Sprite getCurrentSprite(Shark shark) {
-		// TODO Auto-generated method stub
-		return null;
+		return shark.getCurrentSprite();
 	}
 
 	@Override
 	public School createSchool() {
-		// TODO Auto-generated method stub
-		return null;
+		return new School();
 	}
 
 	@Override
 	public Slime createSlime(int x, int y, Sprite[] sprites, School school) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Slime(x, y, sprites, school);
 	}
 
 	@Override
 	public void addSlime(World world, Slime slime) {
-		// TODO Auto-generated method stub
-
+		if (!world.gameStarted()){
+			world.addSlime(slime);
+		}
 	}
 
 	@Override
 	public Collection<Slime> getSlimes(World world) {
-		// TODO Auto-generated method stub
-		return null;
+		return world.getSlimes();
 	}
 
 	@Override
 	public int[] getLocation(Slime slime) {
-		// TODO Auto-generated method stub
-		return null;
+		return slime.getPosition().getPosition();
 	}
 
 	@Override
 	public Sprite getCurrentSprite(Slime slime) {
-		// TODO Auto-generated method stub
-		return null;
+		return slime.getCurrentSprite();
 	}
 
 	@Override
 	public School getSchool(Slime slime) {
-		// TODO Auto-generated method stub
-		return null;
+		return slime.getSchool();
 	}
 
-	@Override
-	public Mazub createMazub(int pixelLeftX, int pixelBottomY, Sprite[] sprites) {
-		// TODO Auto-generated method stub
-		return null;
+	public Mazub createMazub(int pixelLeftX, int pixelBottomY, Sprite[] sprites) throws jumpingalien.util.ModelException {
+		try {
+			return new Mazub(pixelLeftX, pixelBottomY, sprites);
+		} catch (IllegalXPositionException | IllegalYPositionException exc) {
+			throw new jumpingalien.util.ModelException("Illegal positions", exc);
+		}
 	}
 
-	@Override
 	public int[] getLocation(Mazub alien) {
-		// TODO Auto-generated method stub
-		return null;
+		return alien.getPosition().getPosition();	
 	}
 
-	@Override
 	public double[] getVelocity(Mazub alien) {
-		// TODO Auto-generated method stub
-		return null;
+		double[] velocity = new double[2];
+		velocity[0] = alien.getHorizontalVelocity();
+		velocity[1] = alien.getVerticalVelocity();
+		return velocity;
 	}
 
-	@Override
 	public double[] getAcceleration(Mazub alien) {
-		// TODO Auto-generated method stub
-		return null;
+		double[] acceleration = new double[2];
+		acceleration[0] = alien.getHorizontalAcceleration();
+		acceleration[1] = alien.getVerticalAcceleration();
+		return acceleration;
 	}
 
-	@Override
-	public int[] getSize(Mazub alien) {
-		// TODO Auto-generated method stub
-		return null;
+	public int[] getSize(Mazub alien) throws jumpingalien.util.ModelException {
+		try {
+			return alien.getSize();
+		} catch (IllegalSizeException exc) {
+			throw new jumpingalien.util.ModelException("Illegal size", exc);
+		}
 	}
 
-	@Override
 	public Sprite getCurrentSprite(Mazub alien) {
-		// TODO Auto-generated method stub
-		return null;
+		return alien.getCurrentSprite();
 	}
 
-	@Override
 	public void startJump(Mazub alien) {
-		// TODO Auto-generated method stub
-
+		alien.startJump(alien.getInitialVerticalVelocity(),-10);
 	}
 
-	@Override
 	public void endJump(Mazub alien) {
-		// TODO Auto-generated method stub
-
+		alien.endJump();
 	}
 
-	@Override
 	public void startMoveLeft(Mazub alien) {
-		// TODO Auto-generated method stub
-
+		alien.startMove(Direction.LEFT);
 	}
-
-	@Override
+	
 	public void endMoveLeft(Mazub alien) {
-		// TODO Auto-generated method stub
-
+		if (alien.getDirection() == Direction.LEFT) {
+			alien.endMove(0);
+		}
 	}
 
-	@Override
 	public void startMoveRight(Mazub alien) {
-		// TODO Auto-generated method stub
-
+		alien.startMove(Direction.RIGHT);
 	}
 
-	@Override
 	public void endMoveRight(Mazub alien) {
-		// TODO Auto-generated method stub
-
+		if (alien.getDirection() == Direction.RIGHT) {
+			alien.endMove(0);
+		}
 	}
 
-	@Override
 	public void startDuck(Mazub alien) {
-		// TODO Auto-generated method stub
-
+		alien.startDuck();
 	}
 
-	@Override
 	public void endDuck(Mazub alien) {
-		// TODO Auto-generated method stub
-
+		alien.endDuck();
 	}
 
-	@Override
-	public void advanceTime(Mazub alien, double dt) {
-		// TODO Auto-generated method stub
+	 public void advanceTime(Mazub alien, double dt) throws jumpingalien.util.ModelException {
+			try {
+				alien.advanceTime(dt);
+			} catch (IllegalTimeIntervalException exc) {
+				throw new jumpingalien.util.ModelException("Illegal time interval", exc);
+			}
+		}
 
-	}
-
 	@Override
-	public Buzam createBuzam(int pixelLeftX, int pixelBottomY, Sprite[] sprites) {
-		// TODO Auto-generated method stub
-		return null;
+	public Buzam createBuzam(int pixelLeftX, int pixelBottomY, Sprite[] sprites)  throws jumpingalien.util.ModelException {
+		try {
+			return new Buzam(pixelLeftX, pixelBottomY, sprites);
+		} catch (IllegalXPositionException | IllegalYPositionException exc) {
+			throw new jumpingalien.util.ModelException("Illegal positions", exc);
+		}
 	}
 
 	@Override
 	public Buzam createBuzamWithProgram(int pixelLeftX, int pixelBottomY,
 			Sprite[] sprites, Program program) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Buzam(pixelLeftX,pixelBottomY,sprites,program);
 	}
 
 	@Override
 	public Plant createPlantWithProgram(int x, int y, Sprite[] sprites,
 			Program program) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Plant(x,y,sprites,program);
 	}
 
 	@Override
 	public Shark createSharkWithProgram(int x, int y, Sprite[] sprites,
 			Program program) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Shark(x,y,sprites,program);
 	}
 
 	@Override
 	public Slime createSlimeWithProgram(int x, int y, Sprite[] sprites,
 			School school, Program program) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Slime(x,y,sprites,school,program);
 	}
 
 	@Override
@@ -351,44 +337,48 @@ public class Facade implements IFacadePart3 {
 
 	@Override
 	public void addBuzam(World world, Buzam buzam) {
-		// TODO Auto-generated method stub
+		world.setMazub(buzam);
 
 	}
 
 	@Override
 	public int[] getLocation(Buzam alien) {
-		// TODO Auto-generated method stub
-		return null;
+		return alien.getPosition().getPosition();
 	}
 
 	@Override
 	public double[] getVelocity(Buzam alien) {
-		// TODO Auto-generated method stub
-		return null;
+		double[] velocity = new double[2];
+		velocity[0] = alien.getHorizontalVelocity();
+		velocity[1] = alien.getVerticalVelocity();
+		return velocity;
 	}
 
 	@Override
 	public double[] getAcceleration(Buzam alien) {
-		// TODO Auto-generated method stub
-		return null;
+		double[] acceleration = new double[2];
+		acceleration[0] = alien.getHorizontalAcceleration();
+		acceleration[1] = alien.getVerticalAcceleration();
+		return acceleration;
 	}
 
 	@Override
-	public int[] getSize(Buzam alien) {
-		// TODO Auto-generated method stub
-		return null;
+	public int[] getSize(Buzam alien) throws jumpingalien.util.ModelException {
+		try {
+			return alien.getSize();
+		} catch (IllegalSizeException exc) {
+			throw new jumpingalien.util.ModelException("Illegal size", exc);
+		}
 	}
 
 	@Override
 	public Sprite getCurrentSprite(Buzam alien) {
-		// TODO Auto-generated method stub
-		return null;
+		return alien.getCurrentSprite();
 	}
 
 	@Override
 	public int getNbHitPoints(Buzam alien) {
-		// TODO Auto-generated method stub
-		return 0;
+		return alien.getHP();
 	}
 
 }

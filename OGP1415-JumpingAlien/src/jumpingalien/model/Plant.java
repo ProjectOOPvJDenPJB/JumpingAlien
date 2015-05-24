@@ -38,6 +38,28 @@ public class Plant extends LivingCreatures{
 		this.setInitialHorizontalVelocity(0.5);
 		this.setInitialHorizontalAcceleration(0);
 	}
+	
+	/**
+	 * Initialize this new Plant with given position en sprites.
+	 * 
+	 * @param 	positionX
+	 * 			The position on the X-axis this new Plant.
+	 * @param 	positionY
+	 * 			The position on the Y-axis for this new Plant.
+	 * @param 	sprites
+	 * 			The sprites for this new Plant.
+	 * @param 	program
+	 * 			The program for this new plant
+	 * @effect	The new Plant is initialized with the given position as its position,
+	 * 			the given sprites as its sprites, the world as null and hitpoints are set to 1.
+	 * 			| this(positionX,positionY,sprites, null, 1)
+	 * @post    The program for this new plant is equal to the given program
+	 */
+	
+	public Plant(int positionX, int positionY, Sprite[] sprites,Program program){
+		this(positionX,positionY,0.5,sprites, null, 1);	
+		this.setProgram(program);
+	}
 
 	/**
 	 * Initialize this new Plant with given position en sprites.
