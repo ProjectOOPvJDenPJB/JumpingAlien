@@ -1,8 +1,14 @@
 package jumpingalien.part3.programs.Statements;
 
+import java.util.List;
+
 import jumpingalien.model.Program;
 
 public class Sequence extends ComposedStatement{
+	
+	public Sequence(List<Statement> statements){
+		setStatementArray((Statement[]) statements.toArray());
+	}
 
 	@Override
 	public boolean hasSubStatement(Statement statement) {

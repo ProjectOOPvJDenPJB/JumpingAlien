@@ -1,15 +1,16 @@
 package jumpingalien.model;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import jumpingalien.part3.programs.Type;
 import jumpingalien.part3.programs.Statements.Statement;
 
 public class Program {
 	
-	public Program(Statement mainStatement, HashMap<String,Type> globalVariables) {
+	public Program(Statement mainStatement, Map<String, Type> globalVariables2) {
 		this.mainStatement = mainStatement;
-		this.globalVariables = globalVariables;
+		this.globalVariables = globalVariables2;
 	}
 	
 	private Statement getMainStatement() {
@@ -23,7 +24,7 @@ public class Program {
 		return globalVariablesClone;
 	}
 	
-	private final HashMap<String, Type> globalVariables;
+	private final Map<String, Type> globalVariables;
 	
 	public HashMap<String, Object> getVariableValues() {
 		HashMap<String, Object> variableValuesClone = new HashMap<String, Object>(variableValues);

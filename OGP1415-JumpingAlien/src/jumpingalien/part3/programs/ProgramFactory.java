@@ -9,6 +9,7 @@ import java.util.Map;
 import jumpingalien.model.GameObject;
 import jumpingalien.model.LivingCreatures;
 import jumpingalien.model.Program;
+import jumpingalien.model.Tile;
 import jumpingalien.part3.programs.Expressions.*; //Because we need it all
 import jumpingalien.part3.programs.Statements.*;
 
@@ -163,17 +164,13 @@ public class ProgramFactory implements IProgramFactory<Expression<?>, Statement,
 	}
 
 	@Override
-	public E createGetTile(E x, E y, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		//TODO create GetTile class
-		return null;
+	public Expression<Tile> createGetTile(Expression x, Expression y, SourceLocation sourceLocation) {
+		return new GetTile(x, y);
 	}
 
 	@Override
-	public E createSearchObject(E direction, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		//TODO create search object class
-		return null;
+	public Expression<GameObject> createSearchObject(Expression direction, SourceLocation sourceLocation) {
+		return new SearchObject(direction);
 	}
 
 	@Override
@@ -247,8 +244,7 @@ public class ProgramFactory implements IProgramFactory<Expression<?>, Statement,
 	@Override
 	public Statement createAssignment(String variableName, Type variableType, Expression value,
 			SourceLocation sourceLocation) {
-		// TODO Vanaf hier weet ik het nie
-		return null;
+		return new Assignment(variableName, variableType, value);
 	}
 
 	@Override
@@ -283,33 +279,28 @@ public class ProgramFactory implements IProgramFactory<Expression<?>, Statement,
 	}
 
 	@Override
-	public S createPrint(E value, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+	public Statement createPrint(Expression value, SourceLocation sourceLocation) {
+		return new Print(value);
 	}
 
 	@Override
-	public S createStartRun(E direction, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+	public Statement createStartRun(Expression direction, SourceLocation sourceLocation) {
+		return new StartRun(direction);
 	}
 
 	@Override
-	public S createStopRun(E direction, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+	public Statement createStopRun(Expression direction, SourceLocation sourceLocation) {
+		return new StopRun(direction);
 	}
 
 	@Override
-	public S createStartJump(SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+	public Statement createStartJump(SourceLocation sourceLocation) {
+		return new StartJump();
 	}
 
 	@Override
-	public S createStopJump(SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+	public Statement createStopJump(SourceLocation sourceLocation) {
+		return new StopJump();
 	}
 
 	@Override
@@ -319,57 +310,49 @@ public class ProgramFactory implements IProgramFactory<Expression<?>, Statement,
 	}
 
 	@Override
-	public S createStopDuck(SourceLocation sourceLocation) {
+	public Statement createStopDuck(SourceLocation sourceLocation) {
+		return new StopDuck();
+	}
+
+	@Override
+	public Statement createWait(Expression duration, SourceLocation sourceLocation) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public S createWait(E duration, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+	public Statement createSkip(SourceLocation sourceLocation) {
+		return new Skip();
 	}
 
 	@Override
-	public S createSkip(SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+	public Statement createSequence(List<Statement> statements, SourceLocation sourceLocation) {
+		return new Sequence(statements);
 	}
 
 	@Override
-	public S createSequence(List<S> statements, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+	public Type getDoubleType() {
+		return Type.DOUBLE;
 	}
 
 	@Override
-	public T getDoubleType() {
-		// TODO Auto-generated method stub
-		return null;
+	public Type getBoolType() {
+		return Type.BOOLEAN;
 	}
 
 	@Override
-	public T getBoolType() {
-		// TODO Auto-generated method stub
-		return null;
+	public Type getGameObjectType() {
+		return Type.OBJECT;
 	}
 
 	@Override
-	public T getGameObjectType() {
-		// TODO Auto-generated method stub
-		return null;
+	public Type getDirectionType() {
+		return Type.DIRECTION;
 	}
 
 	@Override
-	public T getDirectionType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public P createProgram(S mainStatement, Map<String, T> globalVariables) {
-		// TODO Auto-generated method stub
-		return null;
+	public Program createProgram(Statement mainStatement, Map<String, Type> globalVariables) {
+		return new Program(mainStatement, globalVariables);
 	}
 
 }

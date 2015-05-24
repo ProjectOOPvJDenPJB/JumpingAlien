@@ -4,6 +4,10 @@ import jumpingalien.model.Program;
 import jumpingalien.part3.programs.Expressions.Expression;
 
 public class Print extends ComposedStatement{
+	
+	public Print(Expression<?> expression) {
+		this.expression = expression;
+	}
 
 	@Override
 	public boolean hasSubStatement(Statement statement) {
@@ -14,15 +18,11 @@ public class Print extends ComposedStatement{
 		return  this.expression;
 	}
 	
-	private Expression<?> expression;
-	
-	public void setExpression(Expression<?> expression) {
-		this.expression = expression;
-	}
+	private final Expression<?> expression;
 
 	@Override
 	public void execute(Program program) {
-		System.out.println(getExpression().evaluate());
+		System.out.println(getExpression().evaluate(program));
 	}
 
 }

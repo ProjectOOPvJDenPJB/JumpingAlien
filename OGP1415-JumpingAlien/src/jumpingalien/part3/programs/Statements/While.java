@@ -1,7 +1,6 @@
+package jumpingalien.part3.programs.Statements;
 import jumpingalien.model.Program;
 import jumpingalien.part3.programs.Expressions.Expression;
-import jumpingalien.part3.programs.Statements.ComposedStatement;
-import jumpingalien.part3.programs.Statements.Statement;
 
 
 public class While extends ComposedStatement{
@@ -24,7 +23,7 @@ public class While extends ComposedStatement{
 	
 	@Override
 	public void execute(Program program) {
-		if (this.getExpression().evaluate()){
+		if (this.getExpression().evaluate(program)){
 			execute(program);
 		}	
 	}

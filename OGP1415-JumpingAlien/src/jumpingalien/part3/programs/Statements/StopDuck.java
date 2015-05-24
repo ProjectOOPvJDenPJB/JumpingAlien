@@ -4,7 +4,7 @@ import jumpingalien.model.LivingCreatures;
 import jumpingalien.model.Mazub;
 import jumpingalien.model.Program;
 
-public class EndDuck extends BasicStatement{
+public class StopDuck extends BasicStatement{
 
 	@Override
 	public void execute(Program program) {

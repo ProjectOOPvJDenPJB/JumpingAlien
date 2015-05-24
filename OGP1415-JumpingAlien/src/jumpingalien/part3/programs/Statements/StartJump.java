@@ -6,7 +6,7 @@ import jumpingalien.model.Program;
 import jumpingalien.model.Shark;
 
 public class StartJump extends BasicStatement{
-
+	
 	@Override
 	public void execute(Program program) {
 		LivingCreatures object = program.getPossessedObject();

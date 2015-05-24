@@ -4,20 +4,21 @@ import jumpingalien.model.Program;
 
 public class Skip extends BasicStatement{
 
-	public long getSkipTime(){
+	public double getSkipTime(){
 		return this.skipTime;
 	}
 	
-	private long skipTime;
+	private double skipTime;
 	
-	public void setSkipTime(long time){
+	public void setSkipTime(double time){
 		this.skipTime = time;
 	}
 	
 	@Override
 	public void execute(Program program) {
+		//TODO Da klopt ier langs gene kut
 		try {
-			wait(this.getSkipTime());
+			wait((long) this.getSkipTime());
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

@@ -7,7 +7,7 @@ import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandExceptio
 
 public class GetTile extends BinaryExpression<Tile, Double> {
 
-	protected GetTile(Expression<Double> left, Expression<Double> right)
+	public GetTile(Expression<Double> left, Expression<Double> right)
 			throws IllegalOperandException<?, ?> {
 		super(left, right);
 	}
