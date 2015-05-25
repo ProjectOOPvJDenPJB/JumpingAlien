@@ -32,7 +32,8 @@ public class While extends ComposedStatement{
 	
 	@Override
 	public void execute(Program program) {
-		while (this.getLoopCondition().evaluate(program) && !getBreakLoop()){
+		if (this.getLoopCondition().evaluate(program) && !getBreakLoop()){
+			System.out.println((this.getLoopCondition().evaluate(program)));
 			getActions().execute(program);
 		}	
 	}

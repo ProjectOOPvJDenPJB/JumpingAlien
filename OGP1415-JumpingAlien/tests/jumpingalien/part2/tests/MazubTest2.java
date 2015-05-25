@@ -101,7 +101,7 @@ private Mazub mazub;
 	@Test
 	public void startMoveTest(){
 		Mazub alien = new Mazub(defaultSprites);
-		alien.startMove(1);
+		alien.startMove(Direction.RIGHT);
 		assertTrue(alien.getHorizontalAcceleration() == 1);
 		assertTrue(alien.getHorizontalVelocity() == 1);
 		assertTrue(alien.getMoving());		
@@ -110,7 +110,7 @@ private Mazub mazub;
 	@Test
 	public void EndMoveTest(){
 		Mazub alien = new Mazub(defaultSprites);
-		alien.startMove(1);
+		alien.startMove(Direction.RIGHT);
 		alien.endMove(0);	
 		assertTrue(alien.getHorizontalAcceleration() == 0);
 		assertTrue(alien.getHorizontalVelocity() == 0);
@@ -128,8 +128,8 @@ private Mazub mazub;
 	@Test
 	public void getCurrentSriteArray_WhileNotMoving_MovedLastSecondeToTheRight(){
 		Mazub alien = new Mazub(spriteArrayForSize(10,10));
-		alien.setDirection(1);
-		alien.startMove(1);
+		alien.setDirection(Direction.RIGHT);
+		alien.startMove(Direction.RIGHT);
 		alien.endMove(0);
 		assertEquals(alien.getCurrentSprite(), alien.getSpriteArray()[2]);
 		alien.startDuck();
@@ -139,8 +139,8 @@ private Mazub mazub;
 	@Test
 	public void getCurrentSriteArray_WhileNotMoving_MovedLastSecondeToTheLeft(){
 		Mazub alien = new Mazub(spriteArrayForSize(10,10));
-		alien.setDirection(-1);
-		alien.startMove(1);
+		alien.setDirection(Direction.LEFT);
+		alien.startMove(Direction.RIGHT);
 		alien.endMove(0);
 		assertEquals(alien.getCurrentSprite(), alien.getSpriteArray()[3]);
 		alien.startDuck();
@@ -150,8 +150,8 @@ private Mazub mazub;
 	@Test
 	public void getCurrentSriteArray_WhileMovingAndDucking(){
 		Mazub alien = new Mazub(spriteArrayForSize(10,10));
-		alien.setDirection(1);
-		alien.startMove(1);
+		alien.setDirection(Direction.RIGHT);
+		alien.startMove(Direction.RIGHT);
 		alien.startDuck();
 		assertEquals(alien.getCurrentSprite(), alien.getSpriteArray()[6]);
 		alien.setDirection(-1);
@@ -161,8 +161,8 @@ private Mazub mazub;
 	@Test
 	public void getCurrentSriteArray_WhileMovingAndJumping(){
 		Mazub alien = new Mazub(spriteArrayForSize(10,10));
-		alien.setDirection(1);
-		alien.startMove(1);
+		alien.setDirection(Direction.RIGHT);
+		alien.startMove(Direction.RIGHT);
 		alien.startJump(10,-10);
 		assertEquals(alien.getCurrentSprite(), alien.getSpriteArray()[4]);
 		alien.setDirection(-1);

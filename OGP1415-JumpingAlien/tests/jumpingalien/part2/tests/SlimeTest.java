@@ -2,12 +2,9 @@ package jumpingalien.part2.tests;
 
 import static jumpingalien.tests.util.TestUtils.spriteArrayForSize;
 import static org.junit.Assert.*;
-import jumpingalien.model.Direction;
 import jumpingalien.model.LivingCreatures;
 import jumpingalien.model.Slime;
-import jumpingalien.model.Plant;
 import jumpingalien.model.School;
-import jumpingalien.model.Slime;
 import jumpingalien.model.World;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
@@ -18,21 +15,17 @@ import org.junit.Test;
 public class SlimeTest {
 	
 	private Sprite[] defaultSprites;
-	private World defaultWorld,bigWorld;
+	private World defaultWorld;
 	private School school1;
-	private School school2;
-	private Slime slime, slime2;
+	private Slime slime;
 	
 	@Before
 	public void setUp() {
 		this.defaultWorld = new World(10,10,10,10,10,9,9);
-		this.bigWorld = new World(10,100,100,500,500,700,700);
 
 		this.defaultSprites = spriteArrayForSize(2,2);
 		this.school1 = new School();
-		this.school2 = new School();
 		this.slime = new Slime(0, 0, 0, 0, 0, defaultSprites, defaultWorld,school1,100);
-		this.slime2 = new Slime(5, 5, 0, 0, 0, defaultSprites, defaultWorld,school2,100);
 	}
 
 	@Test
@@ -95,21 +88,6 @@ public class SlimeTest {
 		assertTrue(slime.getYPosition()==0);
 	}
 	
-	//@Test
-	//TODO Uncomment to test
-	public void testStartMoveOpposite(){
-		//When initialized the direction for a slime is to the right
-		slime2.startMoveOpposite();
-		assertTrue(slime2.getMoving() == true);
-		assertTrue(slime2.getHorizontalVelocity() == 0);
-		assertTrue(slime2.getHorizontalAcceleration() == 0.7);
-		slime.advanceTime(0.199);
-		// xPos == 5 - 0.7*50*0.199**2 = 5 - 1.386 =3.614
-		// xVel == 0.7 * 0.1 = 0.07
-		assertTrue(Util.fuzzyEquals(slime2.getXPosition(),3.614));
-		assertTrue(slime2.getHorizontalVelocity() == 0.07);
-		assertTrue(slime2.getDirection() == Direction.LEFT);
-		}
 	
 	@Test
 	public void testTerminteWhenTerminatedWithinTheBounds(){

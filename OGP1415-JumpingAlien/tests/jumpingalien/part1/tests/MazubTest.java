@@ -369,16 +369,15 @@ public class MazubTest {
 	
 	@Test
 	public void isValidSize_True() {
-		assertTrue(Mazub.isValidSize(TestUtils.intArray(0,0)));
-		assertTrue(Mazub.isValidSize(TestUtils.intArray(8,8)));
-		assertTrue(Mazub.isValidSize(TestUtils.intArray(37,87)));
+		assertTrue(Mazub.isValidSize(0));
+		assertTrue(Mazub.isValidSize(8));
+		assertTrue(Mazub.isValidSize(87));
 	}
 	
 	@Test
 	public void isValidSize_False() {
-		assertFalse(Mazub.isValidSize(TestUtils.intArray(-1,-1)));
-		assertFalse(Mazub.isValidSize(TestUtils.intArray(-8,42)));
-		assertFalse(Mazub.isValidSize(TestUtils.intArray(42,-68)));
+		assertFalse(Mazub.isValidSize(-1));
+		assertFalse(Mazub.isValidSize(-8));
 	}
 	
 }

@@ -221,7 +221,7 @@ public class ProgramFactory implements IProgramFactory<Expression<?>, Statement,
 
 	@Override
 	public Expression<Boolean> createIsMoving(Expression expr, Expression direction, SourceLocation sourceLocation) {
-		return new IsMoving(expr);
+		return new IsMoving(expr, direction);
 	}
 
 	@Override

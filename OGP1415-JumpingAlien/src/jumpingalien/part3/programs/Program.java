@@ -70,8 +70,8 @@ public class Program {
 		this.possessedObject = object;
 	}
 	
-	public void excecute() {
-		getMainStatement().execute(this);
+	public void excecute(double dt) {
+		this.getMainStatement().execute(this);
 	}
 
 }

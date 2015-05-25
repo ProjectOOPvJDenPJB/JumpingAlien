@@ -39,7 +39,11 @@ public class IfElse extends ComposedStatement{
 		if (getIfExpression().evaluate(program)){
 			getIfStatement().execute(program);
 		}else{
+			try {
 			getElseStatement().execute(program);
+			} catch (NullPointerException e) {
+				
+			}
 		}
 		
 	}

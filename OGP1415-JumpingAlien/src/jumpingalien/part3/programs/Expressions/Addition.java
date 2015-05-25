@@ -3,7 +3,7 @@ package jumpingalien.part3.programs.Expressions;
 import jumpingalien.part3.programs.Program;
 import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandException;
 
-public class Addition extends BinaryExpression<Double,Double>{
+public class Addition extends BinaryExpression<Double,Number>{
 	
 	/**
 	 * Initialize this new Addition with the given operands.
@@ -16,7 +16,7 @@ public class Addition extends BinaryExpression<Double,Double>{
 	 * 			with the given operands.
 	 * 			| super(left,right)
 	 */
-	public Addition(Expression<Double> left, Expression<Double> right)
+	public Addition(Expression<Number> left, Expression<Number> right)
 			throws IllegalOperandException {
 		super(left, right);
 	}
@@ -32,7 +32,7 @@ public class Addition extends BinaryExpression<Double,Double>{
 	 */
 	@Override
 	public Double evaluate(Program program) {
-		return getLeftOperand().evaluate(program) + getRightOperand().evaluate(program);
+		return getLeftOperand().evaluate(program).doubleValue() + getRightOperand().evaluate(program).doubleValue();
 	}
 
 }

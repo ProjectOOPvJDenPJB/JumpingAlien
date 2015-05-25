@@ -839,6 +839,10 @@ public class World {
 			this.terminate();
 		}
 		updateWindowPosition();
+		for (GameObject gameObject : getAllObjects()) {
+			if ((gameObject != null) && (gameObject.getProgram() != null))
+				gameObject.getProgram().excecute(dt);
+		}
 		for (Plant plant : this.getPlants()) {
 			plant.advanceTime(dt);
 		}

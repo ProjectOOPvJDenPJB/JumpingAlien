@@ -1494,6 +1494,7 @@ public abstract class LivingCreatures extends GameObject {
 	
 	public void setProgram(Program program){
 		this.program = program;
+		program.setPossessedObject(this);
 	}
 	
 }

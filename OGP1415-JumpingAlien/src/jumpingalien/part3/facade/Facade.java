@@ -345,8 +345,7 @@ public class Facade implements IFacadePart3 {
 
 	@Override
 	public boolean isWellFormed(Program program) {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
