@@ -1,7 +1,6 @@
 package jumpingalien.part3.programs.Expressions;
 
 public abstract class Expression<T> {
-	//TODO implements ?
 	
 	/**
 	 * Check whether this expression has the given expression as one

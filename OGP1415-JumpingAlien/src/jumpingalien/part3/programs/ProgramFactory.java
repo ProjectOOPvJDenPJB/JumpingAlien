@@ -11,10 +11,6 @@ import jumpingalien.model.Tile;
 import jumpingalien.part3.programs.Expressions.*; //Because we need it all
 import jumpingalien.part3.programs.Statements.*;
 
-/**
- * @author Joren
- *
- */
 @SuppressWarnings("rawtypes")
 public class ProgramFactory implements IProgramFactory<Expression<?>, Statement, Type, Program> {
 
