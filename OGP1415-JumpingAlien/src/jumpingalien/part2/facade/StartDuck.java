@@ -2,7 +2,7 @@ package jumpingalien.part2.facade;
 
 import jumpingalien.model.LivingCreatures;
 import jumpingalien.model.Mazub;
-import jumpingalien.model.Program;
+import jumpingalien.part3.programs.Program;
 import jumpingalien.part3.programs.Statements.BasicStatement;
 
 public class StartDuck extends BasicStatement{

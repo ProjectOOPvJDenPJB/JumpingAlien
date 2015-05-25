@@ -1,16 +1,18 @@
-package jumpingalien.model;
+package jumpingalien.part3.programs;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import jumpingalien.part3.programs.Type;
+import jumpingalien.model.LivingCreatures;
+import jumpingalien.part3.programs.IProgramFactory.Direction;
 import jumpingalien.part3.programs.Statements.Statement;
 
 public class Program {
 	
-	public Program(Statement mainStatement, Map<String, Type> globalVariables2) {
+	public Program(Statement mainStatement, Map<String, Type> globalVariables) {
 		this.mainStatement = mainStatement;
-		this.globalVariables = globalVariables2;
+		this.globalVariables = globalVariables;
+		setVariableValues(globalVariables);
 	}
 	
 	private Statement getMainStatement() {
@@ -19,7 +21,7 @@ public class Program {
 	
 	private final Statement mainStatement;
 	
-	private HashMap <String, Type> getGlobalVariables() {
+	public HashMap <String, Type> getGlobalVariables() {
 		HashMap<String,Type> globalVariablesClone = new HashMap<String, Type>(globalVariables);
 		return globalVariablesClone;
 	}
@@ -32,6 +34,24 @@ public class Program {
 	}
 	
 	private HashMap<String, Object> variableValues;
+	
+	protected void setVariableValues(Map<String, Type> map) {
+		this.variableValues = new HashMap<String, Object>();
+		for (String key : map.keySet()) {
+			if (map.get(key) == Type.DOUBLE) {
+				this.variableValues.put(key, 0.0);
+			}
+			else if (map.get(key) == Type.BOOLEAN) {
+				this.variableValues.put(key, false);
+			}
+			else if (map.get(key) == Type.OBJECT) {
+				this.variableValues.put(key, null);
+			}
+			else if (map.get(key) == Type.DIRECTION) {
+				this.variableValues.put(key, Direction.RIGHT);
+			}
+		}
+	}
 	
 	public void setVariableValue(String varName, Object value) {
 		if (! getGlobalVariables().containsKey(varName))
@@ -52,7 +72,6 @@ public class Program {
 	
 	public void excecute() {
 		getMainStatement().execute(this);
-		//TODO!!! Dit moet nog met excecution time etc
 	}
 
 }

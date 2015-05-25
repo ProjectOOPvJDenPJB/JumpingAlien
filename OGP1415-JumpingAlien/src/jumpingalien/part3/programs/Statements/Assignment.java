@@ -1,7 +1,7 @@
 package jumpingalien.part3.programs.Statements;
 
-import jumpingalien.model.Program;
 import jumpingalien.part3.programs.Expressions.Expression;
+import jumpingalien.part3.programs.Program;
 import jumpingalien.part3.programs.Type;
 
 public class Assignment extends BasicStatement {

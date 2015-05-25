@@ -2,7 +2,7 @@ package jumpingalien.part3.programs.Statements;
 
 import jumpingalien.model.LivingCreatures;
 import jumpingalien.model.Mazub;
-import jumpingalien.model.Program;
+import jumpingalien.part3.programs.Program;
 
 public class StopDuck extends BasicStatement{
 

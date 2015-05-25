@@ -9,6 +9,8 @@ import java.util.Random;
 
 
 
+
+import jumpingalien.part3.programs.Program;
 //import jumpingalien.model.LivingCreatures.State;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
@@ -299,14 +301,15 @@ public class Slime extends LivingCreatures {
 	 */
 	public void advanceTimeAlive(double timeInterval) {
 		
-		if (Util.fuzzyGreaterThanOrEqualTo(getRunTime(), getRandomTime())) {
-			startMove(this.getDirection().oppositeDirection());
-			setRandomTime();
-			setRunTime(0);
+		if (this.getProgram() == null){
+			if (Util.fuzzyGreaterThanOrEqualTo(getRunTime(), getRandomTime())) {
+				startMove(this.getDirection().oppositeDirection());
+				setRandomTime();
+				setRunTime(0);
+			}
+			else
+				this.setRunTime(getRunTime() + timeInterval);
 		}
-		else
-			this.setRunTime(getRunTime() + timeInterval);
-		
 		this.changeVerticalPosition(timeInterval);
 		this.changeHorizontalPosition(timeInterval,getHorizontalAcceleration());
 		Interaction.interactWithOtherCreatures(this);

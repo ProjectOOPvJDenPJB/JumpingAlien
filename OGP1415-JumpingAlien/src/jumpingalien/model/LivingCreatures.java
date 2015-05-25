@@ -1,6 +1,7 @@
 package jumpingalien.model;
 
 import jumpingalien.model.Position;
+import jumpingalien.part3.programs.Program;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
 import be.kuleuven.cs.som.annotate.Basic;
@@ -1489,7 +1490,7 @@ public abstract class LivingCreatures extends GameObject {
 		return this.program;
 	}
 	
-	private Program program;
+	private Program program = null;
 	
 	public void setProgram(Program program){
 		this.program = program;

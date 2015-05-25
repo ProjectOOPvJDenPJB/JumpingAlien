@@ -1,6 +1,7 @@
 package jumpingalien.part3.facade;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import jumpingalien.model.Buzam;
 import jumpingalien.model.Direction;
@@ -10,12 +11,18 @@ import jumpingalien.model.IllegalXPositionException;
 import jumpingalien.model.IllegalYPositionException;
 import jumpingalien.model.Mazub;
 import jumpingalien.model.Plant;
-import jumpingalien.model.Program;
 import jumpingalien.model.School;
 import jumpingalien.model.Shark;
 import jumpingalien.model.Slime;
 import jumpingalien.model.World;
+import jumpingalien.part3.programs.IProgramFactory;
 import jumpingalien.part3.programs.ParseOutcome;
+import jumpingalien.part3.programs.Program;
+import jumpingalien.part3.programs.ProgramFactory;
+import jumpingalien.part3.programs.ProgramParser;
+import jumpingalien.part3.programs.Type;
+import jumpingalien.part3.programs.Expressions.Expression;
+import jumpingalien.part3.programs.Statements.Statement;
 import jumpingalien.util.ModelException;
 import jumpingalien.util.Sprite;
 
@@ -67,7 +74,6 @@ public class Facade implements IFacadePart3 {
 			throw new jumpingalien.util.ModelException("Illegal time interval", exc);
 		}
 	}
-	//TODO wss moeten we een aparte advance time maken voor met een programma te werken
 
 	@Override
 	public int[] getVisibleWindow(World world) {
@@ -325,8 +331,16 @@ public class Facade implements IFacadePart3 {
 
 	@Override
 	public ParseOutcome<?> parse(String text) {
-		// TODO Auto-generated method stub
-		return null;
+		IProgramFactory<Expression<?>, Statement, Type, Program> factory = new ProgramFactory();
+		ProgramParser<Expression<?>, Statement, Type, Program> parser = new ProgramParser<>(factory);
+		Optional<Program> parseResult = parser.parseString(text);
+		if (parseResult.isPresent()) {
+			return ParseOutcome.success(parseResult.get());
+		}
+		else {
+			return ParseOutcome.failure(parser.getErrors());
+		}
+		
 	}
 
 	@Override
@@ -337,7 +351,7 @@ public class Facade implements IFacadePart3 {
 
 	@Override
 	public void addBuzam(World world, Buzam buzam) {
-		world.setMazub(buzam);
+		world.setBuzam(buzam);
 
 	}
 

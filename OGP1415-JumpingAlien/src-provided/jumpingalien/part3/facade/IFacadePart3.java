@@ -3,7 +3,6 @@ package jumpingalien.part3.facade;
 import jumpingalien.model.Buzam;
 import jumpingalien.model.Mazub;
 import jumpingalien.model.Plant;
-import jumpingalien.model.Program;
 import jumpingalien.model.School;
 import jumpingalien.model.Shark;
 import jumpingalien.model.Slime;
@@ -11,6 +10,7 @@ import jumpingalien.model.World;
 import jumpingalien.part1.facade.IFacade;
 import jumpingalien.part2.facade.IFacadePart2;
 import jumpingalien.part3.programs.ParseOutcome;
+import jumpingalien.part3.programs.Program;
 import jumpingalien.part3.programs.ProgramParser;
 import jumpingalien.util.Sprite;
 

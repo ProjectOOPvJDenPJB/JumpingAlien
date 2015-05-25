@@ -2,7 +2,7 @@ package jumpingalien.part3.programs.Expressions;
 
 import java.util.Random;
 
-import jumpingalien.model.Program;
+import jumpingalien.part3.programs.Program;
 import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandException;
 
 public class createRandom extends UnaryExpression<Double, Double> {
@@ -18,7 +18,7 @@ public class createRandom extends UnaryExpression<Double, Double> {
 
 	@Override
 	public Double evaluate(Program program) {
-		return generateRandom(this.evaluate(program));
+		return generateRandom(getOperand().evaluate(program));
 	}
 
 }

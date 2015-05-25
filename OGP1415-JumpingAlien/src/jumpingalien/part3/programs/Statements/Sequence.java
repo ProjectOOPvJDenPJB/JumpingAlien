@@ -2,12 +2,12 @@ package jumpingalien.part3.programs.Statements;
 
 import java.util.List;
 
-import jumpingalien.model.Program;
+import jumpingalien.part3.programs.Program;
 
 public class Sequence extends ComposedStatement{
 	
 	public Sequence(List<Statement> statements){
-		this.array = (Statement[]) statements.toArray();
+		this.array = statements;
 	}
 
 	@Override
@@ -15,17 +15,17 @@ public class Sequence extends ComposedStatement{
 		return true;
 	}
 	
-	public Statement[] getStatementArray(){
+	public List<Statement> getStatementArray(){
 		return this.array;
 	}
 	
-	private final Statement[] array;
+	private final List<Statement> array;
 	
 	@Override
 	public void execute(Program program) {
-		Statement[] statementArray = getStatementArray();
-		for (int i = 1; i < statementArray.length;i +=1){
-			statementArray[i].execute(program);
+		List<Statement> statementArray = getStatementArray();
+		for (int i = 1; i < statementArray.size();i +=1){
+			statementArray.get(i).execute(program);
 			if (this.getBreakLoop()){
 				this.setBreakLoop(false);
 				break;

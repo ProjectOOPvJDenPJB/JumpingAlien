@@ -1,5 +1,7 @@
 package jumpingalien.model;
 
+import jumpingalien.part3.programs.Program;
+
 
 /**
  * Class of Tile
@@ -169,6 +171,10 @@ public class Tile extends GameObject {
 	@Override
 	public int getHeight() {
 		return getWorld().getTileSize();
+	}
+
+	public Program getProgram(){
+		return null;
 	}
 
 }

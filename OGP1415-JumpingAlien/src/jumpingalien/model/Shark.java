@@ -2,6 +2,7 @@ package jumpingalien.model;
 
 import java.util.Random;
 
+import jumpingalien.part3.programs.Program;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
 /**
@@ -41,7 +42,7 @@ public class Shark extends LivingCreatures {
 	 */
 	public Shark(int positionX, int positionY, double horizontalVelocity, double verticalVelocity,
 			World world,Sprite[] sprites, int hitpoints){
-		super(positionX,positionY, horizontalVelocity, verticalVelocity,1.5,0,0,4,world,sprites, hitpoints);
+		super(positionX,positionY, horizontalVelocity, verticalVelocity,0,0,0,4,world,sprites, hitpoints);
 		this.setInitialHorizontalVelocity(0);
 		this.setInitialHorizontalAcceleration(1.5);
 	}
@@ -229,6 +230,7 @@ public class Shark extends LivingCreatures {
 	 * 			| Interaction.interactWithOtherCreatures(this)
 	 */
 	public void advanceTimeAlive(double timeInterval) {
+		if (this.getProgram() == null){
 		if (Util.fuzzyGreaterThanOrEqualTo(getRunTime(),getRandomTime())) {
 			this.setRunTime(0);
 			this.endJump();
@@ -247,6 +249,7 @@ public class Shark extends LivingCreatures {
 		}
 		else
 			this.setRunTime(getRunTime() + timeInterval);
+		}
 		
 		this.changeHorizontalPosition(timeInterval,getHorizontalAcceleration());
 		this.changeVerticalPosition(timeInterval);

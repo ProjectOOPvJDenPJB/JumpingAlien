@@ -1,7 +1,7 @@
 package jumpingalien.part3.programs.Statements;
 
 import jumpingalien.model.LivingCreatures;
-import jumpingalien.model.Program;
+import jumpingalien.part3.programs.Program;
 import jumpingalien.part3.programs.IProgramFactory.Direction;
 import jumpingalien.part3.programs.Expressions.DirectionExpression;
 import jumpingalien.part3.programs.Expressions.Expression;
@@ -9,18 +9,19 @@ import jumpingalien.part3.programs.Expressions.Expression;
 public class StartRun extends BasicStatement{
 	
 	public StartRun(Expression<Direction> direction) {
-		this.direction = new DirectionExpression(direction.evaluate(new Program(null,null)));
+		this.direction = direction;
 	}
 	
-	public DirectionExpression getDirection() {
+	public Expression<Direction> getDirection() {
 		return this.direction;
 	}
 	
-	private final DirectionExpression direction;
+	private final Expression<Direction> direction;
 
 	@Override
 	public void execute(Program program) {
 		LivingCreatures object = program.getPossessedObject();
-		object.startMove(getDirection().evaluateForCreature());
+		DirectionExpression direction = new DirectionExpression(getDirection().evaluate(program));
+		object.startMove(direction.evaluateForCreature());
 	}
 }

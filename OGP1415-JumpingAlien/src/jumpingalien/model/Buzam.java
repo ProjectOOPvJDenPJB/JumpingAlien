@@ -1,5 +1,6 @@
 package jumpingalien.model;
 
+import jumpingalien.part3.programs.Program;
 import jumpingalien.util.Sprite;
 
 public class Buzam extends Mazub {
@@ -110,5 +111,5 @@ public class Buzam extends Mazub {
 			advanceTimeAlive(timeInterval - (timeInterval - dt_min));
 		}
 	}
-	
+		
 }

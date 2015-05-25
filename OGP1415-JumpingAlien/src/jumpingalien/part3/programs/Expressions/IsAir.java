@@ -1,8 +1,8 @@
 package jumpingalien.part3.programs.Expressions;
 
-import jumpingalien.model.Program;
 import jumpingalien.model.Tile;
 import jumpingalien.model.TileType;
+import jumpingalien.part3.programs.Program;
 import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandException;
 
 public class IsAir extends UnaryExpression<Boolean, Tile> {

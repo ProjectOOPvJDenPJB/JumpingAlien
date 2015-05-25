@@ -1,13 +1,12 @@
 package jumpingalien.part3.programs.Expressions;
 
-import jumpingalien.model.Program;
+import jumpingalien.part3.programs.Program;
 import jumpingalien.part3.programs.Type;
 
 public class Variable extends BasicExpression<Object>{
 	
-	public Variable(String name,Type type, Object value){
+	public Variable(String name,Type type){
 		this.setName(name);
-		this.setValue(value);
 		this.setType(type);		
 	}
 	
@@ -30,16 +29,10 @@ public class Variable extends BasicExpression<Object>{
 	public Type getType(){
 		return this.type;
 	}
-	
-	public void setValue(Object value){
-		this.value = value;
-	}
-	
-	public Object value;
 		
 	@Override
 	public Object evaluate(Program program) {
-		return this.value;
+		return program.getVariableValues().get(getName());
 	}
 
 }

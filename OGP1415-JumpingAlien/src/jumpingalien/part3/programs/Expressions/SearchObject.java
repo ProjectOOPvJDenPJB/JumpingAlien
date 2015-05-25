@@ -3,7 +3,7 @@ package jumpingalien.part3.programs.Expressions;
 import java.util.Collection;
 
 import jumpingalien.model.GameObject;
-import jumpingalien.model.Program;
+import jumpingalien.part3.programs.Program;
 import jumpingalien.part3.programs.IProgramFactory.Direction;
 import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandException;
 

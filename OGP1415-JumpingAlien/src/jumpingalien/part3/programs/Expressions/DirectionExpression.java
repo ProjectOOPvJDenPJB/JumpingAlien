@@ -1,6 +1,6 @@
 package jumpingalien.part3.programs.Expressions;
 
-import jumpingalien.model.Program;
+import jumpingalien.part3.programs.Program;
 import jumpingalien.part3.programs.IProgramFactory.Direction;
 
 public class DirectionExpression extends BasicExpression<Direction> {

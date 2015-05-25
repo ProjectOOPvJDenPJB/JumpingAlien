@@ -269,7 +269,7 @@ public class Interaction{
 		else if (creature instanceof Shark){
 			interactWithShark((LivingCreatures)mazub, (Shark)creature);
 		}
-		else if (creature instanceof Buzam) {
+		else if (creature instanceof Mazub) {
 			if (Util.fuzzyGreaterThanOrEqualTo(creature.getHitTimer(),0.6)){
 				creature.addHP(-50);
 				creature.setHitTimer(0);
@@ -329,6 +329,13 @@ public class Interaction{
 				}
 			}
 		}catch (NullPointerException exc){
+		}
+		try {
+			Buzam buzam = world.getBuzam();
+			if (collidesWithCreature(creature, buzam)) {
+				return true;
+			}
+		} catch(NullPointerException exc) {
 		}
 		return false;
 	}

@@ -1,7 +1,7 @@
 package jumpingalien.part3.programs.Expressions;
 
 import jumpingalien.model.LivingCreatures;
-import jumpingalien.model.Program;
+import jumpingalien.part3.programs.Program;
 import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandException;
 
 public class IsDead extends UnaryExpression<Boolean, LivingCreatures> {

@@ -1,6 +1,6 @@
 package jumpingalien.part3.programs.Expressions;
 
-import jumpingalien.model.Program;
+import jumpingalien.part3.programs.Program;
 
 public class ObjectNull extends BasicExpression<Object>{
 

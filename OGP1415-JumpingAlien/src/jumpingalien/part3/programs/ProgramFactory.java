@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import jumpingalien.model.GameObject;
-import jumpingalien.model.Program;
 import jumpingalien.model.Tile;
 import jumpingalien.part3.programs.Expressions.*; //Because we need it all
 import jumpingalien.part3.programs.Statements.*;
@@ -22,8 +21,7 @@ public class ProgramFactory implements IProgramFactory<Expression<?>, Statement,
 	@Override
 	public Expression<?> createReadVariable(String variableName, Type variableType,
 			SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Variable(variableName, variableType);
 	}
 
 	@Override
@@ -249,15 +247,13 @@ public class ProgramFactory implements IProgramFactory<Expression<?>, Statement,
 
 	@Override
 	public Statement createForEach(
-			//TODO
 			String variableName,
 			jumpingalien.part3.programs.IProgramFactory.Kind variableKind,
 			Expression where,
 			Expression sort,
 			jumpingalien.part3.programs.IProgramFactory.SortDirection sortDirection,
 			Statement body, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ForEach(variableName, variableKind, where, sort, sortDirection, body, sourceLocation);
 	}
 
 	@Override
@@ -308,13 +304,11 @@ public class ProgramFactory implements IProgramFactory<Expression<?>, Statement,
 
 	@Override
 	public Statement createWait(Expression duration, SourceLocation sourceLocation) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Wait(duration);
 	}
 
 	@Override
 	public Statement createSkip(SourceLocation sourceLocation) {
-		//TODO
 		return new Skip();
 	}
 

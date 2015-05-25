@@ -1,8 +1,8 @@
 package jumpingalien.part3.programs.Expressions;
 
 import jumpingalien.model.GameObject;
-import jumpingalien.model.Program;
 import jumpingalien.model.Slime;
+import jumpingalien.part3.programs.Program;
 import jumpingalien.part3.programs.Expressions.Exceptions.IllegalOperandException;
 
 public class IsSlime extends UnaryExpression<Boolean, GameObject> {

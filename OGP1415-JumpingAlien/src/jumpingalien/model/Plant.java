@@ -1,4 +1,5 @@
 package jumpingalien.model;
+import jumpingalien.part3.programs.Program;
 import jumpingalien.util.Sprite;
 import jumpingalien.util.Util;
 
@@ -57,7 +58,7 @@ public class Plant extends LivingCreatures{
 	 */
 	
 	public Plant(int positionX, int positionY, Sprite[] sprites,Program program){
-		this(positionX,positionY,0.5,sprites, null, 1);	
+		this(positionX,positionY,0,sprites, null, 1);	
 		this.setProgram(program);
 	}
 
@@ -202,9 +203,11 @@ public class Plant extends LivingCreatures{
 	 * 			| Interaction.interactWithOtherCreatures(this)
 	 */
 	public void advanceTimeAlive(double timeInterval) {
-		if (Util.fuzzyGreaterThanOrEqualTo(this.getRunTime(), 0.5)){
-			this.setDirection(this.getDirection().oppositeDirection());
-			this.setRunTime(0);			
+		if (this.getProgram() == null){
+			if (Util.fuzzyGreaterThanOrEqualTo(this.getRunTime(), 0.5)){
+				this.setDirection(this.getDirection().oppositeDirection());
+				this.setRunTime(0);			
+			}
 		}
 		
 		this.changeHorizontalPosition(timeInterval,0);

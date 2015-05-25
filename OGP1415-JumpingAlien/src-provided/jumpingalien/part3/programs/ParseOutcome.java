@@ -2,8 +2,6 @@ package jumpingalien.part3.programs;
 
 import java.util.List;
 
-import jumpingalien.model.Program;
-
 /**
  * A class that represents the outcome of parsing a string.
  * Parsing can have two outcomes:

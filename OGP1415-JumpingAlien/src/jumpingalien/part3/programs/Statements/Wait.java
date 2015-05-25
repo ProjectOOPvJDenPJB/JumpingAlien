@@ -1,6 +1,6 @@
 package jumpingalien.part3.programs.Statements;
 
-import jumpingalien.model.Program;
+import jumpingalien.part3.programs.Program;
 import jumpingalien.part3.programs.Expressions.DoubleLiteral;
 import jumpingalien.part3.programs.Expressions.Expression;
 import jumpingalien.util.Util;
@@ -8,7 +8,7 @@ import jumpingalien.util.Util;
 public class Wait extends BasicStatement {
 	
 	public Wait(Expression<Double> duration) {
-		setDuration(duration, new Program(null, null));
+		this.duration = duration;
 	}
 	
 	public double getDuration(Program program) {

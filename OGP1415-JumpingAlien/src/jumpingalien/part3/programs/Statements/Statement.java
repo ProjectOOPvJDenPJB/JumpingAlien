@@ -40,5 +40,5 @@ public abstract class Statement {
 	/**
 	 *Evaluate this program
 	 */
-	public abstract void execute(jumpingalien.model.Program program);
+	public abstract void execute(jumpingalien.part3.programs.Program program);
 }
